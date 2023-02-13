@@ -1,13 +1,16 @@
 const PORT = 3000;
 
-const app = require('express')();
+const express = require('express');
+const app = express();
 const server = require('http').createServer(app);
 const io = require('./server/config/io')(server);
 
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/client/index.html');
+    res.sendFile(__dirname + '/client/html/index.html');
 });
 
+app.use(express.static('client'));
+// app.use(express.urlencoded({extended: false}));
 // app.set('io', io);
 
 server.listen(PORT, () => {

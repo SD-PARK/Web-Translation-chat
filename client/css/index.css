@@ -1,0 +1,84 @@
+body {
+    position:relative;
+    margin:0;
+    width:auto;
+    height:100vh;
+    background:url('../img/bg.jpg') no-repeat center;
+    background-size:cover;
+    
+    -webkit-backdrop-filter:blur(5px);
+    backdrop-filter:blur(5px);
+}
+
+div#form {
+    position:absolute;
+    width:540px;
+    height:420px;
+    background-color:#303825;
+    top:50%;
+    left:50%;
+    transform:translate(-50%, -50%);
+    border-radius:15px;
+    padding:30px;
+    box-shadow:1px 2px 30px -10px black;
+}
+
+form#login {
+    width:540px;
+    height:auto;
+    line-height:13px;
+}
+form#login > * {
+    display:block;
+}
+form#login > span.title {
+    font-size:19px;
+    color:#fff;
+    text-align:center;
+}
+form#login > span.main {
+    font-size:42px;
+}
+form#login > span {
+    font-size:13px;
+    color:#bbb;
+    line-height:35px;
+}
+form#login > input {
+    outline:none;
+    width:520px;
+    height:42px;
+    border:none;
+    border-radius:5px;
+    background-color:#202815;
+    padding:0 10px;
+    font-size:16px;
+    color:#ccc;
+}
+::-ms-reveal {
+    filter:invert(100%);
+}
+form#login > span > a {
+    text-decoration:none;
+    color:#0099ff;
+}
+form#login > span > a:hover {
+    text-decoration:underline;
+}
+form#login > button {
+    width:540px;
+    height:48px;
+    border:none;
+    border-radius:5px;
+    font-size:16px;
+    background:#809080;
+    color:white;
+}
+form#login > button:hover {
+    cursor:pointer;
+    background:#6F6B7C;
+    transition:all 0.2s;
+}
+span.red {
+    color:red;
+}
