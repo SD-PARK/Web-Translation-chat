@@ -13,9 +13,10 @@ body {
 div#form {
     position:absolute;
     width:540px;
-    height:420px;
+    height:auto;
     background-color:#303825;
-    top:50%;
+    opacity:0;
+    top:45%;
     left:50%;
     transform:translate(-50%, -50%);
     border-radius:15px;
@@ -23,15 +24,15 @@ div#form {
     box-shadow:1px 2px 30px -10px black;
 }
 
-form#login {
+form {
     width:540px;
     height:auto;
     line-height:13px;
 }
-form#login > * {
+form > * {
     display:block;
 }
-form#login > span.title {
+form > span.title {
     font-size:19px;
     color:#fff;
     text-align:center;
@@ -39,12 +40,15 @@ form#login > span.title {
 form#login > span.main {
     font-size:42px;
 }
-form#login > span {
+form#register > span.main {
+    font-size:25px;
+}
+form > span {
     font-size:13px;
     color:#bbb;
     line-height:35px;
 }
-form#login > input {
+form > input {
     outline:none;
     width:520px;
     height:42px;
@@ -58,14 +62,14 @@ form#login > input {
 ::-ms-reveal {
     filter:invert(100%);
 }
-form#login > span > a {
+form > span > a {
     text-decoration:none;
     color:#0099ff;
 }
-form#login > span > a:hover {
+form > span > a:hover {
     text-decoration:underline;
 }
-form#login > button {
+form > button {
     width:540px;
     height:48px;
     border:none;
@@ -74,7 +78,7 @@ form#login > button {
     background:#809080;
     color:white;
 }
-form#login > button:hover {
+form > button:hover {
     cursor:pointer;
     background:#6F6B7C;
     transition:all 0.2s;
