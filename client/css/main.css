@@ -1,0 +1,81 @@
+body {
+    width:auto;
+    height:100vh;
+    display:flex;
+    flex-direction: column;
+    margin:0;
+    background-color:#303825;
+    color:white;
+}
+#header {
+    height:60px;
+    width:auto;
+    border-bottom:1px solid #809080;
+    line-height:60px;
+    padding-left: 30px;
+}
+#section {
+    display:flex;
+    flex:1;
+    width:auto;
+}
+/* sec_list */
+#sec_list {
+    display:flex;
+    flex-direction: column;
+    width:350px;
+    border-right:1px solid #809080;
+}
+#sec_list > div#mode {
+    display:flex;
+    flex-wrap:wrap;
+    height:60px;
+    border-bottom:1px solid #809080;
+}
+#mode > button#friends {
+    width:175px;
+    height:60px;
+}
+#mode > button#rooms {
+    width:175px;
+    height:60px;
+}
+#mode > button {
+    border:none;
+    background:none;
+    color: #809080;
+    font-size:14px;
+}
+#mode > button:hover {
+    color:white;
+    cursor:pointer;
+}
+#mode > div#underline {
+    position:absolute;
+    top:119px;
+    left:32.5px;
+    /* left:205px; */
+    width:110px;
+    height:2px;
+    background:white;
+}
+#sec_list > div#list {
+    flex:1;
+    border-bottom:1px solid #809080;
+}
+#sec_list > div#profile {
+    height:150px;
+}
+/* sec_talk */
+#sec_talk {
+    display:flex;
+    flex-direction: column;
+    flex:1;
+}
+#sec_talk > div#title {
+    height:60px;
+    border-bottom:1px solid #809080;
+}
+#sec_talk > div#display {
+    flex:1;
+}

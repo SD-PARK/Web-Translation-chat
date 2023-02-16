@@ -12,6 +12,9 @@ app.get('/login', (req, res) => {
 app.get('/register', (req, res) => {
     res.sendFile(__dirname + '/client/html/register.html');
 });
+app.get('/main', (req, res) => {
+    res.sendFile(__dirname + '/client/html/main.html');
+})
 
 app.use('/client', express.static(path.join(__dirname, 'client')));
 app.use('/node_modules', express.static(path.join(__dirname, '/node_modules')));

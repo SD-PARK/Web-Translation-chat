@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="client/css/main.css">
+        <link rel="stylesheet" href="client/css/font.css">
+    </head>
+    <body>
+        <div id="header">대충 타이틀</div>
+        <div id="section">
+            <div id="sec_list">
+                <div id="mode">
+                    <button id="friends" onclick="modeSwap(0)" type="button">친구</button>
+                    <button id="rooms" onclick="modeSwap(1)" type="button">채팅방</button>
+                    <div id="underline"></div>
+                </div>
+                <div id="list"></div>
+                <div id="profile"></div>
+            </div>
+            <div id="sec_talk">
+                <div id="title"></div>
+                <div id="display"></div>
+            </div>
+        </div>
+        <script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
+        <script type="text/javascript"  src="/socket.io/socket.io.js"></script>
+        <script type="text/javascript" src="client/js/mainAction.js"></script>
+    </body>
+</html>
