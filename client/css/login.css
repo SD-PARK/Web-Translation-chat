@@ -1,8 +1,8 @@
 body {
     position:relative;
-    margin:0;
     width:auto;
     height:100vh;
+    margin:0;
     background:url('../img/bg.jpg') no-repeat center;
     background-size:cover;
     
