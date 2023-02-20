@@ -13,7 +13,7 @@ function modeSwap(mode) {
     selected.css({
         'color': 'white',
         'font-weight': 'bold'
-    }, 200);
+    });
     unselected.removeAttr('style');
     
     let left = 32.5 + (mode * 172.5);

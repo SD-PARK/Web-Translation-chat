@@ -71,12 +71,85 @@ body {
     height:2px;
     background:white;
 }
+
 #sec_list > div#list {
-    height:580px;
+    height:610px;
     border-bottom:1px solid #809080;
+    overflow-y:scroll;
 }
-#sec_list > div#profile {
-    height:150px;
+#list::-webkit-scrollbar {
+    width:5px;
+}
+#list::-webkit-scrollbar-thumb{
+    background-color: rgba(255,255,255,1);
+    border-radius: 10px;    
+}
+#list > div.friendCol {
+    position:relative;
+    height:60px;
+    padding:0 10px;
+}
+div.friendCol > img.profile {
+    width:40px;
+    height:40px;
+    margin:10px;
+    background-color:#809080;
+    border-radius:50%;
+}
+div.friendCol > img.flag {
+    position:absolute;
+    top:11px;
+    left:46px;
+    width:18px;
+    height:12px;
+    object-fit:cover;
+}
+div.friendCol > p {
+    float:right;
+    width:260px;
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    word-break:break-all;
+}
+
+#sec_list > div#myProfile {
+    position:relative;
+    height:120px;
+    padding:0 10px;
+}
+div#myProfile > img.profile {
+    width:70px;
+    height:70px;
+    margin:25px 10px;
+    background-color:#809080;
+    border-radius:50%;
+}
+div#myProfile > img.flag {
+    position:absolute;
+    bottom:4px;
+    right:0;
+    width:36px;
+    height:24px;
+    opacity:0.7;
+    object-fit:cover;
+}
+div#myProfile > p {
+    position:absolute;
+    top:32px;
+    left:103px;
+    width:200px;
+    font-size:18px;
+    margin:0;
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    word-break:break-all;
+}
+div#myProfile > p.tag {
+    top:60px;
+    font-size:16px;
+    color:#bbb;
 }
 /* sec_talk */
 #sec_talk {
