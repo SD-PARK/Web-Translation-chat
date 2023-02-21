@@ -127,10 +127,10 @@ div#myProfile > img.profile {
 }
 div#myProfile > img.flag {
     position:absolute;
-    bottom:4px;
-    right:0;
-    width:36px;
-    height:24px;
+    bottom:3px;
+    right:-1px;
+    width:39px;
+    height:26px;
     opacity:0.7;
     object-fit:cover;
 }
@@ -159,7 +159,56 @@ div#myProfile > p.tag {
 #sec_talk > div#title {
     height:60px;
     border-bottom:1px solid #809080;
+    line-height:60px;
+    padding: 0 20px;
 }
 #sec_talk > div#display {
-    flex:1;
+    height:729px;
+    padding:20px;
+}
+div#display > div#messages {
+    height:635px;
+    overflow-y:scroll;
+}
+#messages::-webkit-scrollbar {
+    width:5px;
+}
+#messages::-webkit-scrollbar-thumb{
+    background-color: rgba(255,255,255,0.7);
+    border-radius: 10px;    
+}
+div#messages > div.message {
+    position:relative;
+    height:auto;
+    margin-bottom:15px;
+}
+div.message > img.profile {
+    width:50px;
+    height:50px;
+    margin-right:10px;
+    background-color:#809080;
+    border-radius:50%;
+}
+div.message > span.name {
+    position:absolute;
+    top:0;
+    font-size:16px;
+}
+span.name > span.time {
+    margin-left:10px;
+    font-size:12px;
+    color:#bbb;
+}
+div.message > p {
+    margin: -30px 0 0 60px;
+}
+div#display > input#send {
+    width:969px;
+    height:52px;
+    padding: 0 20px;
+    background-color: #202815;
+    border-radius:10px;
+    border:none;
+    font-size:16px;
+    color:#fff;
 }
