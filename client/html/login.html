@@ -7,7 +7,7 @@
     </head>
     <body>
         <div id="form">
-            <form action="main" id="login">
+            <form action="login" id="login" method="post">
                 <br><span class="main title">😆</span><br>
                 <span class="title">반가워요!</span><br>
                 <span>이메일 또는 전화번호 <span class="red">*</span></span>
@@ -15,12 +15,13 @@
                 <span>비밀번호 <span class="red">*</span></span>
                 <input type="password" name="password">
                 <span><a href="#">비밀번호를 잊으셨나요?</a></span><br>
-                <button type="submit">로그인</button>
+                <button type="submit" value="login">로그인</button>
                 <span>계정이 필요하신가요? <a href="javascript:void(0);" onclick="to_register();">가입하기</a></span>
             </form>
         </div>
         <script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
         <script type="text/javascript" src="client/js/pageSwap.js"></script>
+        <script type="text/javascript" src="client/js/loginAction.js"></script>
         <script type="text/javascript"  src="/socket.io/socket.io.js"></script>
     </body>
 </html>

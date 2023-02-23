@@ -1,13 +1,5 @@
 swapPage(0);
 
-const form = $('form')[0];
-form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    swapPage(1);
-    setTimeout(() => {
-        form.submit();
-    }, 100);
-});
 function to_register() {
     swapPage(1);
     setTimeout(() => {
