@@ -6,13 +6,6 @@ const server = require('http').createServer(app);
 const io = require('./server/config/io')(server);
 const path = require('path');
 
-app.get('/register', (req, res) => {
-    res.sendFile(__dirname + '/client/html/register.html');
-});
-app.get('/main', (req, res) => {
-    res.sendFile(__dirname + '/client/html/main.html');
-})
-
 // body-parser
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));

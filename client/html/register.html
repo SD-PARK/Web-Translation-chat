@@ -7,7 +7,7 @@
     </head>
     <body>
         <div id="form">
-            <form action="#" id="register">
+            <form action="register" id="register" method="post">
                 <span class="main title">계정 만들기</span><br><br>
                 <span>이메일 <span class="red">*</span></span>
                 <input type="text" name="email"><br>
@@ -20,7 +20,9 @@
             </form>
         </div>
         <script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
-        <script type="text/javascript"  src="client/js/pageSwap.js"></script>
+        <script type="text/javascript" src="client/js/pageSwap.js"></script>
+        <script type="text/javascript" src="client/js/getParameter.js"></script>
+        <script type="text/javascript" src="client/js/loginAction.js"></script>
         <script type="text/javascript"  src="/socket.io/socket.io.js"></script>
     </body>
 </html>
