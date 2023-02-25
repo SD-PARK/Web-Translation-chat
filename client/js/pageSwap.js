@@ -26,8 +26,3 @@ function swapPage(status) { // 0: 현재 페이지에 머뭄, 1: 다른 페이�
         }, 100);
     }
 }
-
-$(() => {
-    // const socket = io();
-    // socket.emit('login');
-});

@@ -21,3 +21,8 @@ function modeSwap(mode) {
         left: left
     }, 200);
 }
+
+$(() => {
+    const socket = io();
+    socket.emit('login');
+});

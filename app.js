@@ -4,15 +4,18 @@ const express = require('express');
 const app = express();
 const server = require('http').createServer(app);
 const io = require('./server/config/io')(server);
+const session = require('./server/config/session');
 const path = require('path');
 
-// body-parser
+// Body-parser
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
-// static
+// Static
 app.use('/client', express.static(path.join(__dirname, 'client')));
 app.use('/config', express.static(path.join(__dirname, 'server/config')));
 app.use('/node_modules', express.static(path.join(__dirname, '/node_modules')));
+// Session
+app.use(session);
 // app.set('io', io);
 
 const router = require('./server/src/router');
