@@ -22,7 +22,7 @@ exports.loginPostMid = (req, res) => {
     db.query(`SELECT USER_ID FROM USERS
                 WHERE EMAIL='${email}' AND PASSWORD='${crypto_pw}'`, (err, check) => {
                     if (check[0]) {
-                        req.session.user = check[0];
+                        req.session.USER_ID = check[0].USER_ID;
                         res.redirect('/main');
                     }
                     else
@@ -41,22 +41,22 @@ exports.registerPostMid = (req, res) => {
     try {
         db.beginTransaction();
         
-        db.query(`SELECT USER_ID FROM USERS WHERE EMAIL='${email}'`, (err, check) => {
+        db.query(`CALL CHECK_DUPLICATE_EMAIL('${email}')`, (err, check) => {
             if (check[0])
                 res.redirect('/register?err=100');
             else {
                 let tag;
-                db.query(`SELECT NAME_TAG FROM USERS WHERE NAME='${name}'`, (err, used_tag) => {
+                db.query(`CALL CHECK_DUPLICATE_NAMETAG('${name}')`, (err, used_tag) => {
                     if (used_tag) {
                         do {
                             tag = ('#' + Math.floor(Math.random() * 10000));
                             for(let i of used_tag)
-                                if (tag == i.USER_TAG)
+                                if (tag == i.NAME_TAG)
                                     tag = -1;
                         } while (tag == -1);
                     }
                     
-                    db.query(`INSERT INTO USERS (EMAIL, PASSWORD, NAME, NAME_TAG) VALUE ('${email}', '${crypto_pw}', '${name}', '${tag}')`, (err, r) => {
+                    db.query(`CALL SIGNUP('${email}', '${crypto_pw}', '${name}', '${tag}')`, (err, r) => {
                         res.redirect('/login');
                         console.log('register:', email, name + tag);
                     });

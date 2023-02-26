@@ -76,12 +76,14 @@ body {
     height:610px;
     border-bottom:1px solid #809080;
     overflow-y:scroll;
+    scrollbar-width:thin;
+    scrollbar-color:#bbb transparent;
 }
 #list::-webkit-scrollbar {
     width:5px;
 }
 #list::-webkit-scrollbar-thumb{
-    background-color: rgba(255,255,255,1);
+    background-color: rgba(255,255,255,0.7);
     border-radius: 10px;    
 }
 #list > div.friendCol {
@@ -106,7 +108,7 @@ div.friendCol > img.flag {
 }
 div.friendCol > p {
     float:right;
-    width:260px;
+    width:250px;
     overflow:hidden;
     white-space:nowrap;
     text-overflow:ellipsis;
@@ -146,7 +148,7 @@ div#myProfile > p {
     text-overflow:ellipsis;
     word-break:break-all;
 }
-div#myProfile > p.tag {
+div#myProfile > p#tag {
     top:60px;
     font-size:16px;
     color:#bbb;
@@ -163,12 +165,14 @@ div#myProfile > p.tag {
     padding: 0 20px;
 }
 #sec_talk > div#display {
-    height:729px;
-    padding:20px;
+    height:709px;
+    padding:0 20px 20px 20px;
 }
 div#display > div#messages {
-    height:635px;
+    height:655px;
     overflow-y:scroll;
+    scrollbar-width:thin;
+    scrollbar-color:#bbb transparent;
 }
 #messages::-webkit-scrollbar {
     width:5px;
@@ -176,6 +180,9 @@ div#display > div#messages {
 #messages::-webkit-scrollbar-thumb{
     background-color: rgba(255,255,255,0.7);
     border-radius: 10px;    
+}
+div#messages > div.lineSpace {
+    height:15px;
 }
 div#messages > div.message {
     position:relative;

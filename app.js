@@ -3,8 +3,8 @@ const PORT = 3000;
 const express = require('express');
 const app = express();
 const server = require('http').createServer(app);
-const io = require('./server/config/io')(server);
 const session = require('./server/config/session');
+const io = require('./server/config/io')(server, session);
 const path = require('path');
 
 // Body-parser
