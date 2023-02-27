@@ -73,7 +73,7 @@ body {
 }
 
 #sec_list > div#list {
-    height:610px;
+    height:608px;
     border-bottom:1px solid #809080;
     overflow-y:scroll;
     scrollbar-width:thin;
@@ -115,6 +115,36 @@ div.friendCol > p {
     word-break:break-all;
 }
 
+#sec_list > div#addList {
+    position:absolute;
+    bottom:130px;
+    left:10px;
+    width:330px;
+    height:40px;
+    opacity:0.7;
+}
+#addList > input {
+    width:260px;
+    height:40px;
+    padding:0 55px 0 15px;
+    background-color: #202815;
+    border-radius:10px;
+    border:none;
+    font-size:15px;
+    color:#fff;
+}
+#addList > button {
+    position:absolute;
+    bottom:0px;
+    left:290px;
+    width:40px;
+    height:40px;
+    border:none;
+    border-radius:50%;
+    background-color: #C0D0C0;
+    font-size:26px;
+}
+
 #sec_list > div#myProfile {
     position:relative;
     height:120px;
@@ -129,7 +159,7 @@ div#myProfile > img.profile {
 }
 div#myProfile > img.flag {
     position:absolute;
-    bottom:3px;
+    bottom:1px;
     right:-1px;
     width:39px;
     height:26px;

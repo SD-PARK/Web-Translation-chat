@@ -2,5 +2,9 @@ const path = require('path');
 const db = require('../config/db');
 
 exports.mainGetMid = (req, res) => {
-    res.sendFile('main.html', {root: path.join('client/html/')});
+    if(req.session.USER_ID) {
+        res.sendFile('main.html', {root: path.join('client/html/')});
+    } else {
+        res.redirect('/login');
+    }
 }

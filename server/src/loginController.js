@@ -8,7 +8,7 @@ function hash(password) {
 }
 
 exports.loginGetMid = (req, res) => {
-    if (req.session.user)
+    if (req.session.USER_ID)
         res.redirect('/main');
     else
         res.sendFile('login.html', {root: path.join('client/html/')});
@@ -42,18 +42,27 @@ exports.registerPostMid = (req, res) => {
         db.beginTransaction();
         
         db.query(`CALL CHECK_DUPLICATE_EMAIL('${email}')`, (err, check) => {
-            if (check[0])
+            if (check[0][0]) {
+                console.log(check[0][0]);
                 res.redirect('/register?err=100');
+            }
             else {
-                let tag;
                 db.query(`CALL CHECK_DUPLICATE_NAMETAG('${name}')`, (err, used_tag) => {
-                    if (used_tag) {
-                        do {
-                            tag = ('#' + Math.floor(Math.random() * 10000));
-                            for(let i of used_tag)
-                                if (tag == i.NAME_TAG)
-                                    tag = -1;
-                        } while (tag == -1);
+                    let tag;
+                    if (used_tag[0][0]) {
+                        if (used_tag[0].length == 9999) {
+                            // 모든 네임태그 사용 중일 때
+                        } else {
+                            do {
+                                tag = ('#' + Math.floor(Math.random() * 10000));
+                                for(let i of used_tag[0])
+                                    if (tag == i.NAME_TAG) {
+                                        tag = -1;
+                                    }
+                            } while (tag == -1);
+                        }
+                    } else {
+                        tag = ('#' + Math.floor(Math.random() * 10000));
                     }
                     
                     db.query(`CALL SIGNUP('${email}', '${crypto_pw}', '${name}', '${tag}')`, (err, r) => {
