@@ -24,8 +24,9 @@
                         <div class="roomCol"></div>
                     </div>
                     <div id="addList">
-                        <input type="text" onkeyup="if(window.event.keyCode==13){searchFriend()}">
-                        <button>+</button>
+                        <p>이름과 태그가 정확한지 다시 한 번 확인해주세요.</p>
+                        <input type="text" placeholder="사용자명#0000" onkeyup="if(window.event.keyCode==13){searchFriend()}">
+                        <button onclick="addList()"></button>
                     </div>
                     <div id="myProfile">
                         <img src="client/img/neko2.png" class="profile">

@@ -91,6 +91,9 @@ body {
     height:60px;
     padding:0 10px;
 }
+#list > div.friendCol:hover {
+    background-color: rgba(255,255,255,0.1);
+}
 div.friendCol > img.profile {
     width:40px;
     height:40px;
@@ -117,15 +120,24 @@ div.friendCol > p {
 
 #sec_list > div#addList {
     position:absolute;
-    bottom:130px;
+    bottom:160px;
     left:10px;
-    width:330px;
+    width:350px;
     height:40px;
-    opacity:0.7;
+}
+#addList > p {
+    opacity:0;
+    height:20px;
+    font-size:13px;
+    margin:0 0 7px -20px;
+    text-align:center;
+    color:red;
 }
 #addList > input {
-    width:260px;
+    width:0px;
     height:40px;
+    opacity:0;
+    margin-left:260px;
     padding:0 55px 0 15px;
     background-color: #202815;
     border-radius:10px;
@@ -135,12 +147,14 @@ div.friendCol > p {
 }
 #addList > button {
     position:absolute;
-    bottom:0px;
+    bottom:-27px;
     left:290px;
     width:40px;
     height:40px;
+    opacity:0.7;
     border:none;
     border-radius:50%;
+    background-image: url('../img/plus.png');
     background-color: #C0D0C0;
     font-size:26px;
 }
@@ -149,6 +163,9 @@ div.friendCol > p {
     position:relative;
     height:120px;
     padding:0 10px;
+}
+#sec_list > div#myProfile:hover {
+    background-color: rgba(255,255,255,0.1);
 }
 div#myProfile > img.profile {
     width:70px;

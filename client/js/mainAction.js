@@ -48,18 +48,58 @@ function printFriend(info) {
     `);
 }
 
+let addButtonStatus = 0;
+const addList_p = $('#addList > p');
+const addList_input = $('#addList > input');
+const addList_btn = $('#addList > button');
+/** 친구 추가 버튼 클릭 시 */
+function addList() {
+    if (addButtonStatus) {
+        addList_input.animate({
+            opacity: 0,
+            'margin-left': '260px',
+            width: '0px'
+        }, 500);
+        addList_btn.animate({
+            opacity: 0.7,
+            rotate: '0deg'
+        }, 500);
+        addList_input.css('outline', '1px solid white');
+        addList_p.css('opacity', '0');
+        addList_input.val('');
+    } else {
+        addList_input.animate({
+            opacity: 1,
+            margin: 0,
+            width: '260px'
+        }, 500);
+        addList_btn.animate({
+            opacity: 1,
+            rotate: '45deg'
+        }, 500);
+    }
+    addButtonStatus = !addButtonStatus;
+}
+
+/** 친구 검색 */
 function searchFriend() {
-    let val = $('#addList > input').val();
+    let val = addList_input.val();
     let searchInfo = {
         NAME: val.slice(0, -5),
         TAG: val.slice(-5)
     }
     socket.emit('addFriend', (searchInfo), (callback) => {
         if (callback) {
-            $('#addList > input').val('');
+            addList_input.val('');
             modeSwap(0);
         } else {
-            // 찾지 못했어요.
+            addList_input.css('outline','1px solid red');
+            addList_p.css('opacity', '1');
         }
     });
 }
+
+addList_input.keyup(() => {
+    addList_input.css('outline', '1px solid white');
+    addList_p.css('opacity', '0');
+});
