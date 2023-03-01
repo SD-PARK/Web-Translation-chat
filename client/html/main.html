@@ -2,8 +2,8 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <link rel="stylesheet" href="client/css/main.css">
-        <link rel="stylesheet" href="client/css/font.css">
+        <link rel="stylesheet" href="/client/css/main.css">
+        <link rel="stylesheet" href="/client/css/font.css">
     </head>
     <body>
         <div id="form">
@@ -16,54 +16,40 @@
                         <div id="underline"></div>
                     </div>
                     <div id="list">
-                        <!-- <div class="friendCol">
-                            <img src="client/img/neko1.png" class="profile">
-                            <img src="client/img/flag/ko.png" class="flag">
+                        <!-- <div class="friendCol" onclick="location.href="/main/@fr/roomID"">
+                            <img src="/client/img/neko1.png" class="profile">
+                            <img src="/client/img/flag/ko.png" class="flag">
                             <p>닉네임닉네임닉네임닉네임닉네임닉네임닉네임닉네임닉네임닉네임닉네임닉네임닉네임닉네임닉네임닉네임닉네임</p>
                         </div> -->
                         <div class="roomCol"></div>
                     </div>
                     <div id="addList">
-                        <p>이름과 태그가 정확한지 다시 한 번 확인해주세요.</p>
+                        <p></p>
                         <input type="text" placeholder="사용자명#0000" onkeyup="if(window.event.keyCode==13){searchFriend()}">
                         <button onclick="addList()"></button>
                     </div>
                     <div id="myProfile">
-                        <img src="client/img/neko2.png" class="profile">
-                        <img src="client/img/flag/ko.png" class="flag">
-                        <p id="myName">박상도박상도박상도박상도박상도박상도박상도박상도박상도박상도박상도박상도박상도박상도박상도박상도박상도</p>
-                        <p id="tag">#1324</p>
+                        <img src="/client/img/neko2.png" class="profile">
+                        <img src="/client/img/flag/ko.png" class="flag">
+                        <p id="myName"></p>
+                        <p id="tag"></p>
                     </div>
                 </div>
                 <div id="sec_talk">
-                    <div id="title">대충 방 제목</div>
+                    <div id="title"></div>
                     <div id="display">
                         <div id="messages">
                             <div class="lineSpace"></div>
-                            <div class="message">
-                                <img src="client/img/neko1.png" class="profile">
-                                <span class="name">이름<span class="time">2023.02.21 오후 2:32</span></span>
-                                <p>
-                                    대화 내용<br>
-                                    대화 내용<br>
-                                    대화 내용대화 내용대화 내용대화 내용대화 내용대화 내용대화 내용대화 내용대화 내용대화 내용대화 내용대화 내용대화 내용대화 내용대화 내용대화 내용대화 내용대화 내용대화 내용대화 내용대화 내용대화 내용대화 내용대화 내용대화 내용
-                                    대화 내용<br>
-                                    대화 내용<br>
-                                    대화 내용<br>
-                                    대화 내용<br>
-                                    대화 내용<br>
-                                    대화 내용대화 내용대화 내용대화 내용대화 내용대화 내용대화 내용대화 내용대화 내용대화 내용대화 내용대화 내용대화 내용대화 내용대화 내용대화 내용대화 내용대화 내용대화 내용대화 내용대화 내용
-                                </p>
-                            </div>
                         </div>
-                        <input type="text" id="send">
+                        <input type="text" id="send" onkeyup="if(window.event.keyCode==13){sendChat()}">
                     </div>
                 </div>
             </div>
         </div>
-        <script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
-        <script type="text/javascript"  src="client/js/pageSwap.js"></script>
-        <script type="text/javascript"  src="/socket.io/socket.io.js"></script>
-        <script type="text/javascript" src="client/js/mainAction.js"></script>
+        <script type="text/javascript" src="/node_modules/jquery/dist/jquery.min.js"></script>
+        <script type="text/javascript" src="/client/js/pageSwap.js"></script>
+        <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+        <script type="text/javascript" src="/client/js/mainSocket.js"></script>
+        <script type="text/javascript" src="/client/js/mainAction.js"></script> <!-- Action에는 애니메이션만 넣을 것. socket은 분리. -->
     </body>
 </html>

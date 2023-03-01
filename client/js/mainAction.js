@@ -1,10 +1,4 @@
-const socket = io();
 
-// 세팅
-socket.emit('login', (info) => {
-    $('div#myProfile > p#myName').text(info.NAME);
-    $('div#myProfile > p#tag').text(info.NAME_TAG);
-});
 modeSwap(0);
 $('#messages').scrollTop($('#messages')[0].scrollHeight);
 
@@ -20,9 +14,9 @@ function modeSwap(mode) {
         $('button#friends').css(select_css);
         $('button#rooms').removeAttr('style');
 
-        socket.emit('friendList', (friends) => {
-            for(let i of friends) {
-                printFriend(i);
+        socket.emit('friendChatList', (friends) => {
+            for(let i of friends.LIST) {
+                printFriend(i, (i.ROOM_ID === friends.ACCENT));
             }
         });
     } else {
@@ -37,22 +31,11 @@ function modeSwap(mode) {
     }, 200);
 }
 
-/** 친구 목록 출력 */
-function printFriend(info) {
-    $('div#list').append(`
-        <div class="friendCol">
-            <img src="client/img/neko1.png" class="profile">
-            <img src="client/img/flag/ko.png" class="flag">
-            <p>${info.NAME}</p>
-        </div>
-    `);
-}
-
 let addButtonStatus = 0;
 const addList_p = $('#addList > p');
 const addList_input = $('#addList > input');
 const addList_btn = $('#addList > button');
-/** 친구 추가 버튼 클릭 시 */
+/** 애니메이션: 친구 추가 버튼 클릭 시 */
 function addList() {
     if (addButtonStatus) {
         addList_input.animate({
@@ -80,25 +63,6 @@ function addList() {
     }
     addButtonStatus = !addButtonStatus;
 }
-
-/** 친구 검색 */
-function searchFriend() {
-    let val = addList_input.val();
-    let searchInfo = {
-        NAME: val.slice(0, -5),
-        TAG: val.slice(-5)
-    }
-    socket.emit('addFriend', (searchInfo), (callback) => {
-        if (callback) {
-            addList_input.val('');
-            modeSwap(0);
-        } else {
-            addList_input.css('outline','1px solid red');
-            addList_p.css('opacity', '1');
-        }
-    });
-}
-
 addList_input.keyup(() => {
     addList_input.css('outline', '1px solid white');
     addList_p.css('opacity', '0');

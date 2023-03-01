@@ -3,7 +3,7 @@ body {
     width:auto;
     height:100vh;
     margin:0;
-    background:url('../img/bg.jpg') no-repeat center;
+    background:url('/client/img/bg.jpg') no-repeat center;
     background-size:cover;
     
     -webkit-backdrop-filter:blur(5px);
@@ -89,10 +89,16 @@ body {
 #list > div.friendCol {
     position:relative;
     height:60px;
-    padding:0 10px;
+    padding:0 5px;
+    margin: 3px 0 3px 5px;
+    border-radius:10px;
+    cursor:pointer;
 }
 #list > div.friendCol:hover {
     background-color: rgba(255,255,255,0.1);
+}
+#list > div.accent {
+    background-color: rgba(255,255,255,0.2);
 }
 div.friendCol > img.profile {
     width:40px;
@@ -154,15 +160,17 @@ div.friendCol > p {
     opacity:0.7;
     border:none;
     border-radius:50%;
-    background-image: url('../img/plus.png');
+    background-image: url('/client/img/plus.png');
     background-color: #C0D0C0;
     font-size:26px;
+    cursor:pointer;
 }
 
 #sec_list > div#myProfile {
     position:relative;
     height:120px;
     padding:0 10px;
+    cursor:pointer;
 }
 #sec_list > div#myProfile:hover {
     background-color: rgba(255,255,255,0.1);
@@ -210,6 +218,7 @@ div#myProfile > p#tag {
     border-bottom:1px solid #809080;
     line-height:60px;
     padding: 0 20px;
+    text-shadow:3px 3px 5px #000;
 }
 #sec_talk > div#display {
     height:709px;
