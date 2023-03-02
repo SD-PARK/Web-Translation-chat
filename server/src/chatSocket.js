@@ -20,21 +20,30 @@ module.exports = (chat, db) => {
             }
 
             if(roomId) {
+                db.query(`CALL PRINT_MESSAGES('${roomId}')`, (err, logs) => {
+                    socket.emit('chatLogs', (logs[0]));
+                });
                 socket.join(roomId);
             }
         });
 
         socket.on('disconnect', () => {
             socket.leave(roomId);
+            roomId = 0;
         });
 
         socket.on('sendMessage', (data) => {
             msgInfo = {
                 NAME: name,
-                MSG: data.MSG,
-                TIME: data.TIME
+                CHAT: data.MSG,
+                SEND_TIME: data.TIME
             }
-            chat.to(roomId).emit('msgReceive', msgInfo);
+
+            try {
+                db.query(`CALL SEND_MESSAGE('${roomId}', ${userId}, '${data.MSG}')`);
+                console.log('MSG DB Save: ', roomId, userId, data.MSG, data.TIME);
+                chat.to(roomId).emit('msgReceive', msgInfo);
+            } catch (err) {}
         });
 
         // 친구 목록 호출

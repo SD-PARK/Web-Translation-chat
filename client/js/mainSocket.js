@@ -56,13 +56,33 @@ function sendChat() {
 }
 
 socket.on('msgReceive', (msgInfo) => {
-    console.log(msgInfo);
-
-    let time = new Intl.DateTimeFormat('ko', {dateStyle:'medium', timeStyle: 'short'}).format(new Date(msgInfo.TIME));
-    $('div#messages').append(`
-        <div class="message">
-            <img src="/client/img/neko1.png" class="profile">
-            <span class="name">${msgInfo.NAME}<span class="time">${time}</span></span>
-            <p>${msgInfo.MSG}</p>
-        </div>`);
+    msgPrint(msgInfo);
 });
+
+socket.on('chatLogs', (logs) => {
+    console.log(logs);
+    for(let log of logs) {
+        msgPrint(log);
+    }
+});
+
+let beforeInfo;
+function msgPrint(info) {
+    if(beforeInfo && (beforeInfo.NAME === info.NAME)) {
+        let p = $('div#messages > div.message:nth-last-child(1) > p');
+        p.text(beforeInfo.CHAT + '\n' + info.CHAT);
+        beforeInfo.CHAT = p.text();
+        p.html(p.html().replace(/\n/g, '<br/>'));
+    } else {
+        let time = new Intl.DateTimeFormat('ko', {dateStyle:'medium', timeStyle: 'short'}).format(new Date(info.SEND_TIME));
+        $('div#messages').append(`
+            <div class="message">
+                <img src="/client/img/neko1.png" class="profile">
+                <span class="name">${info.NAME}<span class="time">${time}</span></span>
+                <p>${info.CHAT}</p>
+            </div>`);
+        beforeInfo = info;
+    }
+    
+    $('#messages').scrollTop($('#messages')[0].scrollHeight);
+}
