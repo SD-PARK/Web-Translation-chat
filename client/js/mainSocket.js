@@ -6,6 +6,9 @@ socket.emit('login', (info) => {
     $('div#myProfile > p#tag').text(info.NAME_TAG);
 });
 
+
+/////////////// 친구 목록 관련 ///////////////
+
 /** 친구 목록 출력 */
 function printFriend(info, accent) {
     $('div#list').append(`
@@ -13,6 +16,7 @@ function printFriend(info, accent) {
             <img src="/client/img/neko1.png" class="profile">
             <img src="/client/img/flag/ko.png" class="flag">
             <p>${info.NAME}</p>
+            <button onclick="deleteFriend('${info.ROOM_ID}')"></button>
         </div>
     `);
     if(accent) {
@@ -35,7 +39,8 @@ function searchFriend() {
             addList_p.css('opacity', '1');
         } else if (callback) {
             addList_input.val('');
-            modeSwap(0);
+            mode = 0;
+            modeSwap();
         } else {
             addList_input.css('outline','1px solid red');
             addList_p.text('이름과 태그가 정확한지 다시 한 번 확인해주세요.');
@@ -44,8 +49,16 @@ function searchFriend() {
     });
 }
 
+function deleteFriend(roomId) {
+    socket.emit('deleteFriend', (roomId), (callback) => {
+        mode = 0;
+        modeSwap();
+    });
+}
+
 /////////////// 채팅 관련 ///////////////
 
+/** 메세지 송신 */
 function sendChat() {
     let data = {
         MSG: $('input#send').val(),
@@ -55,10 +68,12 @@ function sendChat() {
     socket.emit('sendMessage', (data));
 }
 
+/** 메세지 수신 */
 socket.on('msgReceive', (msgInfo) => {
     msgPrint(msgInfo);
 });
 
+/** 과거 메세지 출력 */
 socket.on('chatLogs', (logs) => {
     console.log(logs);
     for(let log of logs) {
@@ -66,6 +81,7 @@ socket.on('chatLogs', (logs) => {
     }
 });
 
+/** 메세지 출력 관련 함수 */
 let beforeInfo;
 function msgPrint(info) {
     if(beforeInfo && (beforeInfo.NAME === info.NAME)) {

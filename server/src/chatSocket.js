@@ -21,7 +21,8 @@ module.exports = (chat, db) => {
 
             if(roomId) {
                 db.query(`CALL PRINT_MESSAGES('${roomId}')`, (err, logs) => {
-                    socket.emit('chatLogs', (logs[0]));
+                    try { socket.emit('chatLogs', (logs[0])); }
+                    catch (err) {}
                 });
                 socket.join(roomId);
             }
@@ -32,6 +33,7 @@ module.exports = (chat, db) => {
             roomId = 0;
         });
 
+        // 메세지 송신
         socket.on('sendMessage', (data) => {
             msgInfo = {
                 NAME: name,
@@ -50,7 +52,7 @@ module.exports = (chat, db) => {
         socket.on('friendChatList', (callback) => {
             try {
                 db.beginTransaction();
-                db.query(`CALL PRINT_FRIENDS_CHAT(${userId})`, (err, friends) => { try{ callback({ LIST: friends[0], ACCENT: roomId}); } catch (err){} });
+                db.query(`CALL PRINT_FRIENDS_CHAT(${userId})`, (err, friends) => { try{ callback({ LIST: friends[0], ACCENT: roomId});} catch (err){} });
                 db.commit();
             } catch (err) {
                 db.rollback();
@@ -61,26 +63,27 @@ module.exports = (chat, db) => {
         socket.on('addFriend', (info, callback) => {
             try {
                 db.beginTransaction();
-                db.query(`CALL SEARCH_USER_RELATION(${userId}, '${info.NAME}', '${info.TAG}')`, (err, rel) => { // 검색인자와 일치하는 유저 불러옴
-                    if(rel[0][0]) { // 일치하는 유저가 있다면?
-                        if(rel[0][0].ME_REL) { // 나의 친구로 등록된 사용자라면?: '친구로 등록된 사용자예요!'
-                            console.log(-1);
+                db.query(`CALL SEARCH_USER_RELATION(${userId}, '${info.NAME}', '${info.TAG}')`, (err, rel) => { // 검색인자와 일치하는 유저의 ID, 해당 유저와의 관계 불러옴
+                    if(rel[0][0]?.USER_ID) { // 일치하는 유저가 있다면?
+                        if(rel[0][0]?.ME_REL) { // 나의 친구로 등록된 사용자라면?: '친구로 등록된 사용자예요!'
                             callback(-1);
                         } else {
                             try {
-                                db.beginTransaction();
                                 db.query(`CALL ADD_FRIEND(${userId}, ${rel[0][0].USER_ID})`);
-                                if(!rel[0][0].TARGET_REL) // 상대방이 나를 친구로 등록하지 않았다면?: 개인 방 생성, 초대
-                                    inviteRoom([userId, rel[0][0].USER_ID], makeRoom('ONE'));
-                                console.log('Add Relation: ', userId, '=>', rel[0][0].USER_ID);
-                                db.commit();
-                                callback(1);
+                                db.query(`CALL CHECK_EXIST_ROOM(${userId}, ${rel[0][0].USER_ID});`, (err, room) => { // 이미 생성된 방이 있는지 체크
+                                    console.log(room[0]);
+                                    if (room[0][0]?.STATUS == undefined) { // 상대방과의 기존 방이 없다면, 생성 후 초대
+                                        inviteRoom([userId, rel[0][0].USER_ID], makeRoom('ONE'));
+                                    } else if (room[0][0]?.STATUS == 'EXIT') { // 상대방과의 기존 방이 있으며, 나왔다면, 기존 방 입장
+                                        inviteRoom([userId], room[0][0].ROOM_ID);
+                                    }
+                                    callback(1);
+                                    console.log('Add Relation: ', userId, '=>', rel[0][0].USER_ID);
+                                });
                             } catch (err) {
-                                db.rollback();
                             }
                         }
                     } else { // 일치하는 유저가 없다면?: '이름과 태그가 정확한지 다시 한 번 확인해주세요.'
-                        console.log(0);
                         callback(0);
                     }
                 });
@@ -91,9 +94,17 @@ module.exports = (chat, db) => {
             }
         });
 
+        socket.on('deleteFriend', (roomId, callback) => {
+            db.query(`CALL DELETE_FRIEND(${userId}, '${roomId}')`, (err, res) => {
+                db.query(`CALL CHECK_REMOVED_ROOM('${roomId}')`); // 채팅방에 남은 인원이 없을 경우 관련 데이터 제거
+            });
+            console.log('Delete Relation!');
+            callback();
+        });
+
         /** ONE, MANY ; RoomID 반환 */
         function makeRoom(status) {
-            let id = randomChars(9);
+            let id = randomChars(9); // 같은 이름의 채팅방이 있을 경우
             db.query(`CALL CREATE_ROOM('${id}', '${status}')`);
             console.log('Create Room: [' + status + '] ', id);
             return id;
@@ -101,19 +112,20 @@ module.exports = (chat, db) => {
 
         /** 랜덤 문자열 생성 */
         function randomChars(length) {
-            const chars = '0123456789abcdefghijkmnopqrstuvwxyzABCDEFGHIJKMNOPQRSTUVWXYZ';
+            const chars = '0123456789abcdefghijkmnopqrstuvwxyz';
             let str = '';
             for(let i=0; i<length; i++) {
-                str += chars.charAt(Math.floor(Math.random() * 60));
+                str += chars.charAt(Math.floor(Math.random() * 35));
             }
             return str;
         }
 
-        /** 대화방에 사용자 초대 */
+        /** 채팅방에 사용자 초대 */
         function inviteRoom(person, room) {
             for(let p of person) {
-                db.query(`CALL INVITE_ROOM (${p}, '${room}')`);
-                console.log('Invite Room:', p, '=>', room);
+                db.query(`CALL INVITE_ROOM (${p}, '${room}')`, (err, res) => {
+                    console.log('Invite Room:', p, '=>', room);
+                });
             }
         }
     });

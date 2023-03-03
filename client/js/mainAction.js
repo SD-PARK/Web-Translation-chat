@@ -2,7 +2,7 @@
 
 
 /** 친구 <-> 채팅방 탭 전환 애니메이션 */
-let mode = 0; // 0: 친구 1: 채팅방
+let mode = 0; // 0: 채팅방 탭, 1: 친구 탭 선택 중
 modeSwap();
 function modeSwap() {
     // 탭 강조, 목록 출력
@@ -16,6 +16,7 @@ function modeSwap() {
         $('button#rooms').removeAttr('style');
 
         socket.emit('friendChatList', (friends) => {
+            console.log(1);
             for(let i of friends.LIST) {
                 console.log(i.ROOM_ID, friends.ACCENT);
                 printFriend(i, (i.ROOM_ID === friends.ACCENT));
