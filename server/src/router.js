@@ -16,6 +16,12 @@ router.post('/register', loginController.registerPostMid);
 
 router.get('/main', mainController.mainGetMid);
 
+router.get('/main/:target', (req, res, next) => {
+    req.session.ROOM_TARGET = req.params.target;
+    req.session.ROOM_ID = 0;
+    next();
+}, mainController.mainGetMid);
+
 router.get('/main/:target/:id', (req, res, next) => {
     req.session.ROOM_TARGET = req.params.target;
     req.session.ROOM_ID = req.params.id;

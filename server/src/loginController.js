@@ -9,7 +9,7 @@ function hash(password) {
 
 exports.loginGetMid = (req, res) => {
     if (req.session.USER_ID)
-        res.redirect('/main');
+        res.redirect('/main/@fr');
     else
         res.sendFile('login.html', {root: path.join('client/html/')});
 }
@@ -25,7 +25,7 @@ exports.loginPostMid = (req, res) => {
         WHERE EMAIL='${email}' AND PASSWORD='${crypto_pw}'`, (err, check) => {
             if (check[0]) {
                 req.session.USER_ID = check[0].USER_ID;
-                res.redirect('/main');
+                res.redirect('/main/@fr');
             }
             else
                 res.redirect('/login?failed=1');

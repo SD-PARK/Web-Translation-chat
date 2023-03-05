@@ -1,9 +1,12 @@
 const socket = io('/chat');
 
 // 세팅
+let target;
 socket.emit('login', (info) => {
-    $('div#myProfile > p#myName').text(info.NAME);
-    $('div#myProfile > p#tag').text(info.NAME_TAG);
+    $('div#myProfile > p#myName').text(info.INFO.NAME);
+    $('div#myProfile > p#tag').text(info.INFO.NAME_TAG);
+    modeSwap(info.TARGET == '@rm');
+    target = info.TARGET;
 });
 
 
@@ -12,7 +15,7 @@ socket.emit('login', (info) => {
 /** 친구 목록 출력 */
 function printFriend(info, accent) {
     $('div#list').append(`
-        <div class="friendCol" onclick="location.href='/main/@fr/${info.ROOM_ID}'">
+        <div class="col" onclick="location.href='/main/@fr/${info.ROOM_ID}'">
             <img src="/client/img/neko1.png" class="profile">
             <img src="/client/img/flag/ko.png" class="flag">
             <p>${info.NAME}</p>
@@ -21,7 +24,7 @@ function printFriend(info, accent) {
     `);
     if(accent) {
         $('div#title').text(info.NAME);
-        $('div#list > div.friendCol').last().addClass('accent');
+        $('div#list > div.col').last().addClass('accent');
     }
 }
 
@@ -40,7 +43,7 @@ function searchFriend() {
         } else if (callback) {
             addList_input.val('');
             mode = 0;
-            modeSwap();
+            modeSwap(0);
         } else {
             addList_input.css('outline','1px solid red');
             addList_p.text('이름과 태그가 정확한지 다시 한 번 확인해주세요.');
@@ -51,10 +54,27 @@ function searchFriend() {
 
 function deleteFriend(roomId) {
     socket.emit('deleteFriend', (roomId), (callback) => {
-        mode = 0;
-        modeSwap();
+        modeSwap(0);
     });
 }
+
+/////////////// 채팅방 관련 ///////////////
+
+
+/** 채팅방 목록 출력 */
+function printRoom(info, accent) {
+    $('div#list').append(`
+        <div class="col" onclick="location.href='/main/@rm/${info.ROOM_ID}'">
+            <img src="/client/img/neko1.png" class="profile">
+            <p>${info.TITLE}</p>
+        </div>
+    `);
+    if(accent) {
+        $('div#title').text(info.TITLE);
+        $('div#list > div.col').last().addClass('accent');
+    }
+}
+
 
 /////////////// 채팅 관련 ///////////////
 
@@ -76,6 +96,7 @@ socket.on('msgReceive', (msgInfo) => {
 /** 과거 메세지 출력 */
 socket.on('chatLogs', (logs) => {
     console.log(logs);
+    $('div#title').css('background-image', `url('/client/img/${target}.png')`);
     for(let log of logs) {
         msgPrint(log);
     }

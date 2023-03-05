@@ -1,0 +1,110 @@
+div#bgBox {
+    position:absolute;
+    width:1400px;
+    height:850px;
+    top:50%;
+    left:50%;
+    transform:translate(-50%, -50%);
+    border-radius:10px;
+    background-color:rgba(0,0,0,0.6);
+    opacity:0;
+    display:none;
+}
+
+div#bgBox > div#alert {
+    position:absolute;
+    width:400px;
+    height:auto;
+    background-color:#303825;
+    top:50%;
+    left:50%;
+    transform:translate(-50%, -50%);
+    border-radius:15px;
+    padding:30px;
+    box-shadow:1px 2px 30px -10px black;
+}
+div#alert > * {
+    border-radius:10px;
+}
+div#alert > button#closeAlert {
+    position:absolute;
+    top:15px;
+    right:15px;
+    width:30px;
+    height:30px;
+    background:none;
+    background-image:url('/client/img/delete.png');
+    background-size:cover;
+    opacity:0.7;
+}
+div#alert > button#closeAlert:hover {
+    opacity:1;
+}
+div#alert > h3 {
+    text-align:center;
+    margin-top:0;
+    color:#fff;
+}
+div#alert > button {
+    border:none;
+    font-weight:bold;
+    cursor:pointer;
+    background:none;
+    font-size:15px;
+}
+div#alert > button#createRoomBtn {
+    width:400px;
+    height:50px;
+    padding-left:20px;
+    color:#333;
+    text-align:left;
+    background:#fff url('/client/img/arrow.png') no-repeat 95%;
+    background-size:contain;
+}
+div#alert > p {
+    color:#fff;
+    text-align:center;
+    font-size:15px;
+}
+div#alert > input {
+    outline:none;
+    padding: 0 20px;
+    border:none;
+    font-size:14px;
+}
+div#alert > input#enterRoomId {
+    width:360px;
+    height:45px;
+}
+div#alert > button#enterRoomBtn {
+    float:right;
+    width:100px;
+    height:40px;
+    background-color:#809080;
+    color:#ddd;
+    margin:15px 0 0 0px;
+    font-size:14px;
+}
+
+div#alert > p#explan {
+    font-size:13px;
+    color:#ccc;
+    text-align:left;
+    margin-bottom:5px;
+}
+div#alert > input#roomTitle {
+    width:360px;
+    height:45px;
+    margin-bottom:15px;
+}
+div#alert > button#backBtn {
+    margin-top:12px;
+    color:#ddd;
+}
+div#alert > button#createBtn {
+    float:right;
+    width:80px;
+    height:40px;
+    color:#ddd;
+    background-color:#809080;
+}

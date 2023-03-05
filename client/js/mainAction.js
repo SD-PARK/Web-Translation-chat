@@ -3,40 +3,45 @@
 
 /** 친구 <-> 채팅방 탭 전환 애니메이션 */
 let mode = 0; // 0: 채팅방 탭, 1: 친구 탭 선택 중
-modeSwap();
-function modeSwap() {
+function modeSwap(md) {
     // 탭 강조, 목록 출력
     let select_css = {
         'color': 'white',
         'font-weight': 'bold'};
 
-    $('div#list').empty();
-    if (!mode) {
+    if (!md) {
         $('button#friends').css(select_css);
         $('button#rooms').removeAttr('style');
-
-        socket.emit('friendChatList', (friends) => {
-            console.log(1);
-            for(let i of friends.LIST) {
-                console.log(i.ROOM_ID, friends.ACCENT);
-                printFriend(i, (i.ROOM_ID === friends.ACCENT));
-            }
-        });
     } else {
         $('button#rooms').css(select_css);
         $('button#friends').removeAttr('style');
-
-        if(addButtonStatus)
-            addList();
     }
+    loadList(!md);
     
     // 밑줄 애니메이션
-    let left = 32.5 + (mode * 172.5);
+    let left = 32.5 + (md * 172.5);
     $('#underline').animate({
         left: left
     }, 200);
 
-    mode = !mode;
+    mode = !md;
+}
+
+function loadList(mode) {
+    $('div#list').empty();
+    if(mode) {
+        socket.emit('friendChatList', (friends) => {
+            for(let i of friends.LIST) {
+                printFriend(i, (i.ROOM_ID === friends.ACCENT));
+            }
+        });
+    } else {
+        socket.emit('roomChatList', (room) => {
+            for(let i of room.LIST) {
+                printRoom(i, (i.ROOM_ID === room.ACCENT));
+            }
+        });
+    }
 }
 
 let addButtonStatus = 0;
@@ -72,9 +77,8 @@ function addList() {
         }
         addButtonStatus = !addButtonStatus;
     } else { // 채팅방 탭 선택 중
-
+        loadAlert();
     }
-    console.log(mode);
 }
 
 addList_input.keyup(() => {

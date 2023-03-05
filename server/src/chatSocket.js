@@ -6,13 +6,15 @@ module.exports = (chat, db) => {
         socket.on('login', (callback) => {
             userId = socket.handshake.session.USER_ID;
             roomId = socket.handshake.session.ROOM_ID;
+            roomTarget = socket.handshake.session.ROOM_TARGET;
 
             console.log('Client Login!: ' + userId);
             try {
                 db.beginTransaction();
                 db.query(`CALL PRINT_USER_INFO(${userId})`, (err, info) => {
-                    try { callback(info[0][0]); name = info[0][0].NAME; }
-                    catch (err) {}
+                    try { 
+                        callback({TARGET:roomTarget, INFO:info[0][0]}); name = info[0][0].NAME;
+                    } catch (err) {}
                 });
                 db.commit();
             } catch (err) {
@@ -20,6 +22,7 @@ module.exports = (chat, db) => {
             }
 
             if(roomId) {
+                console.log(roomId);
                 db.query(`CALL PRINT_MESSAGES('${roomId}')`, (err, logs) => {
                     try { socket.emit('chatLogs', (logs[0])); }
                     catch (err) {}
@@ -29,8 +32,8 @@ module.exports = (chat, db) => {
         });
 
         socket.on('disconnect', () => {
+            roomId, roomTarget = 0;
             socket.leave(roomId);
-            roomId = 0;
         });
 
         // 메세지 송신
@@ -94,6 +97,7 @@ module.exports = (chat, db) => {
             }
         });
 
+        // 친구 삭제
         socket.on('deleteFriend', (roomId, callback) => {
             db.query(`CALL DELETE_FRIEND(${userId}, '${roomId}')`, (err, res) => {
                 db.query(`CALL CHECK_REMOVED_ROOM('${roomId}')`); // 채팅방에 남은 인원이 없을 경우 관련 데이터 제거
@@ -102,11 +106,37 @@ module.exports = (chat, db) => {
             callback();
         });
 
+        socket.on('roomChatList', (callback) => {
+            try {
+                db.beginTransaction();
+                db.query(`CALL PRINT_ROOM_CHAT(${userId})`, (err, rooms) => { try{ callback({ LIST: rooms[0], ACCENT: roomId});} catch (err){} });
+                db.commit();
+            } catch (err) {
+                db.rollback();
+            }
+        });
+
+        // 채팅방 참가
+        socket.on('checkRoomId', (checkId, callback) => {
+            db.query(`CALL CHECK_ROOM_ID('${checkId}')`, (err, res) => {
+                if(res[0][0]?.ROOM_ID) {
+                    callback(1);
+                    inviteRoom([userId], checkId);
+                }
+                else callback(0);
+            });
+        });
+
+        // 채팅방 생성
+        socket.on('createRoom', (title) => {
+            inviteRoom([userId], makeRoom({STATUS:'many', TITLE:title}));
+        });
+
         /** ONE, MANY ; RoomID 반환 */
-        function makeRoom(status) {
+        function makeRoom(info) {
             let id = randomChars(9); // 같은 이름의 채팅방이 있을 경우
-            db.query(`CALL CREATE_ROOM('${id}', '${status}')`);
-            console.log('Create Room: [' + status + '] ', id);
+            db.query(`CALL CREATE_ROOM('${id}', '${info.STATUS}', '${info?.TITLE ?? '채팅방'}')`);
+            console.log('Create Room: [' + info.STATUS + '] ', id);
             return id;
         }
 

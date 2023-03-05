@@ -86,7 +86,7 @@ body {
     background-color: rgba(255,255,255,0.7);
     border-radius: 10px;    
 }
-#list > div.friendCol {
+#list > div.col {
     position:relative;
     height:60px;
     padding:0 5px;
@@ -94,20 +94,20 @@ body {
     border-radius:10px;
     cursor:pointer;
 }
-#list > div.friendCol:hover {
+#list > div.col:hover {
     background-color: rgba(255,255,255,0.1);
 }
 #list > div.accent {
     background-color: rgba(255,255,255,0.2);
 }
-div.friendCol > img.profile {
+div.col > img.profile {
     width:40px;
     height:40px;
     margin:10px;
     background-color:#809080;
     border-radius:50%;
 }
-div.friendCol > img.flag {
+div.col > img.flag {
     position:absolute;
     top:11px;
     left:46px;
@@ -115,7 +115,7 @@ div.friendCol > img.flag {
     height:12px;
     object-fit:cover;
 }
-div.friendCol > p {
+div.col > p {
     float:right;
     width:250px;
     overflow:hidden;
@@ -123,7 +123,7 @@ div.friendCol > p {
     text-overflow:ellipsis;
     word-break:break-all;
 }
-div.friendCol > button {
+div.col > button {
     display:none;
     position:absolute;
     right:15px;
@@ -136,10 +136,10 @@ div.friendCol > button {
     background-size:cover;
     opacity:0.7;
 }
-div.friendCol:hover > button {
+div.col:hover > button {
     display:block;
 }
-div.friendCol > button:hover {
+div.col > button:hover {
     opacity:1;
     cursor:pointer;
 }
@@ -237,8 +237,10 @@ div#myProfile > p#tag {
     height:60px;
     border-bottom:1px solid #809080;
     line-height:60px;
-    padding: 0 20px;
+    padding: 0 20px 0 60px;
     text-shadow:3px 3px 5px #000;
+    background:url('/client/img/@fr.png') no-repeat 15px;
+    background-size:35px;
 }
 #sec_talk > div#display {
     height:709px;
