@@ -57,10 +57,10 @@ body {
     background:none;
     color: #bbb;
     font-size:14px;
+    cursor:pointer;
 }
 #mode > button:hover {
     color:white;
-    cursor:pointer;
 }
 #mode > div#underline {
     position:absolute;
@@ -138,10 +138,10 @@ div.col > button {
 }
 div.col:hover > button {
     display:block;
+    cursor:pointer;
 }
 div.col > button:hover {
     opacity:1;
-    cursor:pointer;
 }
 
 #sec_list > div#addList {
@@ -241,6 +241,22 @@ div#myProfile > p#tag {
     text-shadow:3px 3px 5px #000;
     background:url('/client/img/@fr.png') no-repeat 15px;
     background-size:35px;
+}
+div#title > button {
+    float:right;
+    width:30px;
+    height:30px;
+    margin:15px 10px;
+    border:none;
+    cursor:pointer;
+}
+div#title > button#invite {
+    background:url('/client/img/invite.png') no-repeat;
+    background-size:cover;
+}
+div#title > button#exit {
+    background:url('/client/img/exit.png') no-repeat;
+    background-size:cover;
 }
 #sec_talk > div#display {
     height:709px;

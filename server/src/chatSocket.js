@@ -22,7 +22,6 @@ module.exports = (chat, db) => {
             }
 
             if(roomId) {
-                console.log(roomId);
                 db.query(`CALL PRINT_MESSAGES('${roomId}')`, (err, logs) => {
                     try { socket.emit('chatLogs', (logs[0])); }
                     catch (err) {}
@@ -31,6 +30,7 @@ module.exports = (chat, db) => {
             }
         });
 
+        // 페이지 벗어남
         socket.on('disconnect', () => {
             roomId, roomTarget = 0;
             socket.leave(roomId);
@@ -106,6 +106,7 @@ module.exports = (chat, db) => {
             callback();
         });
 
+        // 채팅방 목록 호출
         socket.on('roomChatList', (callback) => {
             try {
                 db.beginTransaction();
@@ -130,6 +131,17 @@ module.exports = (chat, db) => {
         // 채팅방 생성
         socket.on('createRoom', (title) => {
             inviteRoom([userId], makeRoom({STATUS:'many', TITLE:title}));
+        });
+
+        // 채팅방 나가기
+        socket.on('exitNowRoom', (callback) => {
+            try{
+                db.beginTransaction();
+                db.query(`CALL EXIT_ROOM(${userId}, '${roomId}')`, (err, r) => {
+                    callback();
+                });
+                db.commit();
+            } catch(err) {db.rollback();}
         });
 
         /** ONE, MANY ; RoomID 반환 */

@@ -71,10 +71,16 @@ function printRoom(info, accent) {
     `);
     if(accent) {
         $('div#title').text(info.TITLE);
+        $('div#title').append(`<button id="exit" onclick="exitRoom()"></button><button id="invite" onclick="inviteRoom()"></button>`);
         $('div#list > div.col').last().addClass('accent');
     }
 }
 
+function exitNowRoom() {
+    socket.emit('exitNowRoom', (callback) => {
+        location.href="/main/@rm";
+    });
+}
 
 /////////////// 채팅 관련 ///////////////
 

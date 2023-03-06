@@ -3,6 +3,7 @@
 
 /** 친구 <-> 채팅방 탭 전환 애니메이션 */
 let mode = 0; // 0: 채팅방 탭, 1: 친구 탭 선택 중
+let nowRoomId = ''; // 현재 채팅방 ID
 function modeSwap(md) {
     // 탭 강조, 목록 출력
     let select_css = {
@@ -33,12 +34,14 @@ function loadList(mode) {
         socket.emit('friendChatList', (friends) => {
             for(let i of friends.LIST) {
                 printFriend(i, (i.ROOM_ID === friends.ACCENT));
+                nowRoomId = friends.ACCENT;
             }
         });
     } else {
         socket.emit('roomChatList', (room) => {
             for(let i of room.LIST) {
                 printRoom(i, (i.ROOM_ID === room.ACCENT));
+                nowRoomId = room.ACCENT;
             }
         });
     }
@@ -77,7 +80,7 @@ function addList() {
         }
         addButtonStatus = !addButtonStatus;
     } else { // 채팅방 탭 선택 중
-        loadAlert();
+        loadAlert(createRoomApp);
     }
 }
 
