@@ -14,7 +14,15 @@
                 <span>사용자명 <span class="red">*</span></span>
                 <input type="text" name="name"><br>
                 <span>비밀번호 <span class="red">*</span></span>
-                <input type="password" name="password"><br><br>
+                <input type="password" name="password"><br>
+                <span>언어 <span class="red">*</span></span>
+                <select name="language">
+                    <option value="ko" selected>한국어</option>
+                    <option value="en">English</option>
+                    <option value="ja">日本語</option>
+                    <option value="zh-CN">简体字</option>
+                    <option value="zh-TW">正體字</option>
+                </select><br><br>
                 <button type="submit">계속하기</button>
                 <span><a href="javascript:void(0);" onclick="to_login();">이미 계정이 있으신가요?</a></span><br>
             </form>

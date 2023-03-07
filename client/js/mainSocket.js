@@ -1,12 +1,12 @@
 const socket = io('/chat');
 
 // 세팅
-let target;
 socket.emit('login', (info) => {
     $('div#myProfile > p#myName').text(info.INFO.NAME);
     $('div#myProfile > p#tag').text(info.INFO.NAME_TAG);
+    $('div#myProfile > img.flag').attr('src', `/client/img/flag/${info.INFO.LANGUAGE}.png`);
     modeSwap(info.TARGET == '@rm');
-    target = info.TARGET;
+    $('div#title').css('background-image', `url('/client/img/${info.TARGET}.png')`);
 });
 
 
@@ -17,7 +17,7 @@ function printFriend(info, accent) {
     $('div#list').append(`
         <div class="col" onclick="location.href='/main/@fr/${info.ROOM_ID}'">
             <img src="/client/img/neko1.png" class="profile">
-            <img src="/client/img/flag/ko.png" class="flag">
+            <img src="/client/img/flag/${info.LANGUAGE}.png" class="flag">
             <p>${info.NAME}</p>
             <button onclick="deleteFriend('${info.ROOM_ID}')"></button>
         </div>
@@ -94,26 +94,28 @@ function sendChat() {
     socket.emit('sendMessage', (data));
 }
 
+
 /** 메세지 수신 */
-socket.on('msgReceive', (msgInfo) => {
-    msgPrint(msgInfo);
+socket.on('msgAlert', (MSG_ID) => {
+    console.log(MSG_ID);
+    socket.emit('msgReceive', (MSG_ID), (msgInfo) => {
+        msgPrint(msgInfo);
+    });
 });
 
 /** 과거 메세지 출력 */
 socket.on('chatLogs', (logs) => {
     console.log(logs);
-    $('div#title').css('background-image', `url('/client/img/${target}.png')`);
-    for(let log of logs) {
+    for(let log of logs)
         msgPrint(log);
-    }
 });
 
-/** 메세지 출력 관련 함수 */
+/** 메세지 출력 관련 */
 let beforeInfo;
 function msgPrint(info) {
     if(beforeInfo && (beforeInfo.NAME === info.NAME)) {
         let p = $('div#messages > div.message:nth-last-child(1) > p');
-        p.text(beforeInfo.CHAT + '\n' + info.CHAT);
+        p.text(beforeInfo.CHAT + '\n' + info?.LANG_CHAT??info.eMsg);
         beforeInfo.CHAT = p.text();
         p.html(p.html().replace(/\n/g, '<br/>'));
     } else {
@@ -121,10 +123,14 @@ function msgPrint(info) {
         $('div#messages').append(`
             <div class="message">
                 <img src="/client/img/neko1.png" class="profile">
+                <img src="/client/img/flag/${info.LANGUAGE}.png" class="flag">
                 <span class="name">${info.NAME}<span class="time">${time}</span></span>
-                <p>${info.CHAT}</p>
+                <p>${info?.LANG_CHAT??info.eMsg}</p>
             </div>`);
-        beforeInfo = info;
+        beforeInfo = {
+            NAME: info.NAME,
+            CHAT: info?.LANG_CHAT??info.eMsg
+        };
     }
     
     $('#messages').scrollTop($('#messages')[0].scrollHeight);

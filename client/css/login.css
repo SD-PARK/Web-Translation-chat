@@ -48,7 +48,7 @@ form > span {
     color:#bbb;
     line-height:35px;
 }
-form > input {
+form > input, select {
     outline:none;
     width:520px;
     height:42px;
@@ -58,6 +58,9 @@ form > input {
     padding:0 10px;
     font-size:16px;
     color:#ccc;
+}
+form > select {
+    width:540px;
 }
 ::-ms-reveal {
     filter:invert(100%);

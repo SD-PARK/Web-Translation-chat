@@ -1,6 +1,8 @@
 module.exports = (chat, db) => {
     chat.on('connection', (socket) => {
-        let userId, roomId, name;
+        let userId, roomId, name, lang;
+        const escapeMap = require('../config/escapeMap');
+        const papago = require('../config/translate');
 
         // Main Page 접속
         socket.on('login', (callback) => {
@@ -13,20 +15,25 @@ module.exports = (chat, db) => {
                 db.beginTransaction();
                 db.query(`CALL PRINT_USER_INFO(${userId})`, (err, info) => {
                     try { 
-                        callback({TARGET:roomTarget, INFO:info[0][0]}); name = info[0][0].NAME;
+                        callback({TARGET:roomTarget, INFO:info[0][0]}); name = info[0][0].NAME; lang = info[0][0].LANGUAGE;
                     } catch (err) {}
+
+                    if(roomId) {
+                        db.query(`CALL PRINT_MESSAGES('${roomId}', '${lang}')`, async (err, logs) => {
+                            try {
+                                for(let i=0; i<logs[0].length; i++) {
+                                    let eMsg = await translate(logs[0][i]);
+                                    logs[0][i].eMsg = eMsg;
+                                }
+                                socket.emit('chatLogs', (logs[0]));
+                            } catch (err) {}
+                        });
+                        socket.join(roomId);
+                    }
                 });
                 db.commit();
             } catch (err) {
                 db.rollback();
-            }
-
-            if(roomId) {
-                db.query(`CALL PRINT_MESSAGES('${roomId}')`, (err, logs) => {
-                    try { socket.emit('chatLogs', (logs[0])); }
-                    catch (err) {}
-                });
-                socket.join(roomId);
             }
         });
 
@@ -38,17 +45,22 @@ module.exports = (chat, db) => {
 
         // 메세지 송신
         socket.on('sendMessage', (data) => {
-            msgInfo = {
-                NAME: name,
-                CHAT: data.MSG,
-                SEND_TIME: data.TIME
-            }
+            let eMsg = escapeMap(data.MSG);
 
             try {
-                db.query(`CALL SEND_MESSAGE('${roomId}', ${userId}, '${data.MSG}')`);
-                console.log('MSG DB Save: ', roomId, userId, data.MSG, data.TIME);
-                chat.to(roomId).emit('msgReceive', msgInfo);
-            } catch (err) {}
+                db.query(`CALL SEND_MESSAGE('${roomId}', ${userId}, '${eMsg}', '${lang}')`, (err, msgId) => {
+                    console.log('MSG DB Save: ', roomId, userId, data.MSG, data.TIME);
+                    chat.to(roomId).emit('msgAlert', (msgId[0][0].MSG_ID));
+                });
+            } catch (err) {console.log('>> MSG SEND ERROR:', roomId, userId, eMsg);}
+        });
+
+        socket.on('msgReceive', (MSG_ID, callback) => {
+            db.query(`CALL PRINT_ONE_MESSAGE('${roomId}', ${MSG_ID}, '${lang}')`, async (err, msgData) => {
+                let eMsg = await translate(msgData[0][0]);
+                msgData[0][0].eMsg = eMsg;
+                callback(msgData[0][0]);
+            });
         });
 
         // 친구 목록 호출
@@ -76,7 +88,7 @@ module.exports = (chat, db) => {
                                 db.query(`CALL CHECK_EXIST_ROOM(${userId}, ${rel[0][0].USER_ID});`, (err, room) => { // 이미 생성된 방이 있는지 체크
                                     console.log(room[0]);
                                     if (room[0][0]?.STATUS == undefined) { // 상대방과의 기존 방이 없다면, 생성 후 초대
-                                        inviteRoom([userId, rel[0][0].USER_ID], makeRoom('ONE'));
+                                        inviteRoom([userId, rel[0][0].USER_ID], makeRoom({STATUS:'ONE'}));
                                     } else if (room[0][0]?.STATUS == 'EXIT') { // 상대방과의 기존 방이 있으며, 나왔다면, 기존 방 입장
                                         inviteRoom([userId], room[0][0].ROOM_ID);
                                     }
@@ -130,7 +142,7 @@ module.exports = (chat, db) => {
 
         // 채팅방 생성
         socket.on('createRoom', (title) => {
-            inviteRoom([userId], makeRoom({STATUS:'many', TITLE:title}));
+            inviteRoom([userId], makeRoom({STATUS:'MANY', TITLE:title}));
         });
 
         // 채팅방 나가기
@@ -167,6 +179,20 @@ module.exports = (chat, db) => {
             for(let p of person) {
                 db.query(`CALL INVITE_ROOM (${p}, '${room}')`, (err, res) => {
                     console.log('Invite Room:', p, '=>', room);
+                });
+            }
+        }
+
+        /** 번역된 메시지가 없다면 번역 후 DB에 저장 */
+        async function translate(data) {
+            let eMsg = '';
+            if(!data?.LANG_CHAT) {
+                return await new Promise(async (resolve, reject) => {
+                    eMsg = await papago.lookup(data.SEND_LANGUAGE, lang, data.CHAT);
+                    try {
+                        db.query(`CALL UPDATE_LANG_MESSAGE('${roomId}', ${data.MSG_ID}, '${lang}', '${eMsg}')`);
+                    } catch(err) {}
+                    resolve(eMsg);
                 });
             }
         }

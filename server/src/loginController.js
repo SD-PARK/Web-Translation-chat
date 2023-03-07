@@ -42,7 +42,8 @@ exports.registerGetMid = (req, res) => {
 }
 
 exports.registerPostMid = (req, res) => {
-    const {email, password, name} = req.body;
+    const {email, password, name, language} = req.body;
+    console.log(req.body.language);
     const crypto_pw = hash(password);
 
     try {
@@ -70,7 +71,7 @@ exports.registerPostMid = (req, res) => {
                         tag = ('#' + Math.floor(Math.random() * 10000));
                     }
                     
-                    db.query(`CALL SIGNUP('${email}', '${crypto_pw}', '${name}', '${tag}')`, () => {
+                    db.query(`CALL SIGNUP('${email}', '${crypto_pw}', '${name}', '${tag}', '${language}')`, () => {
                         res.redirect('/login');
                         console.log('Register:\n    Email:', email,'    Name:', name + tag);
                     });

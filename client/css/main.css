@@ -290,6 +290,14 @@ div.message > img.profile {
     background-color:#809080;
     border-radius:50%;
 }
+div.message > img.flag {
+    position:absolute;
+    top:2px;
+    left:-1px;
+    width:21px;
+    height:14px;
+    object-fit:cover;
+}
 div.message > span.name {
     position:absolute;
     top:0;
