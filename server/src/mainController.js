@@ -8,3 +8,11 @@ exports.mainGetMid = (req, res) => {
         res.redirect('/login');
     }
 }
+
+exports.mainMPGetMid = (req, res) => {
+    if(req.session.USER_ID) {
+        res.sendFile('myPage.html', {root: path.join('client/html/')});
+    } else {
+        res.redirect('/login');
+    }
+}

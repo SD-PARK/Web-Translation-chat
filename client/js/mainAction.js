@@ -15,6 +15,9 @@ function modeSwap(md) {
         $('button#friends').removeAttr('style');
     }
     loadList(!md);
+
+    if(addButtonStatus)
+        addList();
     
     // 밑줄 애니메이션
     let left = 32.5 + (md * 172.5);

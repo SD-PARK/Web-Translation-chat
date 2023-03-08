@@ -14,7 +14,15 @@ router.get('/register', loginController.registerGetMid);
 
 router.post('/register', loginController.registerPostMid);
 
+router.get('/logout', loginController.logoutGetMid);
+
 router.get('/main', mainController.mainGetMid);
+
+router.get('/main/@mp', (req, res, next) => {
+    req.session.ROOM_TARGET = '@mp';
+    req.session.ROOM_ID = 0;
+    next();
+}, mainController.mainMPGetMid);
 
 router.get('/main/:target', (req, res, next) => {
     req.session.ROOM_TARGET = req.params.target;

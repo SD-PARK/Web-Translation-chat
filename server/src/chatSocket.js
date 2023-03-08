@@ -155,6 +155,15 @@ module.exports = (chat, db) => {
                 db.commit();
             } catch(err) {db.rollback();}
         });
+        
+        // 계정 삭제
+        socket.on('deleteAccount', (callback) => {
+            try {
+                db.beginTransaction();
+                db.query(`CALL DELETE_USER(${userId})`, (err, res) => {callback();});
+                db.commit();
+            } catch(err) {db.rollback();}
+        });
 
         /** ONE, MANY ; RoomID 반환 */
         function makeRoom(info) {

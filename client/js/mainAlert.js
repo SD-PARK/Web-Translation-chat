@@ -22,6 +22,14 @@ const inviteRoomApp = `<button id="closeAlert" onclick="closeAlert()"></button>
                     <h3>친구 초대하기</h3>
                     <p>친구에게 입장 코드를 전송하세요!</p>
                     <div id="inviteCode"><button id="inviteCopy" onclick="inviteCopy()">복사</button></div>`;
+const logoutApp = `<button id="closeAlert" onclick="closeAlert()"></button>
+                    <h3>로그아웃</h3>
+                    <p>현재 계정에서 로그아웃하시겠어요?</p>
+                    <button class="yorn" onclick="closeAlert()">취소</button><button class="yorn" onclick="location.href='/logout'">로그아웃</button>`;
+const dropAccountApp = `<button id="closeAlert" onclick="closeAlert()"></button>
+                    <h3>계정 삭제</h3>
+                    <p>정말 계정을 삭제하시겠어요? 삭제 후에는 되돌릴 수 없어요.</p>
+                    <button class="yorn" onclick="closeAlert()">취소</button><button class="yorn" onclick="deleteAccount()">삭제</button>`;
 
 /** 지정된 알림 띄우기 */
 function loadAlert(app) {

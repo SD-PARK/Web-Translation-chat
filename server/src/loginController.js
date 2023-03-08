@@ -25,7 +25,7 @@ exports.loginPostMid = (req, res) => {
         WHERE EMAIL='${email}' AND PASSWORD='${crypto_pw}'`, (err, check) => {
             if (check[0]) {
                 req.session.USER_ID = check[0].USER_ID;
-                res.redirect('/main/@fr');
+                res.redirect('/main/@mp');
             }
             else
                 res.redirect('/login?failed=1');
@@ -83,4 +83,9 @@ exports.registerPostMid = (req, res) => {
         res.redirect('/register?err=101');
         db.rollback();
     }
+}
+
+exports.logoutGetMid = (req, res) => {
+    req.session.destroy();
+    res.redirect('/login');
 }

@@ -2,9 +2,25 @@ const socket = io('/chat');
 
 // 세팅
 socket.emit('login', (info) => {
+    // 좌측 하단 미니 프로필
     $('div#myProfile > p#myName').text(info.INFO.NAME);
     $('div#myProfile > p#tag').text(info.INFO.NAME_TAG);
     $('div#myProfile > img.flag').attr('src', `/client/img/flag/${info.INFO.LANGUAGE}.png`);
+    // 내 계정 내 메인 프로필
+    console.log(info.TARGET);
+    if(info.TARGET == '@mp') {
+        $('div#userInfo > div > h2.name').text(info.INFO.NAME);
+        $('div#userInfo > div > span.tag').text(info.INFO.NAME_TAG);
+        $('div#userInfo > div > span.email').text(info.INFO.EMAIL);
+        const fullLanguage = {
+            ko: '한국어',
+            en: 'English',
+            ja: '日本語',
+            'zh-CH': '简体字',
+            'zh-TW': '正體字'
+        }
+        $('div#userInfo > div > span.language').text(fullLanguage[info.INFO.LANGUAGE] || []);
+    }
     modeSwap(info.TARGET == '@rm');
     $('div#title').css('background-image', `url('/client/img/${info.TARGET}.png')`);
 });
@@ -42,7 +58,6 @@ function searchFriend() {
             addList_p.css('opacity', '1');
         } else if (callback) {
             addList_input.val('');
-            mode = 0;
             modeSwap(0);
         } else {
             addList_input.css('outline','1px solid red');
@@ -52,6 +67,7 @@ function searchFriend() {
     });
 }
 
+/** 친구 삭제 */
 function deleteFriend(roomId) {
     socket.emit('deleteFriend', (roomId), (callback) => {
         modeSwap(0);
@@ -76,9 +92,10 @@ function printRoom(info, accent) {
     }
 }
 
+/** 현재 채팅방 나가기 */
 function exitNowRoom() {
     socket.emit('exitNowRoom', (callback) => {
-        location.href="/main/@rm";
+        location.href="/main/@mp";
     });
 }
 
@@ -134,4 +151,11 @@ function msgPrint(info) {
     }
     
     $('#messages').scrollTop($('#messages')[0].scrollHeight);
+}
+
+/////////////// 계정 관련 ///////////////
+function deleteAccount() {
+    socket.emit('deleteAccount', (callback) => {
+        location.href = '/logout';
+    });
 }
