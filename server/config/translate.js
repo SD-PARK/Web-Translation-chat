@@ -1,6 +1,7 @@
 const axios = require('axios');
 const qs = require('querystring');
 const key = require('./key');
+const descapeMap = require('./descapeMap');
 
 class Papago {
     async lookup(source, target, term) {
@@ -20,11 +21,11 @@ class Papago {
             const params = qs.stringify({
                 source: source,
                 target: target,
-                text: term
+                text: descapeMap(term)
             });
             const response = await axios.post('https://openapi.naver.com/v1/papago/n2mt', params, config);
             // console.log(response.data.message.result.translatedText.replace(/\"/g, ""));
-            return (response.data.message.result.translatedText).replace(/\"/g, "");
+            return response.data.message.result.translatedText;
             // try{
             
             // } catch (err) {

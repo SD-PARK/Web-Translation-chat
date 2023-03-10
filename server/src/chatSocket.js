@@ -46,7 +46,6 @@ module.exports = (chat, db) => {
         // 메세지 송신
         socket.on('sendMessage', (data) => {
             let eMsg = escapeMap(data.MSG);
-
             try {
                 db.query(`CALL SEND_MESSAGE('${roomId}', ${userId}, '${eMsg}', '${lang}')`, (err, msgId) => {
                     console.log('MSG DB Save: ', roomId, userId, data.MSG, data.TIME);
@@ -55,6 +54,7 @@ module.exports = (chat, db) => {
             } catch (err) {console.log('>> MSG SEND ERROR:', roomId, userId, eMsg);}
         });
 
+        // 메세지 수신
         socket.on('msgReceive', (MSG_ID, callback) => {
             db.query(`CALL PRINT_ONE_MESSAGE('${roomId}', ${MSG_ID}, '${lang}')`, async (err, msgData) => {
                 let eMsg = await translate(msgData[0][0]);
@@ -194,11 +194,12 @@ module.exports = (chat, db) => {
 
         /** 번역된 메시지가 없다면 번역 후 DB에 저장 */
         async function translate(data) {
-            let tMsg = '';
+            let tMsg, eMsg = '';
             if(!data?.LANG_CHAT) {
                 return await new Promise(async (resolve, reject) => {
                     tMsg = await papago.lookup(data.SEND_LANGUAGE, lang, data.CHAT);
                     eMsg = escapeMap(tMsg);
+                    console.log(data.CHAT, tMsg, eMsg);
                     try {
                         db.query(`CALL UPDATE_LANG_MESSAGE('${roomId}', ${data.MSG_ID}, '${lang}', '${eMsg}')`);
                     } catch(err) {}

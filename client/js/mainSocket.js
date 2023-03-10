@@ -130,13 +130,12 @@ socket.on('chatLogs', (logs) => {
 /** 메세지 출력 관련 */
 let beforeInfo;
 function msgPrint(info) {
-    console.log(info);
     info.LANG_CHAT = (info.LANG_CHAT == null) ? info.eMsg : info.LANG_CHAT;
-    console.log(info.LANG_CHAT);
     if(beforeInfo && (beforeInfo.NAME === info.NAME)) {
         let p = $('div#messages > div.message:nth-last-child(1) > p');
-        p.text(descapeMap(beforeInfo.CHAT + '\n' + info.LANG_CHAT));
-        beforeInfo.CHAT = p.text();
+        beforeInfo.CHAT = (beforeInfo.CHAT + '\n' + info.LANG_CHAT);
+        let str = descapeMap(beforeInfo.CHAT);
+        p.text(str);
         p.html(p.html().replace(/\n/g, '<br/>'));
     } else {
         let time = new Intl.DateTimeFormat('ko', {dateStyle:'medium', timeStyle: 'short'}).format(new Date(info.SEND_TIME));
