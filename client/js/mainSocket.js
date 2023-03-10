@@ -130,9 +130,12 @@ socket.on('chatLogs', (logs) => {
 /** 메세지 출력 관련 */
 let beforeInfo;
 function msgPrint(info) {
+    console.log(info);
+    info.LANG_CHAT = (info.LANG_CHAT == null) ? info.eMsg : info.LANG_CHAT;
+    console.log(info.LANG_CHAT);
     if(beforeInfo && (beforeInfo.NAME === info.NAME)) {
         let p = $('div#messages > div.message:nth-last-child(1) > p');
-        p.text(beforeInfo.CHAT + '\n' + info?.LANG_CHAT??info.eMsg);
+        p.text(descapeMap(beforeInfo.CHAT + '\n' + info.LANG_CHAT));
         beforeInfo.CHAT = p.text();
         p.html(p.html().replace(/\n/g, '<br/>'));
     } else {
@@ -142,11 +145,11 @@ function msgPrint(info) {
                 <img src="/client/img/neko1.png" class="profile">
                 <img src="/client/img/flag/${info.LANGUAGE}.png" class="flag">
                 <span class="name">${info.NAME}<span class="time">${time}</span></span>
-                <p>${info?.LANG_CHAT??info.eMsg}</p>
+                <p>${info.LANG_CHAT}</p>
             </div>`);
         beforeInfo = {
             NAME: info.NAME,
-            CHAT: info?.LANG_CHAT??info.eMsg
+            CHAT: info.LANG_CHAT
         };
     }
     

@@ -1,6 +1,6 @@
 module.exports = (chat, db) => {
     chat.on('connection', (socket) => {
-        let userId, roomId, name, lang;
+        let userId, roomId, lang;
         const escapeMap = require('../config/escapeMap');
         const papago = require('../config/translate');
 
@@ -15,7 +15,7 @@ module.exports = (chat, db) => {
                 db.beginTransaction();
                 db.query(`CALL PRINT_USER_INFO(${userId})`, (err, info) => {
                     try { 
-                        callback({TARGET:roomTarget, INFO:info[0][0]}); name = info[0][0].NAME; lang = info[0][0].LANGUAGE;
+                        callback({TARGET:roomTarget, INFO:info[0][0]}); lang = info[0][0].LANGUAGE;
                     } catch (err) {}
 
                     if(roomId) {
@@ -194,10 +194,11 @@ module.exports = (chat, db) => {
 
         /** 번역된 메시지가 없다면 번역 후 DB에 저장 */
         async function translate(data) {
-            let eMsg = '';
+            let tMsg = '';
             if(!data?.LANG_CHAT) {
                 return await new Promise(async (resolve, reject) => {
-                    eMsg = await papago.lookup(data.SEND_LANGUAGE, lang, data.CHAT);
+                    tMsg = await papago.lookup(data.SEND_LANGUAGE, lang, data.CHAT);
+                    eMsg = escapeMap(tMsg);
                     try {
                         db.query(`CALL UPDATE_LANG_MESSAGE('${roomId}', ${data.MSG_ID}, '${lang}', '${eMsg}')`);
                     } catch(err) {}

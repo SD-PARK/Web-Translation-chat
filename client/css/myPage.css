@@ -2,6 +2,7 @@ div#editProfile {
     position:relative;
     width:750px;
     height:600px;
+    border-radius:10px;
     border:1px solid #809080;
     background:#809080;
     margin:50px 130px;
