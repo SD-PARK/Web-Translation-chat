@@ -123,6 +123,18 @@ div.col > p {
     text-overflow:ellipsis;
     word-break:break-all;
 }
+div.col > p#roomTitle {
+    width:260px;
+    font-size:16px;
+    margin-top:7px;
+}
+div.col > span#roomLastChat {
+    position:absolute;
+    bottom:10px;
+    left:75px;
+    font-size:13px;
+    margin:0;
+}
 div.col > button {
     display:none;
     position:absolute;

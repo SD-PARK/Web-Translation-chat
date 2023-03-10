@@ -124,7 +124,7 @@ div#alert > div#inviteCode {
 }
 div#inviteCode > button#inviteCopy {
     float:right;
-    width:60px;
+    width:auto;
     height:40px;
     background-color:#809080;
     color:white;
@@ -133,4 +133,5 @@ div#inviteCode > button#inviteCopy {
     cursor:pointer;
     white-space:nowrap;
     overflow:hidden;
+    padding:0 15px;
 }

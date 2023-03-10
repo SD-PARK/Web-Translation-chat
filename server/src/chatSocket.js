@@ -18,6 +18,8 @@ module.exports = (chat, db) => {
                         callback({TARGET:roomTarget, INFO:info[0][0]}); lang = info[0][0].LANGUAGE;
                     } catch (err) {}
 
+                    // Room 접근 권한 체크해야함
+                    
                     if(roomId) {
                         db.query(`CALL PRINT_MESSAGES('${roomId}', '${lang}')`, async (err, logs) => {
                             try {

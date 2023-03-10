@@ -12,8 +12,8 @@
             <div id="section">
                 <div id="sec_list">
                     <div id="mode">
-                        <button id="friends" onclick="modeSwap(0)" type="button">친구</button>
-                        <button id="rooms" onclick="modeSwap(1)" type="button">채팅방</button>
+                        <button id="friends" onclick="modeSwap(0)" type="button" data-detect="friend"></button>
+                        <button id="rooms" onclick="modeSwap(1)" type="button" data-detect="chatRoom"></button>
                         <div id="underline"></div>
                     </div>
                     <div id="list">
@@ -48,6 +48,7 @@
         <script type="text/javascript" src="/client/js/pageSwap.js"></script>
         <script type="text/javascript" src="/socket.io/socket.io.js"></script>
         <script type="text/javascript" src="/client/js/mainSocket.js"></script>
+        <script type="text/javascript" src="/client/js/multiLanguage_main.js"></script>
         <script type="text/javascript" src="/client/js/mainAlert.js"></script>
         <script type="text/javascript" src="/client/js/mainAction.js"></script>
         <script type="text/javascript" src="/client/js/descapeMap.js"></script>

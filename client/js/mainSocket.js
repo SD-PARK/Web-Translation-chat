@@ -1,11 +1,14 @@
 const socket = io('/chat');
 
 // 세팅
+let lang;
 socket.emit('login', (info) => {
     // 좌측 하단 미니 프로필
     $('div#myProfile > p#myName').text(info.INFO.NAME);
     $('div#myProfile > p#tag').text(info.INFO.NAME_TAG);
     $('div#myProfile > img.flag').attr('src', `/client/img/flag/${info.INFO.LANGUAGE}.png`);
+    lang = info.INFO.LANGUAGE;
+    setLanguage(lang??'ko');
     // 내 계정 내 메인 프로필
     console.log(info.TARGET);
     if(info.TARGET == '@mp') {
@@ -22,7 +25,10 @@ socket.emit('login', (info) => {
         $('div#userInfo > div > span.language').text(fullLanguage[info.INFO.LANGUAGE] || []);
     }
     modeSwap(info.TARGET == '@rm');
+    // 채팅방 제목 옆 아이콘
     $('div#title').css('background-image', `url('/client/img/${info.TARGET}.png')`);
+    // 언어 별 친구 추가(검색) placeholder 변경
+    $('div#addList > input').attr('placeholder', multiLanguage[lang].searchUser);
 });
 
 
@@ -54,14 +60,14 @@ function searchFriend() {
     socket.emit('addFriend', (searchInfo), (callback) => {
         if (callback == -1) {
             addList_input.css('outline','1px solid red');
-            addList_p.text('이미 친구로 등록된 사용자예요!');
+            addList_p.text(multiLanguage[lang].alreadyFriend);
             addList_p.css('opacity', '1');
         } else if (callback) {
             addList_input.val('');
-            modeSwap(0);
+            loadList(0);
         } else {
             addList_input.css('outline','1px solid red');
-            addList_p.text('이름과 태그가 정확한지 다시 한 번 확인해주세요.');
+            addList_p.text(multiLanguage[lang].invalidUser);
             addList_p.css('opacity', '1');
         }
     });
@@ -70,7 +76,8 @@ function searchFriend() {
 /** 친구 삭제 */
 function deleteFriend(roomId) {
     socket.emit('deleteFriend', (roomId), (callback) => {
-        modeSwap(0);
+        loadList(0);
+        location.href="/main/@mp";
     });
 }
 
@@ -82,7 +89,8 @@ function printRoom(info, accent) {
     $('div#list').append(`
         <div class="col" onclick="location.href='/main/@rm/${info.ROOM_ID}'">
             <img src="/client/img/neko1.png" class="profile">
-            <p>${info.TITLE}</p>
+            <p id="roomTitle">${info.TITLE}</p>
+            <span id="roomLastChat">${info.LAST_MESSAGE}</span>
         </div>
     `);
     if(accent) {

@@ -1,35 +1,47 @@
 
 const bgBox = $('div#bgBox');
 const alertBox = $('div#alert');
-const createRoomApp = `<button id="closeAlert" onclick="closeAlert()"></button>
-                    <h3>채팅방 만들기</h3><br>
-                    <button id="createRoomBtn" onclick="nextAlert(customizeRoomApp)">새 채팅방 개설하기</button>
-                    <p>또는 참가하기</p>
-                    <p id="explan">초대 코드</p>
-                    <input type="text" id="enterRoomId" placeholder="초대 코드를 입력하세요.">
-                    <button id="enterRoomBtn" onclick="enterRoom()">참가하기</button>`;
-const customizeRoomApp = `<button id="closeAlert" onclick="closeAlert()"></button>
-                        <h3>채팅방 꾸미기</h3>
-                        <p id="explan">채팅방 이름</p>
-                        <input type="text" placeholder="채팅방 이름을 적어주세요." id="roomTitle">
-                        <button id="backBtn" onclick="nextAlert(createRoomApp)">돌아가기</button>
-                        <button id="createBtn" onclick="createRoom()">만들기</button>`;
-const exitRoomApp = `<button id="closeAlert" onclick="closeAlert()"></button>
-                    <h3>채팅방 나가기</h3>
-                    <p>재입장하려면 다시 초대를 받아야 합니다. 정말 나가시겠어요?</p>
-                    <button class="yorn" onclick="closeAlert()">취소</button><button class="yorn" onclick="exitNowRoom()">나가기</button>`;
-const inviteRoomApp = `<button id="closeAlert" onclick="closeAlert()"></button>
-                    <h3>친구 초대하기</h3>
-                    <p>친구에게 입장 코드를 전송하세요!</p>
-                    <div id="inviteCode"><button id="inviteCopy" onclick="inviteCopy()">복사</button></div>`;
-const logoutApp = `<button id="closeAlert" onclick="closeAlert()"></button>
-                    <h3>로그아웃</h3>
-                    <p>현재 계정에서 로그아웃하시겠어요?</p>
-                    <button class="yorn" onclick="closeAlert()">취소</button><button class="yorn" onclick="location.href='/logout'">로그아웃</button>`;
-const dropAccountApp = `<button id="closeAlert" onclick="closeAlert()"></button>
-                    <h3>계정 삭제</h3>
-                    <p>정말 계정을 삭제하시겠어요? 삭제 후에는 되돌릴 수 없어요.</p>
-                    <button class="yorn" onclick="closeAlert()">취소</button><button class="yorn" onclick="deleteAccount()">삭제</button>`;
+function createRoomApp() {
+    return `<button id="closeAlert" onclick="closeAlert()"></button>
+            <h3>${multiLanguage[lang].createRoom}</h3><br>
+            <button id="createRoomBtn" onclick="nextAlert(customizeRoomApp)">${multiLanguage[lang].createNewRoom}</button>
+            <p>${multiLanguage[lang].orJoin}</p>
+            <p id="explan">${multiLanguage[lang].inviteCode}</p>
+            <input type="text" id="enterRoomId" placeholder="${multiLanguage[lang].inputInviteCode}">
+            <button id="enterRoomBtn" onclick="enterRoom()">${multiLanguage[lang].join}</button>`;
+}
+function customizeRoomApp() {
+    return `<button id="closeAlert" onclick="closeAlert()"></button>
+            <h3>${multiLanguage[lang].settingRoom}</h3>
+            <p id="explan">${multiLanguage[lang].roomName}</p>
+            <input type="text" placeholder="${multiLanguage[lang].inputRoomName}" id="roomTitle">
+            <button id="backBtn" onclick="nextAlert(createRoomApp())">${multiLanguage[lang].back}</button>
+            <button id="createBtn" onclick="createRoom()">${multiLanguage[lang].create}</button>`;
+}
+function inviteRoomApp() {
+    return `<button id="closeAlert" onclick="closeAlert()"></button>
+            <h3>${multiLanguage[lang].inviteFriend}</h3>
+            <p>${multiLanguage[lang].sendCode}</p>
+            <div id="inviteCode"><button id="inviteCopy" onclick="inviteCopy()">${multiLanguage[lang].copy}</button></div>`;
+}
+function exitRoomApp() {
+    return `<button id="closeAlert" onclick="closeAlert()"></button>
+            <h3>${multiLanguage[lang].exitRoom}</h3>
+            <p>${multiLanguage[lang].exitRoomSure}</p>
+            <button class="yorn" onclick="closeAlert()">${multiLanguage[lang].cancle}</button><button class="yorn" onclick="exitNowRoom()">${multiLanguage[lang].exit}</button>`;
+}
+function logoutApp() {
+    return `<button id="closeAlert" onclick="closeAlert()"></button>
+            <h3>${multiLanguage[lang].logout}</h3>
+            <p>${multiLanguage[lang].logoutSure}</p>
+            <button class="yorn" onclick="closeAlert()">${multiLanguage[lang].cancle}</button><button class="yorn" onclick="location.href='/logout'">${multiLanguage[lang].logout}</button>`;
+}
+function dropAccountApp() {
+    return `<button id="closeAlert" onclick="closeAlert()"></button>
+        <h3>${multiLanguage[lang].deleteAccount}</h3>
+        <p>${multiLanguage[lang].deleteAccountSure}</p>
+        <button class="yorn" onclick="closeAlert()">${multiLanguage[lang].cancle}</button><button class="yorn" onclick="deleteAccount()">${multiLanguage[lang].delete}</button>`;
+}
 
 /** 지정된 알림 띄우기 */
 function loadAlert(app) {
@@ -37,6 +49,7 @@ function loadAlert(app) {
     bgBox.animate({opacity: 1}, 200);
     alertBox.empty();
     alertBox.append(app);
+    setLanguage(lang??'ko'); // 언어 별 텍스트 다시 불러옴
 }
 /** 알림 닫기 */
 function closeAlert() {
@@ -53,6 +66,7 @@ function nextAlert(next) {
         alertBox.append(next);
     }, 200);
     alertBox.animate({opacity: 1}, 200);
+    setLanguage(lang??'ko'); // 언어 별 텍스트 다시 불러옴
 }
 
 bgBox.on('click', (e) => {
@@ -72,7 +86,7 @@ function enterRoom() {
             modeSwap(1);
         } else {
             $('p#explan').css({color: 'red'});
-            $('p#explan').text('초대 코드 - 유효한 초대 코드를 입력하세요.');
+            $('p#explan').text(multiLanguage[lang].invalidInviteCode);
         }
     });
 }
@@ -101,13 +115,12 @@ function inviteCopy() {
     const copyBtn = $('button#inviteCopy');
     window.navigator.clipboard.writeText(nowRoomId);
     copyBtn.css({
-        width:'90px',
         'background-color':'#303825',
         border:'1px solid white'
     });
-    copyBtn.text('복사 완료!');
+    copyBtn.text(multiLanguage[lang].copyComplete);
     setTimeout(() => {
         copyBtn.removeAttr('style');
-        copyBtn.text('복사');
+        copyBtn.text(multiLanguage[lang].copy);
     }, 2000);
 }
