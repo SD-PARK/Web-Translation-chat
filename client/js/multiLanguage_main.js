@@ -32,7 +32,9 @@ const multiLanguage = {
         exitRoomSure: '재입장하려면 다시 초대를 받아야 합니다. 정말 나가시겠어요?',
         exit: '나가기',
         cancle: '취소',
-        delete: '삭제'
+        delete: '삭제',
+        accessDenied: '접속 불가',
+        doNotHavePermission: '접근 권한이 없습니다.'
     },
     'en': {
         friend: 'Friend',
@@ -67,7 +69,9 @@ const multiLanguage = {
         exitRoomSure: 'You must be invited back to re-enter.<br>Are you sure you want to go out?',
         exit: 'Leave',
         cancle: 'Cancle',
-        delete: 'Delete'
+        delete: 'Delete',
+        accessDenied: 'Access Denied',
+        doNotHavePermission: 'You do not have access.'
     },
     'ja': {
         friend: '友達',
@@ -102,7 +106,9 @@ const multiLanguage = {
         exitRoomSure: '再入場するには、再度招待を受ける必要があります。<br>本当に退出しますか？',
         exit: '退出する',
         cancle: 'キャンセル',
-        delete: '削除する'        
+        delete: '削除する',
+        accessDenied: '接続不可',
+        doNotHavePermission: 'アクセス権がありません。'
     },
     'zh-CN': {
         friend: '朋友',
@@ -137,7 +143,9 @@ const multiLanguage = {
         exitRoomSure: '您確定要退出聊天室嗎？<br>您需要重新獲取邀請碼以重新進入。',
         exit: '退出',
         cancle: '取消',
-        delete: '刪除'
+        delete: '刪除',
+        accessDenied: '無法連接',
+        doNotHavePermission: '您沒有訪問權限。'
     },
     'zh-TW': {
         friend: '朋友',
@@ -172,7 +180,9 @@ const multiLanguage = {
         exitRoomSure: '您确定要退出聊天室吗？<br>您需要重新获取邀请码以重新进入。',
         exit: '退出',
         cancel: '取消',
-        delete: '删除'
+        delete: '删除',
+        accessDenied: '无法连接',
+        doNotHavePermission: '您没有访问权限。'
     }
 }
 

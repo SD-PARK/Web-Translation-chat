@@ -38,9 +38,13 @@ function logoutApp() {
 }
 function dropAccountApp() {
     return `<button id="closeAlert" onclick="closeAlert()"></button>
-        <h3>${multiLanguage[lang].deleteAccount}</h3>
-        <p>${multiLanguage[lang].deleteAccountSure}</p>
-        <button class="yorn" onclick="closeAlert()">${multiLanguage[lang].cancle}</button><button class="yorn" onclick="deleteAccount()">${multiLanguage[lang].delete}</button>`;
+            <h3>${multiLanguage[lang].deleteAccount}</h3>
+            <p>${multiLanguage[lang].deleteAccountSure}</p>
+            <button class="yorn" onclick="closeAlert()">${multiLanguage[lang].cancle}</button><button class="yorn" onclick="deleteAccount()">${multiLanguage[lang].delete}</button>`;
+}
+function getOutApp() {
+    return `<h3>${multiLanguage[lang].accessDenied}</h3>
+            <p>${multiLanguage[lang].doNotHavePermission}</p>`;
 }
 
 /** 지정된 알림 띄우기 */

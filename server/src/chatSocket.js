@@ -1,14 +1,35 @@
 module.exports = (chat, db) => {
+    let clients = [];
+
+    setInterval(() => {
+        db.query(`CALL CHECK_ALERT_ALL()`, (err, alert) => {
+            for(let i=alert[0].length-1; i>=0; i--) {
+                if (alert[0][i].ALERT == 1) {
+                    for (let j=clients.length-1; j>=0; j--) {
+                        let client = clients[j];
+                        if (client.uid == alert[0][i].USER_ID)
+                            chat.to(client.id).emit('alert');
+                    }
+                }
+            }
+        });
+    }, 1000);
+
     chat.on('connection', (socket) => {
-        let userId, roomId, lang;
         const escapeMap = require('../config/escapeMap');
         const papago = require('../config/translate');
+        let userId, roomId, lang;
 
         // Main Page 접속
         socket.on('login', (callback) => {
             userId = socket.handshake.session.USER_ID;
             roomId = socket.handshake.session.ROOM_ID;
-            roomTarget = socket.handshake.session.ROOM_TARGET;
+            let roomTarget = socket.handshake.session?.ROOM_TARGET ?? '@mp';
+
+            let userInfo = new Object();
+            userInfo.uid = userId;
+            userInfo.id = socket.id;
+            clients.push(userInfo);
 
             console.log('Client Login!: ' + userId);
             try {
@@ -17,20 +38,24 @@ module.exports = (chat, db) => {
                     try { 
                         callback({TARGET:roomTarget, INFO:info[0][0]}); lang = info[0][0].LANGUAGE;
                     } catch (err) {}
-
-                    // Room 접근 권한 체크해야함
                     
                     if(roomId) {
-                        db.query(`CALL PRINT_MESSAGES('${roomId}', '${lang}')`, async (err, logs) => {
-                            try {
-                                for(let i=0; i<logs[0].length; i++) {
-                                    let eMsg = await translate(logs[0][i]);
-                                    logs[0][i].eMsg = eMsg;
-                                }
-                                socket.emit('chatLogs', (logs[0]));
-                            } catch (err) {}
+                        db.query(`CALL CHECK_GRANT(${userId}, '${roomId}')`, (err, grant) => { // Room 접근 권한 체크
+                            if(grant[0][0]?.STATUS == 'JOIN') { // 권한이 있을 경우
+                                db.query(`CALL PRINT_MESSAGES('${roomId}', '${lang}')`, async (err, logs) => { // 메세지 내역 로드
+                                    try {
+                                        for(let i=0; i<logs[0].length; i++) {
+                                            let eMsg = await translate(logs[0][i]);
+                                            logs[0][i].eMsg = eMsg;
+                                        }
+                                        socket.emit('chatLogs', (logs[0]));
+                                    } catch (err) {}
+                                });
+                                socket.join(roomId);
+                            } else {
+                                socket.emit('getout');
+                            }
                         });
-                        socket.join(roomId);
                     }
                 });
                 db.commit();
@@ -41,7 +66,13 @@ module.exports = (chat, db) => {
 
         // 페이지 벗어남
         socket.on('disconnect', () => {
-            roomId, roomTarget = 0;
+            console.log('Client Disconnect!: ' + userId);
+            for(let i=clients.length-1; i>=0; i--) {
+                let client = clients[i];
+                if(client.uid == userId)
+                    clients.splice(i, 1);
+            }
+            roomId = 0;
             socket.leave(roomId);
         });
 
