@@ -19,7 +19,7 @@ socket.emit('login', (info) => {
             ko: '한국어',
             en: 'English',
             ja: '日本語',
-            'zh-CH': '简体字',
+            'zh-CN': '简体字',
             'zh-TW': '正體字'
         }
         $('div#userInfo > div > span.language').text(fullLanguage[info.INFO.LANGUAGE] || []);
@@ -31,6 +31,11 @@ socket.emit('login', (info) => {
     $('div#addList > input').attr('placeholder', multiLanguage[lang].searchUser);
 });
 
+/////////////// 실시간 갱신 ///////////////
+socket.on('alert', () => {
+    console.log('renewal');
+    loadList(mode);
+});
 
 /////////////// 친구 목록 관련 ///////////////
 
@@ -64,7 +69,6 @@ function searchFriend() {
             addList_p.css('opacity', '1');
         } else if (callback) {
             addList_input.val('');
-            loadList(0);
         } else {
             addList_input.css('outline','1px solid red');
             addList_p.text(multiLanguage[lang].invalidUser);
@@ -76,13 +80,20 @@ function searchFriend() {
 /** 친구 삭제 */
 function deleteFriend(roomId) {
     socket.emit('deleteFriend', (roomId), (callback) => {
-        loadList(0);
+        loadList(1);
         location.href="/main/@mp";
     });
 }
 
 /////////////// 채팅방 관련 ///////////////
 
+/** 채팅방 권한이 없을 경우 */
+socket.on('getout', () => {
+    loadAlert(getOutApp());
+    setTimeout(() => {
+        location.href = "/main/@mp";
+    }, 2000);
+});
 
 /** 채팅방 목록 출력 */
 function printRoom(info, accent) {
@@ -119,13 +130,13 @@ function sendChat() {
     socket.emit('sendMessage', (data));
 }
 
-
 /** 메세지 수신 */
 socket.on('msgAlert', (MSG_ID) => {
     console.log(MSG_ID);
     socket.emit('msgReceive', (MSG_ID), (msgInfo) => {
         msgPrint(msgInfo);
     });
+    loadList(mode);
 });
 
 /** 과거 메세지 출력 */
@@ -146,7 +157,7 @@ function msgPrint(info) {
         p.text(str);
         p.html(p.html().replace(/\n/g, '<br/>'));
     } else {
-        let time = new Intl.DateTimeFormat('ko', {dateStyle:'medium', timeStyle: 'short'}).format(new Date(info.SEND_TIME));
+        let time = new Intl.DateTimeFormat(lang, {dateStyle:'medium', timeStyle: 'short'}).format(new Date(info.SEND_TIME));
         $('div#messages').append(`
             <div class="message">
                 <img src="/client/img/neko1.png" class="profile">
