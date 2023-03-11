@@ -2,9 +2,9 @@
 
 다양한 국적의 사람들과 실시간으로 번역된 대화를 주고받을 수 있는 채팅 앱입니다.
 
-아래 링크를 통해 앱을 테스트해볼 수 있습니다.
+<!-- 아래 링크를 통해 앱을 테스트해볼 수 있습니다.
 
-https://sd-park.github.io/papago-chat/
+https://sd-park.github.io/papago-chat/ -->
 
 ## 기술 스택
 
