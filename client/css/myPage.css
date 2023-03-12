@@ -47,6 +47,17 @@ div#userInfo > div {
     margin:50px 50px;
     padding:30px 45px;
 }
+div#userInfo > button#editInfo {
+    position:absolute;
+    top:45px;
+    right:45px;
+    width:35px;
+    height:35px;
+    background:url('/client/img/pencil.png') no-repeat center;
+    background-size:cover;
+    border:none;
+    /* cursor:pointer; */
+}
 
 div#userInfo > div > h2 {
     display:inline-block;
