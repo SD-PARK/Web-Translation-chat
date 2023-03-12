@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const loginController = require('./loginController');
 const mainController = require('./mainController');
+const { upload } = require('../config/multer');
 
 router.get('/', (req, res) => {
     res.redirect('/login');
@@ -23,6 +24,8 @@ router.get('/main/@mp', (req, res, next) => {
     req.session.ROOM_ID = 0;
     next();
 }, mainController.mainMPGetMid);
+
+router.post('/main/upload', upload.single('upload_image'), mainController.mainUploadPostMid);
 
 router.get('/main/:target', (req, res, next) => {
     req.session.ROOM_TARGET = req.params.target;

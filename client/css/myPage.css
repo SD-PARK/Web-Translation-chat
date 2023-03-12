@@ -1,4 +1,4 @@
-div#editProfile {
+form#editProfile {
     position:relative;
     width:750px;
     height:600px;
@@ -8,19 +8,31 @@ div#editProfile {
     margin:50px 130px;
 }
 
-div#editProfile > div#pImg {
+form#editProfile > input.real-upload {
+    display:none;
+}
+form#editProfile > div.upload {
     position:relative;
     width:100px;
     height:100px;
     margin:30px 50px;
     border:5px solid #303825;
     border-radius:50%;
-    background:#809080 url('/client/img/neko1.png') no-repeat center;
+    background:#809080 url('/client/img/profiles/neko1.png') no-repeat center;
     background-size:cover;
     z-index:1;
+    cursor:pointer;
+}
+form#editProfile > img {
+    position:absolute;
+    top:108px;
+    left:130px;
+    width:27px;
+    height:27px;
+    z-index:2;
 }
 
-div#editProfile > div#userInfo {
+form#editProfile > div#userInfo {
     position:absolute;
     top:110px;
     width:750px;
@@ -75,4 +87,12 @@ div#userInfo > div > button:last-child {
     margin-left:15px;
 } div#userInfo > div > button:last-child:hover {
     background:#bb2222;
+}
+
+body > a {
+    position:absolute;
+    bottom:0;
+    left:50%;
+    transform:translate(-50%, -50%);
+    color:#888;
 }

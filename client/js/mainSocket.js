@@ -4,6 +4,7 @@ const socket = io('/chat');
 let lang;
 socket.emit('login', (info) => {
     // 좌측 하단 미니 프로필
+    $('div#myProfile > img.profile').attr('src', `/client/img/profiles/${info.INFO.IMG}`);
     $('div#myProfile > p#myName').text(info.INFO.NAME);
     $('div#myProfile > p#tag').text(info.INFO.NAME_TAG);
     $('div#myProfile > img.flag').attr('src', `/client/img/flag/${info.INFO.LANGUAGE}.png`);
@@ -12,6 +13,7 @@ socket.emit('login', (info) => {
     // 내 계정 내 메인 프로필
     console.log(info.TARGET);
     if(info.TARGET == '@mp') {
+        $('div.upload').css('background-image', `url(/client/img/profiles/${info.INFO.IMG})`);
         $('div#userInfo > div > h2.name').text(info.INFO.NAME);
         $('div#userInfo > div > span.tag').text(info.INFO.NAME_TAG);
         $('div#userInfo > div > span.email').text(info.INFO.EMAIL);
@@ -43,7 +45,7 @@ socket.on('alert', () => {
 function printFriend(info, accent) {
     $('div#list').append(`
         <div class="col" onclick="location.href='/main/@fr/${info.ROOM_ID}'">
-            <img src="/client/img/neko1.png" class="profile">
+            <img src="/client/img/profiles/${info.IMG}" class="profile">
             <img src="/client/img/flag/${info.LANGUAGE}.png" class="flag">
             <p>${info.NAME}</p>
             <button onclick="deleteFriend('${info.ROOM_ID}')"></button>
@@ -99,7 +101,7 @@ socket.on('getout', () => {
 function printRoom(info, accent) {
     $('div#list').append(`
         <div class="col" onclick="location.href='/main/@rm/${info.ROOM_ID}'">
-            <img src="/client/img/neko1.png" class="profile">
+            <img src="/client/img/@rm.png" class="profile">
             <p id="roomTitle">${info.TITLE}</p>
             <span id="roomLastChat">${info.LAST_MESSAGE}</span>
         </div>
@@ -160,7 +162,7 @@ function msgPrint(info) {
         let time = new Intl.DateTimeFormat(lang, {dateStyle:'medium', timeStyle: 'short'}).format(new Date(info.SEND_TIME));
         $('div#messages').append(`
             <div class="message">
-                <img src="/client/img/neko1.png" class="profile">
+                <img src="/client/img/profiles/${info.IMG}" class="profile">
                 <img src="/client/img/flag/${info.LANGUAGE}.png" class="flag">
                 <span class="name">${info.NAME}<span class="time">${time}</span></span>
                 <p>${info.LANG_CHAT}</p>

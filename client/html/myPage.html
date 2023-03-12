@@ -25,7 +25,7 @@
                         <button onclick="addList()"></button>
                     </div>
                     <div id="myProfile" onclick="location.href='/main/@mp'">
-                        <img src="/client/img/neko2.png" class="profile">
+                        <img src="/client/img/profiles/neko2.png" class="profile">
                         <img src="/client/img/flag/ko.png" class="flag">
                         <p id="myName"></p>
                         <p id="tag"></p>
@@ -34,7 +34,7 @@
                 <div id="sec_talk">
                     <div id="title" data-detect="myAccount"></div>
                     <div id="display">
-                        <div id="editProfile">
+                        <form id="editProfile" action="upload" method="post" enctype="multipart/form-data">
                             <div id="userInfo">
                                 <div>
                                     <h2 class="name"></h2><span class="tag"></span>
@@ -49,8 +49,10 @@
                                     <button onclick="loadAlert(logoutApp)" data-detect="logout"></button>
                                 </div>
                             </div>
-                            <div id="pImg"></div>
-                        </div>
+                            <input type="file" name="upload_image" class="real-upload" accept="image/png, image/jpg, image/jpeg" required multiple>
+                            <div class="upload"></div>
+                            <img src="/client/img/upload.png">
+                        </form>
                     </div>
                 </div>
             </div>
@@ -58,6 +60,7 @@
         <div id="bgBox">
             <div id="alert"></div>
         </div>
+        <a href="https://www.flaticon.com/free-icons/photos" title="photos icons">Photos icons created by exomoon design studio - Flaticon</a>
         <script type="text/javascript" src="/node_modules/jquery/dist/jquery.min.js"></script>
         <script type="text/javascript" src="/client/js/pageSwap.js"></script>
         <script type="text/javascript" src="/socket.io/socket.io.js"></script>
@@ -65,5 +68,6 @@
         <script type="text/javascript" src="/client/js/multiLanguage_main.js"></script>
         <script type="text/javascript" src="/client/js/mainAlert.js"></script>
         <script type="text/javascript" src="/client/js/mainAction.js"></script> <!-- Action에는 애니메이션만 넣을 것. socket은 분리. -->
+        <script type="text/javascript" src="/client/js/myPageAction.js"></script>
     </body>
 </html>
