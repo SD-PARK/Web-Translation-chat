@@ -17,7 +17,7 @@ exports.loginGetMid = (req, res) => {
 exports.loginPostMid = (req, res) => {
     const {email, password} = req.body;
     const crypto_pw = hash(password);
-    console.log('login:', email, password);
+    console.log('login:', email);
 
     try {
         db.beginTransaction();

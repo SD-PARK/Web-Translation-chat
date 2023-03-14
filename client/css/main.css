@@ -117,14 +117,15 @@ div.col > img.flag {
 }
 div.col > p {
     float:right;
-    width:250px;
+    width:200px;
+    margin-right:50px;
     overflow:hidden;
     white-space:nowrap;
     text-overflow:ellipsis;
     word-break:break-all;
 }
 div.col > p#roomTitle {
-    width:260px;
+    width:210px;
     font-size:16px;
     margin-top:7px;
 }
@@ -134,6 +135,7 @@ div.col > span#roomLastChat {
     left:75px;
     font-size:13px;
     margin:0;
+    color:#ddd;
 }
 div.col > button {
     display:none;
@@ -154,6 +156,22 @@ div.col:hover > button {
 }
 div.col > button:hover {
     opacity:1;
+}
+div.col > div#unReadCnt {
+    position:absolute;
+    top:17px;
+    right:14px;
+    height:25px;
+    min-width:25px;
+    border-radius:15px;
+    font-size:13px;
+    text-align:center;
+    line-height:25px;
+    background-color:#809080;
+    opacity:0.8;
+}
+div.col > div#unReadCnt:hover {
+    opacity:0.1;
 }
 
 #sec_list > div#addList {
@@ -286,6 +304,12 @@ div#display > div#messages {
 #messages::-webkit-scrollbar-thumb{
     background-color: rgba(255,255,255,0.7);
     border-radius: 10px;    
+}
+div#messages > div#logsNothing {
+    margin-top:300px;
+    text-align:center;
+    display:none;
+    opacity:0;
 }
 div#messages > div.lineSpace {
     height:15px;

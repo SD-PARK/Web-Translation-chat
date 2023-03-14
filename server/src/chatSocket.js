@@ -13,7 +13,7 @@ module.exports = (chat, db) => {
                 }
             }
         });
-    }, 1000);
+    }, 500);
 
     chat.on('connection', (socket) => {
         const escapeMap = require('../config/escapeMap');
@@ -43,13 +43,18 @@ module.exports = (chat, db) => {
                         db.query(`CALL CHECK_GRANT(${userId}, '${roomId}')`, (err, grant) => { // Room 접근 권한 체크
                             if(grant[0][0]?.STATUS == 'JOIN') { // 권한이 있을 경우
                                 db.query(`CALL PRINT_MESSAGES('${roomId}', '${lang}')`, async (err, logs) => { // 메세지 내역 로드
-                                    try {
-                                        for(let i=0; i<logs[0].length; i++) {
-                                            let eMsg = await translate(logs[0][i]);
-                                            logs[0][i].eMsg = eMsg;
-                                        }
-                                        socket.emit('chatLogs', (logs[0]));
-                                    } catch (err) {}
+                                    if(logs[0][0]) {
+                                        try {
+                                            for(let i=0; i<logs[0].length; i++) {
+                                                let eMsg = await translate(logs[0][i]);
+                                                logs[0][i].eMsg = eMsg;
+                                            }
+                                            socket.emit('chatLogs', (logs[0]));
+                                        } catch (err) {}
+                                    } else { // 메세지 내역이 없을 경우
+                                        socket.emit('logsNothing');
+                                    }
+                                    db.query(`CALL READ_MESSAGE(${userId}, '${roomId}');`);
                                 });
                                 socket.join(roomId);
                             } else {
@@ -94,6 +99,7 @@ module.exports = (chat, db) => {
                 msgData[0][0].eMsg = eMsg;
                 callback(msgData[0][0]);
             });
+            try{ db.query(`CALL READ_MESSAGE(${userId}, '${roomId}');`); } catch(err) {}
         });
 
         // 친구 목록 호출

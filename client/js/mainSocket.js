@@ -54,6 +54,8 @@ function printFriend(info, accent) {
     if(accent) {
         $('div#title').text(info.NAME);
         $('div#list > div.col').last().addClass('accent');
+    } else if(info.UNREAD_CNT > 0) {
+        $('div#list > div.col').append(`<div id="unReadCnt">${info.UNREAD_CNT}</div>`);
     }
 }
 
@@ -110,6 +112,8 @@ function printRoom(info, accent) {
         $('div#title').text(info.TITLE);
         $('div#title').append(`<button id="exit" onclick="exitRoom()"></button><button id="invite" onclick="inviteRoom()"></button>`);
         $('div#list > div.col').last().addClass('accent');
+    } else if(info.UNREAD_CNT > 0) {
+        $('div#list > div.col').append(`<div id="unReadCnt">${info.UNREAD_CNT}</div>`);
     }
 }
 
@@ -146,6 +150,21 @@ socket.on('chatLogs', (logs) => {
     console.log(logs);
     for(let log of logs)
         msgPrint(log);
+});
+
+/** 대화 기록이 없을 때 */
+socket.on('logsNothing', () => {
+    const lnBox = $('div#logsNothing');
+    lnBox.show();
+    lnBox.animate({opacity: 1}, 1000);
+    setTimeout(() => {
+        if(lnBox.css('display') == 'block') {
+            lnBox.animate({opacity: 0}, 1000);
+            setTimeout(() => {
+                lnBox.removeAttr('style');
+            }, 1000);
+        }
+    }, 1500);
 });
 
 /** 메세지 출력 관련 */

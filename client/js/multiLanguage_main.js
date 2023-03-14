@@ -34,7 +34,8 @@ const multiLanguage = {
         cancle: '취소',
         delete: '삭제',
         accessDenied: '접속 불가',
-        doNotHavePermission: '접근 권한이 없습니다.'
+        doNotHavePermission: '접근 권한이 없습니다.',
+        logsNothing: '대화 기록이 없어요.'
     },
     'en': {
         friend: 'Friend',
@@ -71,7 +72,8 @@ const multiLanguage = {
         cancle: 'Cancle',
         delete: 'Delete',
         accessDenied: 'Access Denied',
-        doNotHavePermission: 'You do not have access.'
+        doNotHavePermission: 'You do not have access.',
+        logsNothing: 'No conversation logs available.'
     },
     'ja': {
         friend: '友達',
@@ -108,7 +110,8 @@ const multiLanguage = {
         cancle: 'キャンセル',
         delete: '削除する',
         accessDenied: '接続不可',
-        doNotHavePermission: 'アクセス権がありません。'
+        doNotHavePermission: 'アクセス権がありません。',
+        logsNothing: '会話ログがありません。'
     },
     'zh-CN': {
         friend: '朋友',
@@ -145,7 +148,8 @@ const multiLanguage = {
         cancle: '取消',
         delete: '刪除',
         accessDenied: '無法連接',
-        doNotHavePermission: '您沒有訪問權限。'
+        doNotHavePermission: '您沒有訪問權限。',
+        logsNothing: '沒有對話記錄。'
     },
     'zh-TW': {
         friend: '朋友',
@@ -182,7 +186,8 @@ const multiLanguage = {
         cancel: '取消',
         delete: '删除',
         accessDenied: '无法连接',
-        doNotHavePermission: '您没有访问权限。'
+        doNotHavePermission: '您没有访问权限。',
+        logsNothing: '没有对话记录。'
     }
 }
 
