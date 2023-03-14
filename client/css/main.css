@@ -306,7 +306,7 @@ div#display > div#messages {
     border-radius: 10px;    
 }
 div#messages > div#logsNothing {
-    margin-top:300px;
+    margin:300px 0 10px 0;
     text-align:center;
     display:none;
     opacity:0;

@@ -161,7 +161,10 @@ socket.on('logsNothing', () => {
         if(lnBox.css('display') == 'block') {
             lnBox.animate({opacity: 0}, 1000);
             setTimeout(() => {
-                lnBox.removeAttr('style');
+                lnBox.animate({'margin-top':0}, 1000);
+                setTimeout(() => {
+                    lnBox.removeAttr('style');
+                }, 1000);
             }, 1000);
         }
     }, 1500);
