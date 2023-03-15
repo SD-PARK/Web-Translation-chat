@@ -35,7 +35,9 @@ const multiLanguage = {
         delete: '삭제',
         accessDenied: '접속 불가',
         doNotHavePermission: '접근 권한이 없습니다.',
-        logsNothing: '대화 기록이 없어요.'
+        logsNothing: '대화 기록이 없어요.',
+        stranger: '아직 친구로 등록되지 않은 사용자에요.',
+        register: '등록'
     },
     'en': {
         friend: 'Friend',
@@ -73,7 +75,9 @@ const multiLanguage = {
         delete: 'Delete',
         accessDenied: 'Access Denied',
         doNotHavePermission: 'You do not have access.',
-        logsNothing: 'No conversation logs available.'
+        logsNothing: 'No conversation logs available.',
+        stranger: 'User is not registered as a friend yet.',
+        register: 'Register'
     },
     'ja': {
         friend: '友達',
@@ -111,7 +115,9 @@ const multiLanguage = {
         delete: '削除する',
         accessDenied: '接続不可',
         doNotHavePermission: 'アクセス権がありません。',
-        logsNothing: '会話ログがありません。'
+        logsNothing: '会話ログがありません。',
+        stranger: 'まだ友達登録されていないユーザーです。',
+        register: '登録'
     },
     'zh-CN': {
         friend: '朋友',
@@ -149,7 +155,9 @@ const multiLanguage = {
         delete: '刪除',
         accessDenied: '無法連接',
         doNotHavePermission: '您沒有訪問權限。',
-        logsNothing: '沒有對話記錄。'
+        logsNothing: '沒有對話記錄。',
+        stranger: '用戶尚未註冊為好友。',
+        register: '註冊'
     },
     'zh-TW': {
         friend: '朋友',
@@ -187,7 +195,9 @@ const multiLanguage = {
         delete: '删除',
         accessDenied: '无法连接',
         doNotHavePermission: '您没有访问权限。',
-        logsNothing: '没有对话记录。'
+        logsNothing: '没有对话记录。',
+        stranger: '用户尚未注册为好友。',
+        register: '注册'
     }
 }
 
