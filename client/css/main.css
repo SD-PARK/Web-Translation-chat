@@ -357,3 +357,29 @@ div#display > input#send {
     font-size:16px;
     color:#fff;
 }
+
+div#stranger {
+    display:none;
+    position:absolute;
+    top:122px;
+    left:351px;
+    width:1049px;
+    height:110px;
+    background-color:#202815;
+    z-index:1;
+    opacity:0.7;
+    text-align:center;
+}
+div#stranger > p {
+    font-size:17px;
+}
+div#stranger > button {
+    width:90px;
+    height:35px;
+    border-radius:17px;
+    border:none;
+    cursor:pointer;
+    background-color:#809080;
+    color:white;
+    font-size:14px;
+}

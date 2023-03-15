@@ -29,9 +29,9 @@ function modeSwap(md) {
 }
 
 function loadList(mode) {
-    $('div#list').empty();
     if(mode) {
         socket.emit('friendChatList', (friends) => {
+            $('div#list').empty();
             for(let i of friends.LIST) {
                 printFriend(i, (i.ROOM_ID === friends.ACCENT));
                 nowRoomId = friends.ACCENT;
@@ -39,6 +39,7 @@ function loadList(mode) {
         });
     } else {
         socket.emit('roomChatList', (room) => {
+            $('div#list').empty();
             for(let i of room.LIST) {
                 printRoom(i, (i.ROOM_ID === room.ACCENT));
                 nowRoomId = room.ACCENT;

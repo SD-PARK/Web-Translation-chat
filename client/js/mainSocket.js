@@ -2,6 +2,7 @@ const socket = io('/chat');
 
 // 세팅
 let lang;
+let targetUser;
 socket.emit('login', (info) => {
     // 좌측 하단 미니 프로필
     $('div#myProfile > img.profile').attr('src', `/client/img/profiles/${info.INFO.IMG}`);
@@ -54,6 +55,11 @@ function printFriend(info, accent) {
     if(accent) {
         $('div#title').text(info.NAME);
         $('div#list > div.col').last().addClass('accent');
+        targetUser = info;
+        if(info.RELATION != 'FRIEND') // 친구 추가 여부 확인
+            $('div#stranger').show();
+        else
+            $('div#stranger').removeAttr('style');
     } else if(info.UNREAD_CNT > 0) {
         $('div#list > div.col').append(`<div id="unReadCnt">${info.UNREAD_CNT}</div>`);
     }
@@ -78,6 +84,22 @@ function searchFriend() {
             addList_p.text(multiLanguage[lang].invalidUser);
             addList_p.css('opacity', '1');
         }
+    });
+}
+
+/** 버튼을 통한 친구 추가 */
+function AddFriend() {
+    let info = {
+        NAME: targetUser.NAME,
+        TAG: targetUser.NAME_TAG
+    }
+    socket.emit('addFriend', (info), (callback) => {
+        $('div#stranger').animate({
+            height:0
+        }, 700);
+        setTimeout(() => {
+            $('div#stranger').removeAttr('style');
+        }, 700);
     });
 }
 

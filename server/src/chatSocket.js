@@ -125,7 +125,6 @@ module.exports = (chat, db) => {
                             try {
                                 db.query(`CALL ADD_FRIEND(${userId}, ${rel[0][0].USER_ID})`);
                                 db.query(`CALL CHECK_EXIST_ROOM(${userId}, ${rel[0][0].USER_ID});`, (err, room) => { // 이미 생성된 방이 있는지 체크
-                                    console.log(room[0]);
                                     if (room[0][0]?.STATUS == undefined) { // 상대방과의 기존 방이 없다면, 생성 후 초대
                                         inviteRoom([userId, rel[0][0].USER_ID], makeRoom({STATUS:'ONE'}));
                                     } else if (room[0][0]?.STATUS == 'EXIT') { // 상대방과의 기존 방이 있으며, 나왔다면, 기존 방 입장
