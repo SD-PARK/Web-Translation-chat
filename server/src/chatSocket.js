@@ -193,6 +193,15 @@ module.exports = (chat, db) => {
                 db.commit();
             } catch(err) {db.rollback();}
         });
+
+        // 채팅방 인원 출력
+        socket.on('userListLoad', (callback) => {
+            db.query(`CALL PRINT_ROOM_PERSON('${roomId}')`, (err, res) => {
+                try {
+                    callback(res[0]);
+                } catch(err) {}
+            });
+        });
         
         // 계정 삭제
         socket.on('deleteAccount', (callback) => {
@@ -239,8 +248,10 @@ module.exports = (chat, db) => {
                     eMsg = escapeMap(tMsg);
                     console.log(data.CHAT, tMsg, eMsg);
                     try {
+                        db.beginTransaction();
                         db.query(`CALL UPDATE_LANG_MESSAGE('${roomId}', ${data.MSG_ID}, '${lang}', '${eMsg}')`);
-                    } catch(err) {}
+                        db.commit();
+                    } catch(err) { db.rollback(); }
                     resolve(eMsg);
                 });
             }

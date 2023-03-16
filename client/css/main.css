@@ -86,7 +86,7 @@ body {
     background-color: rgba(255,255,255,0.7);
     border-radius: 10px;    
 }
-#list > div.col {
+div.col {
     position:relative;
     height:60px;
     padding:0 5px;
@@ -94,10 +94,10 @@ body {
     border-radius:10px;
     cursor:pointer;
 }
-#list > div.col:hover {
+div.col:hover {
     background-color: rgba(255,255,255,0.1);
 }
-#list > div.accent {
+div.accent {
     background-color: rgba(255,255,255,0.2);
 }
 div.col > img.profile {
@@ -135,7 +135,12 @@ div.col > span#roomLastChat {
     left:75px;
     font-size:13px;
     margin:0;
+    width:200px;
     color:#ddd;
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    word-break:break-all;
 }
 div.col > button {
     display:none;
@@ -280,6 +285,10 @@ div#title > button {
     border:none;
     cursor:pointer;
 }
+div#title > button#userList {
+    background:url('/client/img/userList.png') no-repeat;
+    background-size:cover;
+}
 div#title > button#invite {
     background:url('/client/img/invite.png') no-repeat;
     background-size:cover;
@@ -293,7 +302,9 @@ div#title > button#exit {
     padding:0 20px 20px 20px;
 }
 div#display > div#messages {
+    display:inline-block;
     height:655px;
+    width:1009px;
     overflow-y:scroll;
     scrollbar-width:thin;
     scrollbar-color:#bbb transparent;
@@ -305,6 +316,7 @@ div#display > div#messages {
     background-color: rgba(255,255,255,0.7);
     border-radius: 10px;    
 }
+
 div#messages > div#logsNothing {
     margin:300px 0 10px 0;
     text-align:center;
@@ -318,6 +330,7 @@ div#messages > div.message {
     position:relative;
     height:auto;
     margin-bottom:15px;
+    word-break:break-all;
 }
 div.message > img.profile {
     width:50px;
@@ -381,5 +394,29 @@ div#stranger > button {
     cursor:pointer;
     background-color:#809080;
     color:white;
+    font-size:14px;
+}
+
+div#chatUsers {
+    display:none;
+    float:right;
+    width:0px;
+    height:655px;
+}
+div#chatUsers > div.col {
+    margin:0;
+    padding:0;
+}
+div#chatUsers > div.col > img.flag {
+    left:38px;
+}
+div#chatUsers > div.col > p {
+    position:absolute;
+    top:0px;
+    left:65px;
+    width:175px;
+    margin:0;
+    padding-right:10px;
+    line-height:60px;
     font-size:14px;
 }

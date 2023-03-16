@@ -38,6 +38,8 @@ socket.emit('login', (info) => {
 socket.on('alert', () => {
     console.log('renewal');
     loadList(mode);
+    if(userListStatus)
+        userListLoad();
 });
 
 /////////////// 친구 목록 관련 ///////////////
@@ -132,7 +134,7 @@ function printRoom(info, accent) {
     `);
     if(accent) {
         $('div#title').text(info.TITLE);
-        $('div#title').append(`<button id="exit" onclick="exitRoom()"></button><button id="invite" onclick="inviteRoom()"></button>`);
+        $('div#title').append(`<button id="exit" onclick="exitRoom()"></button><button id="invite" onclick="inviteRoom()"></button><button id="userList" onclick="userList()"></button>`);
         $('div#list > div.col').last().addClass('accent');
     } else if(info.UNREAD_CNT > 0) {
         $('div#list > div.col').append(`<div id="unReadCnt">${info.UNREAD_CNT}</div>`);
@@ -143,6 +145,20 @@ function printRoom(info, accent) {
 function exitNowRoom() {
     socket.emit('exitNowRoom', (callback) => {
         location.href="/main/@mp";
+    });
+}
+
+/** 채팅방 유저 목록 출력 */
+function userListLoad() {
+    socket.emit('userListLoad', (list) => {
+        $('#chatUsers').empty();
+        for(i of list) {
+            $('#chatUsers').append(`<div class="col">
+                                        <img src="/client/img/profiles/${i.IMG}" class="profile">
+                                        <img src="/client/img/flag/${i.LANGUAGE}.png" class="flag">
+                                        <p>${i.NAME + i.NAME_TAG}</p>
+                                    </div>`);
+        }
     });
 }
 

@@ -89,3 +89,35 @@ addList_input.keyup(() => {
     addList_input.css('outline', '1px solid white');
     addList_p.css('opacity', '0');
 });
+
+let userListStatus = 0;
+const messages = $('div#messages');
+const chatUsers = $('div#chatUsers');
+/** 채팅방 내 유저 목록 */
+function userList() {
+    $('#userList').prop('disabled', true);
+    if (userListStatus) {
+        messages.animate({
+            width: '1009px'
+        }, 600);
+        chatUsers.animate({
+            width: '0px'
+        }, 500);
+        setTimeout(() => {
+            chatUsers.removeAttr('style');
+        }, 500);
+    } else {
+        userListLoad();
+        chatUsers.show();
+        messages.animate({
+            width: '755px'
+        }, 500);
+        chatUsers.animate({
+            width: '250px'
+        }, 600);
+    }
+    setTimeout(() => {
+        $('#userList').prop('disabled', false);
+    }, 600);
+    userListStatus = !userListStatus;
+}
