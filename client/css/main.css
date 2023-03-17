@@ -58,6 +58,7 @@ body {
     color: #bbb;
     font-size:14px;
     cursor:pointer;
+    transition: all 0.3s;
 }
 #mode > button:hover {
     color:white;
@@ -93,6 +94,7 @@ div.col {
     margin: 3px 0 3px 5px;
     border-radius:10px;
     cursor:pointer;
+    transition: all 0.3s;
 }
 div.col:hover {
     background-color: rgba(255,255,255,0.1);
@@ -158,6 +160,7 @@ div.col > button {
 div.col:hover > button {
     display:block;
     cursor:pointer;
+    transition: all 0.3s;
 }
 div.col > button:hover {
     opacity:1;
@@ -226,6 +229,7 @@ div.col > div#unReadCnt:hover {
     height:120px;
     padding:0 10px;
     cursor:pointer;
+    transition: all 0.2s;
 }
 #sec_list > div#myProfile:hover {
     background-color: rgba(255,255,255,0.1);
@@ -284,6 +288,11 @@ div#title > button {
     margin:15px 10px;
     border:none;
     cursor:pointer;
+    opacity:0.5;
+    transition: all 0.2s;
+}
+div#title > button:hover {
+    opacity:1;
 }
 div#title > button#userList {
     background:url('/client/img/userList.png') no-repeat;
@@ -333,6 +342,7 @@ div#messages > div.message {
     word-break:break-all;
 }
 div.message > img.profile {
+    float:left;
     width:50px;
     height:50px;
     margin-right:10px;
@@ -347,9 +357,12 @@ div.message > img.flag {
     height:14px;
     object-fit:cover;
 }
-div.message > span.name {
-    position:absolute;
-    top:0;
+div.message > div.chat {
+    display:inline-block;
+    margin:-3px 0 0 5px;
+    width:90%;
+}
+div.chat > span.name {
     font-size:16px;
 }
 span.name > span.time {
@@ -357,8 +370,15 @@ span.name > span.time {
     font-size:12px;
     color:#bbb;
 }
-div.message > p {
-    margin: -30px 0 0 60px;
+div.chat > p {
+    line-height:24px;
+    padding:2px 0;
+    margin:0;
+    border-radius:5px;
+    transition: all 0.3s;
+}
+div.chat > p:hover {
+    background-color:rgba(255,255,255,0.1);
 }
 div#display > input#send {
     width:969px;

@@ -83,6 +83,7 @@ div#userInfo > div > button {
     border-radius:5px;
     cursor:pointer;
     color:white;
+    transition: all 0.3s;
 } div#userInfo > div > button:hover {
     background-color:#882222;
 }

@@ -65,9 +65,12 @@ function addList() {
                 opacity: 0.7,
                 rotate: '0deg'
             }, 500);
-            addList_input.css('outline', '1px solid white');
-            addList_p.css('opacity', '0');
-            addList_input.val('');
+            addList_p.removeAttr('style');
+            setTimeout(() => {
+                addList_input.val('');
+                addList_input.removeAttr('style');
+                addList_btn.removeAttr('style');
+            }, 500);
         } else {
             addList_input.animate({
                 opacity: 1,

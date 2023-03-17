@@ -213,19 +213,22 @@ let beforeInfo;
 function msgPrint(info) {
     info.LANG_CHAT = (info.LANG_CHAT == null) ? info.eMsg : info.LANG_CHAT;
     if(beforeInfo && (beforeInfo.NAME === info.NAME)) {
-        let p = $('div#messages > div.message:nth-last-child(1) > p');
-        beforeInfo.CHAT = (beforeInfo.CHAT + '\n' + info.LANG_CHAT);
-        let str = descapeMap(beforeInfo.CHAT);
-        p.text(str);
-        p.html(p.html().replace(/\n/g, '<br/>'));
+        // let p = $('div#messages > div.message:nth-last-child(1) > p');
+        // beforeInfo.CHAT = (beforeInfo.CHAT + '\n' + info.LANG_CHAT);
+        // let str = descapeMap(beforeInfo.CHAT);
+        // p.text(str);
+        // p.html(p.html().replace(/\n/g, '<br/>'));
+        $('div#messages > div.message:last-child() > div.chat').append(`<p>${info.LANG_CHAT}</p>`);
     } else {
         let time = new Intl.DateTimeFormat(lang, {dateStyle:'medium', timeStyle: 'short'}).format(new Date(info.SEND_TIME));
         $('div#messages').append(`
             <div class="message">
                 <img src="/client/img/profiles/${info.IMG}" class="profile">
                 <img src="/client/img/flag/${info.LANGUAGE}.png" class="flag">
-                <span class="name">${info.NAME}<span class="time">${time}</span></span>
-                <p>${info.LANG_CHAT}</p>
+                <div class="chat">
+                    <span class="name">${info.NAME}<span class="time">${time}</span></span>
+                    <p>${info.LANG_CHAT}</p>
+                </div>
             </div>`);
         beforeInfo = {
             NAME: info.NAME,
