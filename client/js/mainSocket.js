@@ -185,6 +185,7 @@ socket.on('msgAlert', (MSG_ID) => {
 
 /** 과거 메세지 출력 */
 socket.on('chatLogs', (logs) => {
+    $('.loading-container').hide();
     console.log(logs);
     for(let log of logs)
         msgPrint(log);
@@ -192,6 +193,7 @@ socket.on('chatLogs', (logs) => {
 
 /** 대화 기록이 없을 때 */
 socket.on('logsNothing', () => {
+    $('.loading-container').hide();
     const lnBox = $('div#logsNothing');
     lnBox.show();
     lnBox.animate({opacity: 1}, 1000);

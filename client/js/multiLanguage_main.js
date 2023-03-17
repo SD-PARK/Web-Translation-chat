@@ -37,7 +37,8 @@ const multiLanguage = {
         doNotHavePermission: '접근 권한이 없습니다.',
         logsNothing: '대화 기록이 없어요.',
         stranger: '아직 친구로 등록되지 않은 사용자에요.',
-        register: '등록'
+        register: '등록',
+        loading: '번역 중...'
     },
     'en': {
         friend: 'Friend',
@@ -77,7 +78,8 @@ const multiLanguage = {
         doNotHavePermission: 'You do not have access.',
         logsNothing: 'No conversation logs available.',
         stranger: 'User is not registered as a friend yet.',
-        register: 'Register'
+        register: 'Register',
+        loading: 'Loading...'
     },
     'ja': {
         friend: '友達',
@@ -117,7 +119,8 @@ const multiLanguage = {
         doNotHavePermission: 'アクセス権がありません。',
         logsNothing: '会話ログがありません。',
         stranger: 'まだ友達登録されていないユーザーです。',
-        register: '登録'
+        register: '登録',
+        loading: '翻訳中...'
     },
     'zh-CN': {
         friend: '朋友',
@@ -157,7 +160,8 @@ const multiLanguage = {
         doNotHavePermission: '您沒有訪問權限。',
         logsNothing: '沒有對話記錄。',
         stranger: '用戶尚未註冊為好友。',
-        register: '註冊'
+        register: '註冊',
+        loading: '翻譯中...'
     },
     'zh-TW': {
         friend: '朋友',
@@ -197,7 +201,8 @@ const multiLanguage = {
         doNotHavePermission: '您没有访问权限。',
         logsNothing: '没有对话记录。',
         stranger: '用户尚未注册为好友。',
-        register: '注册'
+        register: '注册',
+        loading: '翻译中...'
     }
 }
 
