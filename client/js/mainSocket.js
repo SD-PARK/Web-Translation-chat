@@ -47,7 +47,7 @@ socket.on('alert', () => {
 /** 친구 목록 출력 */
 function printFriend(info, accent) {
     $('div#list').append(`
-        <div class="col" onclick="location.href='/main/@fr/${info.ROOM_ID}'">
+        <div class="col ${info.ROOM_ID}" onclick="location.href='/main/@fr/${info.ROOM_ID}'">
             <img src="/client/img/profiles/${info.IMG}" class="profile">
             <img src="/client/img/flag/${info.LANGUAGE}.png" class="flag">
             <p>${info.NAME}</p>
@@ -104,12 +104,13 @@ function AddFriend() {
         }, 700);
     });
 }
-
+let n=1;
 /** 친구 삭제 */
 function deleteFriend(roomId) {
+    $(`div.${roomId}`).removeAttr('onclick');
+    $(`div.${roomId}`).attr('onclick', 'location.href="/main/@mp"');
     socket.emit('deleteFriend', (roomId), (callback) => {
         loadList(1);
-        location.href="/main/@mp";
     });
 }
 

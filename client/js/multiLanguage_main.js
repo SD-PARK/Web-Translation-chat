@@ -195,7 +195,7 @@ const multiLanguage = {
         exitRoom: '退出聊天室',
         exitRoomSure: '您确定要退出聊天室吗？<br>您需要重新获取邀请码以重新进入。',
         exit: '退出',
-        cancel: '取消',
+        cancle: '取消',
         delete: '删除',
         accessDenied: '无法连接',
         doNotHavePermission: '您没有访问权限。',

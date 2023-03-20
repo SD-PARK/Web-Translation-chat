@@ -188,6 +188,7 @@ module.exports = (chat, db) => {
             try{
                 db.beginTransaction();
                 db.query(`CALL EXIT_ROOM(${userId}, '${roomId}')`, (err, r) => {
+                    db.query(`CALL CHECK_REMOVED_ROOM('${roomId}')`);
                     callback();
                 });
                 db.commit();
@@ -233,7 +234,7 @@ module.exports = (chat, db) => {
         /** 채팅방에 사용자 초대 */
         function inviteRoom(person, room) {
             for(let p of person) {
-                db.query(`CALL INVITE_ROOM (${p}, '${room}')`, (err, res) => {
+                db.query(`CALL INVITE_ROOM(${p}, '${room}')`, (err, res) => {
                     console.log('Invite Room:', p, '=>', room);
                 });
             }
