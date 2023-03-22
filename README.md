@@ -16,9 +16,10 @@
         - 이전 채팅 내역 출력과 실시간 대화
     - 번역
         - 채팅 번역 기능
-- **개발 언어**: <img src="https://img.shields.io/badge/node.js-339933?style=for-the-badge&logo=node.js&logoColor=white"> <img src="https://img.shields.io/badge/express-000000?style=for-the-badge&logo=express&logoColor=white"> <img src="https://img.shields.io/badge/socket.io-010101?style=for-the-badge&logo=socket.io&logoColor=white">
+        - 각 언어 별 출력 텍스트 변경
+- **개발 언어**: Node.js(Express), Socket.io
 - **개발 환경**: VS Code
-- **데이터베이스**: <img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white">
+- **데이터베이스**: MySQL
 - **형상관리 툴**: GitHub
 - **간단 소개**: 실시간으로 번역되는 대화를 주고받을 수 있는 채팅 앱
 
@@ -44,6 +45,8 @@
         - 계정 삭제 또는 로그아웃 버튼 클릭 시 확인 메시지 출력하기
         - 계정 삭제 시 데이터베이스 내 계정 정보 제거하기
         - 계정 삭제 또는 로그아웃 시 로그인 세션 삭제한 뒤 로그인 페이지로 이동하기
+    - 언어:
+        - 설정한 언어에 따른 출력 텍스트 변경하기
 4. **목록**
     - 친구:
         - ‘사용자명#태그’의 조합을 통해 친구 추가하기
@@ -60,7 +63,7 @@
 5. **채팅 관련**
     - 송신:
         - 메시지 입력 후 엔터 키 누르면 유효성 검사, 입력 값이 공백이라면 송신하지 않음
-        - ㄱ서버로 입력 값 전송, 데이터베이스에 저장 후 채팅방에 입장한 사람들에게 메시지 데이터 전송하기
+        - 서버로 입력 값 전송, 데이터베이스에 저장 후 채팅방에 입장한 사람들에게 메시지 데이터 전송하기
     - 수신:
         - 채팅방 입장 시 이전 메시지 내역을 불러와 페이지 양식에 맞게 출력하기
         - 이전 메시지 내역이 없다면 ‘대화 기록이 없어요’ 메시지 출력하기
@@ -71,4 +74,3 @@
         - 채팅방에 소속된 인원 확인하기
         - 입장 코드 확인 및 복사 기능
         - 채팅방 나가기 버튼 클릭 시 확인 메시지 출력하기
-        - 다양한 국적의 사람들과 실시간으로 번역된 대화를 주고받을 수 있는 채팅 앱입니다.
