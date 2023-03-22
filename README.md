@@ -16,9 +16,9 @@
         - 이전 채팅 내역 출력과 실시간 대화
     - 번역
         - 채팅 번역 기능
-- **개발 언어**: <img src="[https://img.shields.io/badge/node.js-339933?style=for-the-badge&logo=node.js&logoColor=white](https://img.shields.io/badge/node.js-339933?style=for-the-badge&logo=node.js&logoColor=white)"> <img src="[https://img.shields.io/badge/express-000000?style=for-the-badge&logo=express&logoColor=white](https://img.shields.io/badge/express-000000?style=for-the-badge&logo=express&logoColor=white)"> <img src="[https://img.shields.io/badge/socket.io-010101?style=for-the-badge&logo=socket.io&logoColor=white](https://img.shields.io/badge/socket.io-010101?style=for-the-badge&logo=socket.io&logoColor=white)">
+- **개발 언어**: <img src="https://img.shields.io/badge/node.js-339933?style=for-the-badge&logo=node.js&logoColor=white"> <img src="https://img.shields.io/badge/express-000000?style=for-the-badge&logo=express&logoColor=white"> <img src="https://img.shields.io/badge/socket.io-010101?style=for-the-badge&logo=socket.io&logoColor=white">
 - **개발 환경**: VS Code
-- **데이터베이스**: <img src="[https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white](https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white)">
+- **데이터베이스**: <img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white">
 - **형상관리 툴**: GitHub
 - **간단 소개**: 실시간으로 번역되는 대화를 주고받을 수 있는 채팅 앱
 
@@ -71,3 +71,4 @@
         - 채팅방에 소속된 인원 확인하기
         - 입장 코드 확인 및 복사 기능
         - 채팅방 나가기 버튼 클릭 시 확인 메시지 출력하기
+        - 다양한 국적의 사람들과 실시간으로 번역된 대화를 주고받을 수 있는 채팅 앱입니다.
