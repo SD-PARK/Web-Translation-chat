@@ -73,3 +73,122 @@
         - 채팅방에 소속된 인원 확인하기
         - 입장 코드 확인 및 복사 기능
         - 채팅방 나가기 버튼 클릭 시 확인 메시지 출력하기
+
+
+## DB 설계
+
+![erd](https://user-images.githubusercontent.com/97375357/227104504-872de0ac-364c-40f8-9d30-a17a9d62aeb7.png)
+
+
+## API 설계
+
+![api](https://user-images.githubusercontent.com/97375357/227107760-1676bd66-9650-42d7-9d35-05c20e433055.png)
+
+
+## 화면 설계
+
+<details>
+<summary><h3>로그인</h3></summary>
+<hr>
+<h4>1. 로그인 페이지(한글)</h4>
+<img src="https://user-images.githubusercontent.com/97375357/227117914-262c35f0-b940-426d-84a4-43b7e0521a4f.png" width="500"/>
+<hr>
+<h4>2. 로그인 페이지(영어)</h4>
+<img src="https://user-images.githubusercontent.com/97375357/227117907-3a167115-a3eb-4886-afb9-6bb5b88d5ed9.png" width="500"/>
+
+우측 상단 SelectBox를 통해 지원 언어를 변경할 수 있다.
+<hr>
+</details>
+
+<details>
+<summary><h3>회원가입</h3></summary>
+<hr>
+<h4>1. 회원가입 페이지(한글)</h4>
+<img src="https://user-images.githubusercontent.com/97375357/227120022-6fa06e00-7b31-4e40-a081-185f21823042.png" width="500"/>
+<hr>
+<h4>2. 회원가입 페이지(일본어)</h4>
+<img src="https://user-images.githubusercontent.com/97375357/227120019-1514e1cb-1d1c-4b61-bb7b-f5c1d45b3ac4.png" width="500"/>
+
+로그인 페이지에서 설정한 언어를 쿠키를 통해 가져와 이어서 적용한다.
+
+SelectBox를 통해 동일하게 지원 언어 변경 가능.
+<hr>
+</details>
+
+<details>
+<summary><h3>프로필</h3></summary>
+<hr>
+<h4>1. 프로필 페이지</h4>
+<img src="https://user-images.githubusercontent.com/97375357/227120560-270ff1ec-02d2-4f19-a9e0-a8e46c2ec766.png" width="500"/>
+
+데이터베이스에 저장된 계정 정보를 불러온다.
+
+프로필 이미지를 클릭하면 이미지를 업로드할 수 있다.
+<hr>
+<h4>2. 프로필 페이지(업로드 후)</h4>
+<img src="https://user-images.githubusercontent.com/97375357/227120561-831d9578-e351-4fb4-8985-86d720f80305.png" width="500"/>
+<hr>
+</details>
+
+<details>
+<summary><h3>친구, 채팅방 목록</h3></summary>
+<hr>
+<h4>1. 친구 목록</h4>
+<img src="https://user-images.githubusercontent.com/97375357/227121298-041681f4-7bf6-42fd-b5be-97e87cbefbbf.png" width="200"/>
+
+친구 목록을 불러온다.
+
+친구를 클릭하면 1:1 채팅방으로 접속한다.
+
+'사용자명#0000'의 형식으로 유저를 검색해 관계를 등록할 수 있다.
+<hr>
+<h4>2. 채팅방 목록</h4>
+<img src="https://user-images.githubusercontent.com/97375357/227121303-e9c8c7ea-f857-4202-975e-1bcbfa7526ca.png" width="300"/>
+
+디테일은 친구 목록과 같으나 마지막 대화 내역을 불러온다.
+
+마지막 대화는 번역되지 않은 원문으로 출력된다.
+<hr>
+</details>
+
+<details>
+<summary><h3>채팅방 관련 설정</h3></summary>
+<hr>
+<h4>1. 채팅방 만들기</h4>
+<img src="https://user-images.githubusercontent.com/97375357/227122305-d351e76e-bb53-450b-9324-89462e7a8134.png" width="400"/>
+<hr>
+<h4>2. 새 채팅방 개설</h4>
+<img src="https://user-images.githubusercontent.com/97375357/227122311-b1c649e7-06c3-4d4c-ae0c-b4001ac728d5.png" width="400"/>
+
+새 채팅방 개설 버튼을 누르면 채팅방 이름을 정할 수 있다.
+
+정해진 채팅방 이름은 해당 채팅방에 소속된 모두에게 같은 이름으로 적용된다.
+<hr>
+<h4>3. 채팅방 초대</h4>
+<img src="https://user-images.githubusercontent.com/97375357/227122315-ffe8ea0d-ff8e-4926-9ffa-fbc06c1967a3.png" width="400"/>
+
+해당 채팅방의 입장 코드를 복사한 뒤,
+
+<img src="https://user-images.githubusercontent.com/97375357/227122319-43e64f26-f564-4b08-bda1-fab11275a221.png" width="400"/>
+
+채팅방 만들기 탭에서 입장 코드를 입력한 뒤 '참가하기' 버튼을 누르면 해당 채팅방에 입장할 수 있다.
+
+<img src="https://user-images.githubusercontent.com/97375357/227122316-fd682bc5-0f8d-4cbb-b928-3c49a16f4cf3.png" width="250"/>
+<hr>
+<h4>4. 채팅방 나가기</h4>
+<img src="https://user-images.githubusercontent.com/97375357/227122314-939de6de-9020-4244-b207-6d28b4426cda.png" width="400"/>
+
+채팅방 상단의 나가기 버튼을 통해 언제든 채팅방에서 퇴장할 수 있다.
+<hr>
+</details>
+
+<details>
+<summary><h3>대화</h3></summary>
+<hr>
+<h4>1. 대화(한글)</h4>
+<img src="https://user-images.githubusercontent.com/97375357/227125152-5b884b7e-b8f1-4363-8899-3180df222d66.png" width="300"/>
+<hr>
+<h4>2. 대화(일본어)</h4>
+<img src="https://user-images.githubusercontent.com/97375357/227125151-b8140985-7aa1-4b36-a9fa-a50b5682a85e.png" width="300"/>
+<hr>
+</details>
