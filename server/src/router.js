@@ -17,21 +17,11 @@ router.post('/register', loginController.registerPostMid);
 
 router.get('/logout', loginController.logoutGetMid);
 
-router.get('/main', mainController.mainGetMid);
-
-router.get('/main/@mp', (req, res, next) => {
-    req.session.ROOM_TARGET = '@mp';
-    req.session.ROOM_ID = 0;
-    next();
-}, mainController.mainMPGetMid);
+router.get('/main', mainController.mainMPGetMid);
 
 router.post('/main/upload', upload.single('upload_image'), mainController.mainUploadPostMid);
 
-router.get('/main/:target', (req, res, next) => {
-    req.session.ROOM_TARGET = req.params.target;
-    req.session.ROOM_ID = 0;
-    next();
-}, mainController.mainGetMid);
+router.get('/main/:target', mainController.mainMPGetMid);
 
 router.get('/main/:target/:id', (req, res, next) => {
     req.session.ROOM_TARGET = req.params.target;

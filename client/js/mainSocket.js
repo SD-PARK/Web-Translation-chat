@@ -167,12 +167,15 @@ function userListLoad() {
 
 /** 메세지 송신 */
 function sendChat() {
-    let data = {
-        MSG: $('input#send').val(),
-        TIME: new Date()
-    };
-    $('input#send').val('');
-    socket.emit('sendMessage', (data));
+    const msg = $('input#send').val();
+    if(msg.trim()) {
+        let data = {
+            MSG: msg,
+            TIME: new Date()
+        };
+        $('input#send').val('');
+        socket.emit('sendMessage', (data));
+    }
 }
 
 /** 메세지 수신 */
