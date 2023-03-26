@@ -124,3 +124,8 @@ function userList() {
     }, 600);
     userListStatus = !userListStatus;
 }
+
+// 텍스트 클릭 시 원문 출력
+function originText(e) {
+    console.log( $(e).data("text") );
+}
