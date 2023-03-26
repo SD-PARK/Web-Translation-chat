@@ -36,7 +36,6 @@ socket.emit('login', (info) => {
 
 /////////////// 실시간 갱신 ///////////////
 socket.on('alert', () => {
-    console.log('renewal');
     loadList(mode);
     if(userListStatus)
         userListLoad();
@@ -180,7 +179,6 @@ function sendChat() {
 
 /** 메세지 수신 */
 socket.on('msgAlert', (MSG_ID) => {
-    console.log(MSG_ID);
     socket.emit('msgReceive', (MSG_ID), (msgInfo) => {
         msgPrint(msgInfo);
     });
@@ -219,12 +217,7 @@ let beforeInfo;
 function msgPrint(info) {
     info.LANG_CHAT = (info.LANG_CHAT == null) ? info.eMsg : info.LANG_CHAT;
     if(beforeInfo && (beforeInfo.NAME === info.NAME)) {
-        // let p = $('div#messages > div.message:nth-last-child(1) > p');
-        // beforeInfo.CHAT = (beforeInfo.CHAT + '\n' + info.LANG_CHAT);
-        // let str = descapeMap(beforeInfo.CHAT);
-        // p.text(str);
-        // p.html(p.html().replace(/\n/g, '<br/>'));
-        $('div#messages > div.message:last-child() > div.chat').append(`<p onclick="originText(this)" data-text="{'org':'${info.CHAT}', 'trs':'${info.LANG_CHAT}'}'}">${info.LANG_CHAT}</p>`);
+        $('div#messages > div.message:last-child() > div.chat').append(`<p onclick="originText(this)" data-text='{"org":"${info.CHAT}", "trs":"${info.LANG_CHAT}"}'>${info.LANG_CHAT}</p>`);
     } else {
         let time = new Intl.DateTimeFormat(lang, {dateStyle:'medium', timeStyle: 'short'}).format(new Date(info.SEND_TIME));
         $('div#messages').append(`
@@ -233,7 +226,7 @@ function msgPrint(info) {
                 <img src="/client/img/flag/${info.LANGUAGE}.png" class="flag">
                 <div class="chat">
                     <span class="name">${info.NAME}<span class="time">${time}</span></span>
-                    <p onclick="originText(this)" data-text="{'org':'${info.CHAT}', 'trs':'${info.LANG_CHAT}'}'}">${info.LANG_CHAT}</p>
+                    <p onclick="originText(this)" data-text='{"org":"${info.CHAT}", "trs":"${info.LANG_CHAT}"}'>${info.LANG_CHAT}</p>
                 </div>
             </div>`);
         beforeInfo = {

@@ -127,11 +127,13 @@ function userList() {
 
 // 텍스트 클릭 시 원문 출력
 function originText(e) {
-    const text = $(e).data("text");
-    $(e).text(text.org);
-    $(e).unbind('click');
-    setTimeout(() => {
-        $(e).text(text.trs);
-        $(e).bind('click', originText(this));
-    }, 3000);
+    const t = $(e).data("text");
+    if($(e).text() != t.org) {
+        $(e).css('color', '#F5D042');
+        $(e).text(t.org);
+        setTimeout(() => {
+            $(e).removeAttr('style');
+            $(e).text(t.trs);
+        }, 3000);
+    }
 }
