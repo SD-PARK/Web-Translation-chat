@@ -224,7 +224,7 @@ function msgPrint(info) {
         // let str = descapeMap(beforeInfo.CHAT);
         // p.text(str);
         // p.html(p.html().replace(/\n/g, '<br/>'));
-        $('div#messages > div.message:last-child() > div.chat').append(`<p>${info.LANG_CHAT}</p>`);
+        $('div#messages > div.message:last-child() > div.chat').append(`<p data-text="{'org':'${info.CHAT}', 'trs':'${info.LANG_CHAT}'}'}">${info.LANG_CHAT}</p>`);
     } else {
         let time = new Intl.DateTimeFormat(lang, {dateStyle:'medium', timeStyle: 'short'}).format(new Date(info.SEND_TIME));
         $('div#messages').append(`
@@ -233,7 +233,7 @@ function msgPrint(info) {
                 <img src="/client/img/flag/${info.LANGUAGE}.png" class="flag">
                 <div class="chat">
                     <span class="name">${info.NAME}<span class="time">${time}</span></span>
-                    <p>${info.LANG_CHAT}</p>
+                    <p data-text="{'org':'${info.CHAT}', 'trs':'${info.LANG_CHAT}'}'}">${info.LANG_CHAT}</p>
                 </div>
             </div>`);
         beforeInfo = {
