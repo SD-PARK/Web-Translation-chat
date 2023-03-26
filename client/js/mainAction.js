@@ -127,5 +127,11 @@ function userList() {
 
 // 텍스트 클릭 시 원문 출력
 function originText(e) {
-    console.log( $(e).data("text") );
+    const text = $(e).data("text");
+    $(e).text(text.org);
+    $(e).unbind('click');
+    setTimeout(() => {
+        $(e).text(text.trs);
+        $(e).bind('click', originText(this));
+    }, 3000);
 }
