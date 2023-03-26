@@ -17,6 +17,7 @@
         - 이전 채팅 내역 출력과 실시간 대화
     - 번역
         - 채팅 번역 기능
+        - 메시지 원문 출력
         - 각 언어 별 출력 텍스트 변경
 - **개발 언어**: Node.js(Express), Socket.io
 - **개발 환경**: VS Code
@@ -188,6 +189,8 @@ SelectBox를 통해 동일하게 지원 언어 변경 가능.
 <hr>
 <h4>1. 대화(한글)</h4>
 <img src="https://user-images.githubusercontent.com/97375357/227125152-5b884b7e-b8f1-4363-8899-3180df222d66.png" width="300"/>
+
+메시지를 클릭하면 원문 메시지를 확인할 수 있다.
 <hr>
 <h4>2. 대화(일본어)</h4>
 <img src="https://user-images.githubusercontent.com/97375357/227125151-b8140985-7aa1-4b36-a9fa-a50b5682a85e.png" width="300"/>
