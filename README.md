@@ -1,7 +1,6 @@
 # Papago-Chat
 
-![papago-main](https://user-images.githubusercontent.com/97375357/233045122-3c95d54e-876b-4cbc-b9f3-6703dd10bf5e.png)
-<img src="https://user-images.githubusercontent.com/97375357/233045122-3c95d54e-876b-4cbc-b9f3-6703dd10bf5e.png" width="900"/>
+<img src="https://user-images.githubusercontent.com/97375357/233045122-3c95d54e-876b-4cbc-b9f3-6703dd10bf5e.png" width="700" height="400"/>
 
 ## 개요
 
