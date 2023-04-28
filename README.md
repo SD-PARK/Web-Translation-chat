@@ -85,7 +85,7 @@
 
 ## API 설계
 
-![api](https://user-images.githubusercontent.com/97375357/227107760-1676bd66-9650-42d7-9d35-05c20e433055.png)
+![api](https://user-images.githubusercontent.com/97375357/235084779-93f068ba-6367-40b4-a7fe-d9dcf61a7284.png)
 
 
 ## 화면 설계
