@@ -21,7 +21,7 @@ exports.mainMPGetMid = (req, res) => {
     }
 }
 
-exports.mainUploadPostMid = (req, res) => {
+exports.mainUploadPutMid = (req, res) => {
     const userId = req.session.USER_ID;
     
     if(req.file) {

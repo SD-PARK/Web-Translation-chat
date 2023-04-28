@@ -19,7 +19,7 @@ router.get('/logout', loginController.logoutGetMid);
 
 router.get('/main', mainController.mainMPGetMid);
 
-router.post('/main/upload', upload.single('upload_image'), mainController.mainUploadPostMid);
+router.put('/main/upload', upload.single('upload_image'), mainController.mainUploadPutMid);
 
 router.get('/main/:target', mainController.mainMPGetMid);
 
