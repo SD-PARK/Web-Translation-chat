@@ -16,6 +16,8 @@ app.use('/config', express.static(path.join(__dirname, 'server/config')));
 app.use('/node_modules', express.static(path.join(__dirname, '/node_modules')));
 // Session
 app.use(session);
+// Method-Override
+app.use(require('method-override'));
 // app.set('io', io);
 
 const router = require('./server/src/router');
