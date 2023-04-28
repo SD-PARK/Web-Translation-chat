@@ -107,6 +107,7 @@ div.col > img.profile {
     height:40px;
     margin:10px;
     background-color:#809080;
+    background-size:cover;
     border-radius:50%;
 }
 div.col > img.flag {
