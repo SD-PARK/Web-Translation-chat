@@ -107,7 +107,7 @@ div.col > img.profile {
     height:40px;
     margin:10px;
     background-color:#809080;
-    background-size:cover;
+    object-fit:cover;
     border-radius:50%;
 }
 div.col > img.flag {
@@ -240,7 +240,7 @@ div#myProfile > img.profile {
     height:70px;
     margin:25px 10px;
     background-color:#809080;
-    background-size:cover;
+    object-fit:cover;
     border-radius:50%;
 }
 div#myProfile > img.flag {
@@ -349,7 +349,7 @@ div.message > img.profile {
     height:50px;
     margin-right:10px;
     background-color:#809080;
-    background-size:cover;
+    object-fit:cover;
     border-radius:50%;
 }
 div.message > img.flag {
