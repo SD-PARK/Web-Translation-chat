@@ -1,0 +1,4 @@
+## NESOY Ignore File ##
+
+server/config/db.js
+server/config/key.js
