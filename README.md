@@ -25,7 +25,7 @@
 - **데이터베이스**: MySQL
 - **형상관리 툴**: GitHub
 - **간단 소개**: 실시간으로 번역되는 대화를 주고받을 수 있는 채팅 앱
-- **테스트 링크**: http://ec2-13-209-21-60.ap-northeast-2.compute.amazonaws.com:3000/
+- **테스트 링크**: [Test Link for Papago-Chat](http://ec2-13-209-21-60.ap-northeast-2.compute.amazonaws.com:3000/)
 
 ## 요구사항 분석
 
