@@ -1,3 +1,4 @@
 ## Ignore File ##
 server/config/db.js
 server/config/key.js
+node_modules
