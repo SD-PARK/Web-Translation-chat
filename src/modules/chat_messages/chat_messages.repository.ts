@@ -1,5 +1,5 @@
 import { CustomRepository } from "src/config/typeorm_ex/typeorm-ex.decorator";
-import { ChatMessage } from "./chat_messsages.entity";
+import { ChatMessage } from "./chat_messages.entity";
 import { LessThan, Repository } from "typeorm";
 
 @CustomRepository(ChatMessage)
