@@ -80,7 +80,8 @@
 
 ## DB 설계
 
-![erd](https://user-images.githubusercontent.com/97375357/227104504-872de0ac-364c-40f8-9d30-a17a9d62aeb7.png)
+![erd](https://github.com/SD-PARK/papago-chat/assets/97375357/2d2e7583-2174-47bb-b5ed-b4260888ac1d)
+
 
 
 ## API 설계
