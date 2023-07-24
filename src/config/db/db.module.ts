@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
-import { ChatRoom } from '../../modules/chat_rooms/chat_rooms.entity';
-import { ChatMessage } from '../../modules/chat_messages/chat_messages.entity';
+import { ChatRoom } from '../../modules/chat/chat_rooms/chat_rooms.entity';
+import { ChatMessage } from '../../modules/chat/chat_messages/chat_messages.entity';
 
 @Module({
   imports: [TypeOrmModule.forRootAsync({
