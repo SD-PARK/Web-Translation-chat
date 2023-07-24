@@ -6,10 +6,10 @@ export class ChatMessage extends BaseEntity {
     @PrimaryGeneratedColumn()
     message_id: number;
 
-    @Column()
+    @Column({ nullable: false })
     room_id: number;
 
-    @Column({ length: 20, nullable: false })
+    @Column({ length: 45, nullable: false })
     user_name: string;
     
     @Column({ default: () => 'CURRENT_TIMESTAMP'})
