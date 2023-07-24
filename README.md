@@ -25,7 +25,7 @@
     @PrimaryGeneratedColumn()
     message_id: number;
 
-    @Column()
+    @Column({ nullable: false })
     room_id: number;
 
     @Column({ length: 45, nullable: false })
