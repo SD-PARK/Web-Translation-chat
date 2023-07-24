@@ -28,7 +28,7 @@
     @Column()
     room_id: number;
 
-    @Column({ length: 20, nullable: false })
+    @Column({ length: 45, nullable: false })
     user_name: string;
     
     @Column({ default: () => 'CURRENT_TIMESTAMP'})
