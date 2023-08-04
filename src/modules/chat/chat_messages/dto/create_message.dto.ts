@@ -1,7 +1,8 @@
-import { IsNumber, IsString, MaxLength } from 'class-validator';
+import { IsNumber, IsString, MaxLength, Min } from 'class-validator';
 
 export class CreateMessageDto {
     @IsNumber()
+    @Min(0)
     readonly room_id: number;
 
     @IsString()
