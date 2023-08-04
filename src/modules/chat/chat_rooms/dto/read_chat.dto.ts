@@ -1,7 +1,8 @@
-import { IsDate, IsNumber, IsString, MaxLength } from "class-validator";
+import { IsDate, IsNumber, IsString, MaxLength, Min } from "class-validator";
 
 export class ReadRoomDto {
     @IsNumber()
+    @Min(0)
     room_id: number;
 
     @IsString()
