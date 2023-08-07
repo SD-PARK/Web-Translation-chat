@@ -40,4 +40,15 @@ export class ChatMessageRepository extends Repository<ChatMessage> {
         await this.save(newEntity);
         return newEntity;
     }
+
+    /**
+     * 특정 Room의 메시지를 삭제합니다.
+     * @param room_id 메시지를 삭제할 채팅방의 고유 식별자(ID) 입니다.
+     * @returns 삭제한 메시지 데이터를 담은 배열을 반환합니다.
+     */
+    async deleteRoomMessage(room_id: number): Promise<ChatMessage[]> {
+        const deleteMessages: ChatMessage[] = await this.find({ where: { room_id: room_id } });
+        await this.delete({ room_id: room_id });
+        return deleteMessages;
+    }
 }
