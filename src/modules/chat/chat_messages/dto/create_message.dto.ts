@@ -1,4 +1,4 @@
-import { IsNumber, IsString, MaxLength, Min } from 'class-validator';
+import { IsIn, IsNumber, IsString, MaxLength, Min } from 'class-validator';
 
 export class CreateMessageDto {
     @IsNumber()
@@ -11,6 +11,7 @@ export class CreateMessageDto {
 
     @IsString()
     @MaxLength(5)
+    @IsIn(['ko', 'en', 'ja', 'zh-CN', 'zh-TW', 'vi', 'id', 'th', 'th', 'de', 'ru', 'es', 'it', 'fr'])
     readonly language: string;
 
     @IsString()
