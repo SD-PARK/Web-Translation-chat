@@ -14,15 +14,19 @@ export class ChatService {
     ) {}
 
     async findMessage(findMessageData: FindMessageDto): Promise<ReadMessageDto[]> {
-        const findRoom: ReadRoomDto = await this.chatRoomRepository.findOneRoom(findMessageData.room_id);
-        if (!findRoom) throw new NotFoundException('Room ID를 찾을 수 없습니다');
-
+        this.validateRoomID(findMessageData.room_id);
         const result: ReadMessageDto[] = await this.chatMessageRepository.findRoomMessages(findMessageData.room_id, findMessageData.send_at, findMessageData.take);
         return result;
     }
 
     async createMessage(messageData: CreateMessageDto): Promise<ReadMessageDto> {
+        this.validateRoomID(messageData.room_id);
         const result: ReadMessageDto = await this.chatMessageRepository.createMessage(messageData.room_id, messageData.user_name, messageData.language, messageData.message_text);
         return result;
+    }
+
+    async validateRoomID(roomId: number): Promise<void> {
+        const findRoom: ReadRoomDto = await this.chatRoomRepository.findOneRoom(roomId);
+        if (!findRoom) throw new NotFoundException('Room ID를 찾을 수 없습니다');
     }
 }
