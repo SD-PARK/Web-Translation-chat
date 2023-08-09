@@ -1,10 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { ChatMessageRepository } from './chat_messages/chat_messages.repository';
 import { ChatRoomRepository } from './chat_rooms/chat_rooms.repository';
-import { ReadRoomDto } from './chat_rooms/dto/read_chat.dto';
+import { ReadRoomDto } from './chat_rooms/dto/read_room.dto';
 import { ReadMessageDto } from './chat_messages/dto/read_message.dto';
 import { CreateMessageDto } from './chat_messages/dto/create_message.dto';
 import { FindMessageDto } from './chat_messages/dto/find_message.dto';
+import { CreateRoomDto } from './chat_rooms/dto/create_room.dto';
+import { UpdateRoomDto } from './chat_rooms/dto/update_room.dto';
 
 @Injectable()
 export class ChatService {
@@ -13,9 +15,21 @@ export class ChatService {
         private readonly chatRoomRepository: ChatRoomRepository,
     ) {}
 
-    async findMessage(findMessageData: FindMessageDto): Promise<ReadMessageDto[]> {
-        this.validateRoomID(findMessageData.room_id);
-        const result: ReadMessageDto[] = await this.chatMessageRepository.findRoomMessages(findMessageData.room_id, findMessageData.send_at, findMessageData.take);
+    async createRoom(roomData: CreateRoomDto): Promise<ReadRoomDto> {
+        const result: ReadRoomDto = await this.chatRoomRepository.createRoom(roomData.room_name);
+        return result;
+    }
+
+    async updateRoom(roomData: UpdateRoomDto): Promise<ReadRoomDto> {
+        return;
+    }
+
+    async deleteRoom(roomId: number): Promise<void> {
+    }
+
+    async findMessage(messageData: FindMessageDto): Promise<ReadMessageDto[]> {
+        this.validateRoomID(messageData.room_id);
+        const result: ReadMessageDto[] = await this.chatMessageRepository.findRoomMessages(messageData.room_id, messageData.send_at, messageData.take);
         return result;
     }
 
