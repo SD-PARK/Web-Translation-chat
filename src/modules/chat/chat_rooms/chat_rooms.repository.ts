@@ -42,8 +42,8 @@ export class ChatRoomRepository extends Repository<ChatRoom> {
      */
     async createRoom(roomName: string): Promise<ChatRoom> {
         const newEntity: ChatRoom = this.create({ room_name: roomName });
-        await this.save(newEntity);
-        return newEntity;
+        const createdEntity: ChatRoom = await this.save(newEntity);
+        return createdEntity;
     }
 
     /**
