@@ -1,5 +1,6 @@
 import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { ChatRoom } from '../chat_rooms/chat_rooms.entity';
+import { IsIn } from 'class-validator';
 
 @Entity('chat_messages')
 export class ChatMessage extends BaseEntity {
@@ -16,6 +17,7 @@ export class ChatMessage extends BaseEntity {
     send_at: Date;
 
     @Column({ length: 5, nullable: false })
+    @IsIn(['ko', 'en', 'ja', 'zh-CN', 'zh-TW', 'vi', 'id', 'th', 'th', 'de', 'ru', 'es', 'it', 'fr'])
     language: string;
 
     @Column({ type: 'text', nullable: false })
