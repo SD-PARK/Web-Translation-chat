@@ -2,29 +2,53 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ChatService } from './chat.service';
 import { ChatMessageRepository } from './chat_messages/chat_messages.repository';
 import { ChatRoomRepository } from './chat_rooms/chat_rooms.repository';
-import { FindMessageDto } from './chat_messages/dto/find_message.dto';
 import { TypeOrmExModule } from 'src/config/typeorm_ex/typeorm_ex.module';
 import { ConfigModule } from '@nestjs/config';
 import { DBModule } from 'src/config/db/db.module';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { ChatRoom } from './chat_rooms/chat_rooms.entity';
+import { CreateRoomDto } from './chat_rooms/dto/create_room.dto';
+import { ReadRoomDto } from './chat_rooms/dto/read_room.dto';
+import { ChatMessage } from './chat_messages/chat_messages.entity';
+import { BaseEntity, RemoveOptions, SaveOptions } from 'typeorm';
 
 describe('ChatService', () => {
   let service: ChatService;
   let module: TestingModule;
+  let mockMessageRepository: ChatMessageRepository;
+  let mockRoomRepository: ChatRoomRepository;
+  const baseEntity = {
+    chatMessages: new ChatRoom,
+    hasId: function (): boolean {
+      throw new Error('Function not implemented.');
+    },
+    save: function (options?: SaveOptions): Promise<ChatRoom> {
+      throw new Error('Function not implemented.');
+    },
+    remove: function (options?: RemoveOptions): Promise<ChatRoom> {
+      throw new Error('Function not implemented.');
+    },
+    softRemove: function (options?: SaveOptions): Promise<ChatRoom> {
+      throw new Error('Function not implemented.');
+    },
+    recover: function (options?: SaveOptions): Promise<ChatRoom> {
+      throw new Error('Function not implemented.');
+    },
+    reload: function (): Promise<void> {
+      throw new Error('Function not implemented.');
+    }
+  }
 
   beforeAll(async () => {
     module = await Test.createTestingModule({
-      imports: [
-        DBModule,
-        TypeOrmExModule.forCustomRepository([ChatMessageRepository, ChatRoomRepository]),
-        ConfigModule.forRoot({
-          cache: true,
-          isGlobal: true,
-        }),
+      providers: [
+        ChatService, ChatMessageRepository, ChatRoomRepository,
       ],
-      providers: [ChatService],
     }).compile();
 
     service = module.get<ChatService>(ChatService);
+    mockMessageRepository = module.get<ChatMessageRepository>(ChatMessageRepository);
+    mockRoomRepository = module.get<ChatRoomRepository>(ChatRoomRepository);
   });
 
   afterAll(async () => {
@@ -37,12 +61,38 @@ describe('ChatService', () => {
 
   describe('Validate', () => {
     it('Room ID', async () => {
+      const mockEntities: ChatRoom[] = [
+        { room_id: 1, room_name: 'test1', created_at: new Date('2023-01-01'), ...baseEntity},
+        { room_id: 2, room_name: 'test2', created_at: new Date('2023-02-01'), ...baseEntity},
+        { room_id: 3, room_name: 'test3', created_at: new Date('2023-03-01'), ...baseEntity},
+      ];
+
+      mockRoomRepository.findOne = jest.fn().mockImplementation((options) => {
+        return mockEntities.find((entity) => entity.room_id === options.where.room_id);
+      });
+
       await expect(service.validateRoomID(0)).rejects.toThrow('Room ID를 찾을 수 없습니다');
     });
   });
 
   describe('Create Room', () => {
     // Room 생성, 생성 결과 확인
+    it('채팅방 생성', async () => {
+      const createRoomDto: CreateRoomDto = { room_name: 'test' };
+      const mockCreatedEntity: ChatRoom = {
+        room_id: 1,
+        ...createRoomDto,
+        created_at: new Date(Date.now()),
+        chatMessages: new ChatRoom,
+        ...baseEntity
+      };
+
+      jest.spyOn(mockRoomRepository, 'createRoom').mockResolvedValue(mockCreatedEntity);
+
+      const result = await service.createRoom(createRoomDto);
+
+      expect(result).toEqual(mockCreatedEntity);
+    })
   });
 
   describe('Find Room', () => {
