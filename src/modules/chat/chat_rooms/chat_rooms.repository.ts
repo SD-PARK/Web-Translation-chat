@@ -17,8 +17,8 @@ export class ChatRoomRepository extends Repository<ChatRoom> {
      * 모든 채팅방을 조회합니다.
      * @returns 채팅방 데이터를 담은 배열을 반환합니다.
      */
-    async findAllRoom(): Promise<ChatRoom[]> {
-        return await this.find();
+    async findRoom(roomName: string): Promise<ChatRoom[]> {
+        return await this.find({ where: { room_name: roomName }});
     }
 
     /**
