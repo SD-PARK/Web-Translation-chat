@@ -1,6 +1,6 @@
 import { CustomRepository } from "src/config/typeorm_ex/typeorm-ex.decorator";
 import { ChatMessage } from "./chat_messages.entity";
-import { LessThan, Repository } from "typeorm";
+import { DeleteResult, LessThan, Repository } from "typeorm";
 
 @CustomRepository(ChatMessage)
 export class ChatMessageRepository extends Repository<ChatMessage> {
@@ -44,11 +44,9 @@ export class ChatMessageRepository extends Repository<ChatMessage> {
     /**
      * 특정 Room의 메시지를 삭제합니다.
      * @param room_id 메시지를 삭제할 채팅방의 고유 식별자(ID) 입니다.
-     * @returns 삭제한 메시지 데이터를 담은 배열을 반환합니다.
      */
-    async deleteRoomMessage(room_id: number): Promise<ChatMessage[]> {
-        const deleteMessages: ChatMessage[] = await this.find({ where: { room_id: room_id } });
-        await this.delete({ room_id: room_id });
-        return deleteMessages;
+    async deleteRoomMessage(room_id: number): Promise<DeleteResult> {
+        const deletedEntities: DeleteResult = await this.delete({ room_id: room_id });
+        return deletedEntities;
     }
 }
