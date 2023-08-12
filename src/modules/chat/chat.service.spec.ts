@@ -15,8 +15,8 @@ import { BaseEntity, RemoveOptions, SaveOptions } from 'typeorm';
 describe('ChatService', () => {
   let service: ChatService;
   let module: TestingModule;
-  let mockMessageRepository: ChatMessageRepository;
-  let mockRoomRepository: ChatRoomRepository;
+  let mockRoomRepository: Partial<ChatRoomRepository>;
+  let mockMessageRepository: Partial<ChatMessageRepository>;
   const baseEntity = {
     chatMessages: new ChatRoom,
     hasId: function (): boolean {
@@ -38,17 +38,41 @@ describe('ChatService', () => {
       throw new Error('Function not implemented.');
     }
   }
+  const mockEntities: ChatRoom[] = [
+    { room_id: 1, room_name: 'test1', created_at: new Date('2023-01-01'), ...baseEntity},
+    { room_id: 2, room_name: 'test2', created_at: new Date('2023-02-01'), ...baseEntity},
+    { room_id: 3, room_name: 'test3', created_at: new Date('2023-03-01'), ...baseEntity},
+  ];
 
   beforeAll(async () => {
+    mockRoomRepository = {
+      find: jest.fn().mockImplementation((option) => {
+        return mockEntities.filter((entity) => entity.room_name.includes(option.where.room_name));
+      }),
+
+      findOne: jest.fn().mockImplementation((options) => {
+        return mockEntities.find((entity) => entity.room_id === options.where.room_id);
+      }),
+
+      update: jest.fn().mockResolvedValue({ affected: 1 }),
+    };
+    mockMessageRepository = {};
+
     module = await Test.createTestingModule({
       providers: [
-        ChatService, ChatMessageRepository, ChatRoomRepository,
+        {
+          provide: getRepositoryToken(ChatRoomRepository),
+          useValue: mockRoomRepository,
+        },
+        {
+          provide: getRepositoryToken(ChatMessageRepository),
+          useValue: mockMessageRepository,
+        },
+        ChatService
       ],
     }).compile();
 
     service = module.get<ChatService>(ChatService);
-    mockMessageRepository = module.get<ChatMessageRepository>(ChatMessageRepository);
-    mockRoomRepository = module.get<ChatRoomRepository>(ChatRoomRepository);
   });
 
   afterAll(async () => {
@@ -61,17 +85,9 @@ describe('ChatService', () => {
 
   describe('Validate', () => {
     it('Room ID', async () => {
-      const mockEntities: ChatRoom[] = [
-        { room_id: 1, room_name: 'test1', created_at: new Date('2023-01-01'), ...baseEntity},
-        { room_id: 2, room_name: 'test2', created_at: new Date('2023-02-01'), ...baseEntity},
-        { room_id: 3, room_name: 'test3', created_at: new Date('2023-03-01'), ...baseEntity},
-      ];
-
-      mockRoomRepository.findOne = jest.fn().mockImplementation((options) => {
-        return mockEntities.find((entity) => entity.room_id === options.where.room_id);
-      });
-
       await expect(service.validateRoomID(0)).rejects.toThrow('Room ID를 찾을 수 없습니다');
+      await expect(service.validateRoomID(1)).resolves.toBeUndefined();
+      expect(mockRoomRepository.findOne).toHaveBeenCalled();
     });
   });
 
@@ -90,17 +106,34 @@ describe('ChatService', () => {
       jest.spyOn(mockRoomRepository, 'createRoom').mockResolvedValue(mockCreatedEntity);
 
       const result = await service.createRoom(createRoomDto);
-
       expect(result).toEqual(mockCreatedEntity);
+      expect(mockRoomRepository.createRoom).toHaveBeenCalled();
     })
   });
 
   describe('Find Room', () => {
-    // 유효한 Room 조회 (유효하지 않은 경우는 Validate에서 처리함)
+    // 유효한 Room 조회 (유효하지 않은 경우는 Validate에서 처리함)    
+    it('모든 채팅방 검색', () => {
+      expect(service.findRoom({ room_name: '' })).resolves.toEqual(mockEntities);
+    });
+    it('특정 채팅방 검색', () => {
+      expect(service.findRoom({ room_name: 'test2' })).resolves.toEqual(mockEntities[1]);
+    });
   });
 
   describe('Update Room', () => {
-    // Create Room에서 생성한 Room에 대해 Data 변경, 확인
+    const updateData = { room_name: 'test11' };
+    const mockUpdatedEntity: ChatRoom = {
+      ...baseEntity,
+      ...mockEntities[0],
+      ...updateData,
+    }
+    
+    it('채팅방 업데이트 확인', async () => {
+      const result = await service.updateRoom(1, updateData);
+      expect(mockRoomRepository.update).toHaveBeenCalledWith(1, updateData);
+      expect(result).toEqual(mockUpdatedEntity);
+    });
   });
 
   describe('Create Message', () => {
