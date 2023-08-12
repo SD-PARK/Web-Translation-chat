@@ -16,11 +16,24 @@ export class ChatService {
     ) {}
 
     async createRoom(roomData: CreateRoomDto): Promise<ReadRoomDto> {
-        const result: ReadRoomDto = await this.chatRoomRepository.createRoom(roomData.room_name);
-        return result;
+        try {
+            const result: ReadRoomDto = await this.chatRoomRepository.createRoom(roomData.room_name);
+            return result;
+        } catch (err) {
+            console.error('createRoom error:', err);
+        }
+    }
+    
+    async findRoom(roomData: UpdateRoomDto): Promise<ReadRoomDto[]> {
+        try {
+            const result: ReadRoomDto[] = await this.chatRoomRepository.findRoom(roomData.room_name);
+            return result;
+        } catch (err) {
+            console.error('findRoom error:', err);
+        }
     }
 
-    async updateRoom(roomData: UpdateRoomDto): Promise<ReadRoomDto> {
+    async updateRoom(roomId: number, roomData: UpdateRoomDto): Promise<ReadRoomDto> {
         return;
     }
 
@@ -29,18 +42,31 @@ export class ChatService {
 
     async findMessage(messageData: FindMessageDto): Promise<ReadMessageDto[]> {
         this.validateRoomID(messageData.room_id);
-        const result: ReadMessageDto[] = await this.chatMessageRepository.findRoomMessages(messageData.room_id, messageData.send_at, messageData.take);
-        return result;
+        try {
+            const result: ReadMessageDto[] = await this.chatMessageRepository.findRoomMessages(messageData.room_id, messageData.send_at, messageData.take);
+            return result;
+        } catch (err) {
+            console.error('findMessage error:', err);
+        }
     }
 
     async createMessage(messageData: CreateMessageDto): Promise<ReadMessageDto> {
         this.validateRoomID(messageData.room_id);
-        const result: ReadMessageDto = await this.chatMessageRepository.createMessage(messageData.room_id, messageData.user_name, messageData.language, messageData.message_text);
-        return result;
+        try {
+            const result: ReadMessageDto = await this.chatMessageRepository.createMessage(messageData.room_id, messageData.user_name, messageData.language, messageData.message_text);
+            return result;
+        } catch (err) {
+            console.error('createMessage error:', err);
+        }
     }
 
     async validateRoomID(roomId: number): Promise<void> {
-        const findRoom: ReadRoomDto = await this.chatRoomRepository.findOneRoom(roomId);
+        let findRoom: ReadRoomDto;
+        try {
+            findRoom = await this.chatRoomRepository.findOneRoom(roomId);
+        } catch (err) {
+            console.error('validateRoomId error:', err);
+        }
         if (!findRoom) throw new NotFoundException('Room ID를 찾을 수 없습니다');
     }
 }
