@@ -7,6 +7,7 @@ import { CreateMessageDto } from './chat_messages/dto/create_message.dto';
 import { FindMessageDto } from './chat_messages/dto/find_message.dto';
 import { CreateRoomDto } from './chat_rooms/dto/create_room.dto';
 import { UpdateRoomDto } from './chat_rooms/dto/update_room.dto';
+import { DeleteResult } from 'typeorm';
 
 @Injectable()
 export class ChatService {
@@ -20,7 +21,7 @@ export class ChatService {
             const result: ReadRoomDto = await this.chatRoomRepository.createRoom(roomData.room_name);
             return result;
         } catch (err) {
-            console.error('createRoom error:', err);
+            console.error('createRoom Error:', err);
         }
     }
     
@@ -29,24 +30,26 @@ export class ChatService {
             const result: ReadRoomDto[] = await this.chatRoomRepository.findRoom(roomData.room_name);
             return result;
         } catch (err) {
-            console.error('findRoom error:', err);
+            console.error('findRoom Error:', err);
         }
     }
 
     async updateRoom(roomId: number, roomData: UpdateRoomDto): Promise<ReadRoomDto> {
-        return;
-    }
-
-    async deleteRoom(roomId: number): Promise<void> {
-    }
-
-    async findMessage(messageData: FindMessageDto): Promise<ReadMessageDto[]> {
-        this.validateRoomID(messageData.room_id);
         try {
-            const result: ReadMessageDto[] = await this.chatMessageRepository.findRoomMessages(messageData.room_id, messageData.send_at, messageData.take);
+            const result: ReadRoomDto = await this.chatRoomRepository.updateRoomName(roomId, roomData.room_name);
             return result;
         } catch (err) {
-            console.error('findMessage error:', err);
+            console.error('updateRoom Error:', err);
+        }
+    }
+
+    async deleteRoom(roomId: number): Promise<DeleteResult> {
+        try {
+            const result: DeleteResult = await this.chatRoomRepository.deleteRoom(roomId);
+            await this.chatMessageRepository.deleteRoomMessage(roomId);
+            return result;
+        } catch (err) {
+            console.error('deleteRoom Error:', err);
         }
     }
 
@@ -56,7 +59,17 @@ export class ChatService {
             const result: ReadMessageDto = await this.chatMessageRepository.createMessage(messageData.room_id, messageData.user_name, messageData.language, messageData.message_text);
             return result;
         } catch (err) {
-            console.error('createMessage error:', err);
+            console.error('createMessage Error:', err);
+        }
+    }
+
+    async findMessage(messageData: FindMessageDto): Promise<ReadMessageDto[]> {
+        this.validateRoomID(messageData.room_id);
+        try {
+            const result: ReadMessageDto[] = await this.chatMessageRepository.findRoomMessages(messageData.room_id, messageData.send_at, messageData.take);
+            return result;
+        } catch (err) {
+            console.error('findMessage Error:', err);
         }
     }
 
@@ -65,7 +78,7 @@ export class ChatService {
         try {
             findRoom = await this.chatRoomRepository.findOneRoom(roomId);
         } catch (err) {
-            console.error('validateRoomId error:', err);
+            console.error('validateRoomId Error:', err);
         }
         if (!findRoom) throw new NotFoundException('Room ID를 찾을 수 없습니다');
     }
