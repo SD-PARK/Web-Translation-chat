@@ -1,5 +1,5 @@
 import { CustomRepository } from "src/config/typeorm_ex/typeorm-ex.decorator";
-import { Repository } from "typeorm";
+import { DeleteResult, Repository } from "typeorm";
 import { ChatRoom } from "./chat_rooms.entity";
 
 @CustomRepository(ChatRoom)
@@ -50,8 +50,8 @@ export class ChatRoomRepository extends Repository<ChatRoom> {
      * 채팅방을 삭제합니다.
      * @param roomId 삭제할 채팅방의 고유 식별자(ID)입니다.
      */
-    async deleteRoom(roomId: number) {
-        await this.delete(roomId);
+    async deleteRoom(roomId: number): Promise<DeleteResult> {
+        return await this.delete(roomId);
     }
 
     /**
