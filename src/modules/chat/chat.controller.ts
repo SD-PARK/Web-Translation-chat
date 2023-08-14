@@ -12,8 +12,13 @@ import { ChatMessage } from './chat_messages/chat_messages.entity';
 export class ChatController {
     constructor(private readonly chatService: ChatService) {}
 
+    @Get('/room')
+    async getRoomAll(): Promise<ChatRoom[]> {
+        return await this.chatService.findRoom('');
+    }
+
     @Get('/room/:name')
-    async getRoomAll(@Param('name') roomName: string): Promise<ChatRoom[]> {
+    async getRoom(@Param('name') roomName: string): Promise<ChatRoom[]> {
         return await this.chatService.findRoom(roomName);
     }
 
