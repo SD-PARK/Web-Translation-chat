@@ -1,7 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { ChatMessageRepository } from './chat_messages/chat_messages.repository';
 import { ChatRoomRepository } from './chat_rooms/chat_rooms.repository';
-import { ReadMessageDto } from './chat_messages/dto/read_message.dto';
 import { CreateMessageDto } from './chat_messages/dto/create_message.dto';
 import { FindMessageDto } from './chat_messages/dto/find_message.dto';
 import { CreateRoomDto } from './chat_rooms/dto/create_room.dto';
