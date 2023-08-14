@@ -14,5 +14,5 @@ export class ChatRoom extends BaseEntity {
 
     @OneToMany(() => ChatMessage, chatMessage => chatMessage.chatRoom)
     @JoinColumn({ name: 'room_id' })
-    chatMessages: ChatRoom;
+    chatMessages: ChatMessage[];
 }
