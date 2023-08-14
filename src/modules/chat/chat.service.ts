@@ -64,9 +64,9 @@ export class ChatService {
     }
 
     async findMessage(messageData: FindMessageDto): Promise<ChatMessage[]> {
-        this.validateRoomID(messageData.room_id);
+        await this.validateRoomID(messageData.room_id);
         try {
-            const result: ChatMessage[] = await this.chatMessageRepository.findRoomMessages(messageData.room_id, messageData.send_at, messageData.take);
+            const result: ChatMessage[] = await this.chatMessageRepository.findRoomMessages(messageData.room_id, messageData.send_at, messageData?.take ?? 20);
             return result;
         } catch (err) {
             console.error('findMessage Error:', err);
@@ -74,12 +74,11 @@ export class ChatService {
     }
 
     async validateRoomID(roomId: number): Promise<void> {
-        let findRoom: ChatRoom;
         try {
-            findRoom = await this.chatRoomRepository.findOneRoom(roomId);
+            const findRoom: ChatRoom = await this.chatRoomRepository.findOneRoom(roomId);
+            if (findRoom === null) throw new NotFoundException('Room ID를 찾을 수 없습니다');
         } catch (err) {
-            console.error('validateRoomId Error:', err);
+            console.error('validateRoomId Error: ', err);
         }
-        if (!findRoom) throw new NotFoundException('Room ID를 찾을 수 없습니다');
     }
 }
