@@ -1,7 +1,8 @@
-import { IsString, MaxLength } from "class-validator";
+import { IsString, Validate } from "class-validator";
+import { CustomRoomNameValidator } from "src/config/validator/custom_validator";
 
 export class CreateRoomDto {
     @IsString()
-    @MaxLength(30)
+    @Validate(CustomRoomNameValidator)
     room_name: string;
 }
