@@ -1,5 +1,5 @@
 import { CustomRepository } from "src/config/typeorm_ex/typeorm-ex.decorator";
-import { DeleteResult, Repository } from "typeorm";
+import { DeleteResult, Like, Repository } from "typeorm";
 import { ChatRoom } from "./chat_rooms.entity";
 
 @CustomRepository(ChatRoom)
@@ -14,11 +14,12 @@ export class ChatRoomRepository extends Repository<ChatRoom> {
     }
 
     /**
-     * 모든 채팅방을 조회합니다.
+     * 제목을 통해 채팅방을 조회합니다.
+     * @param roomName 조회할 채팅방의 제목에 포함된 문자열입니다.
      * @returns 채팅방 데이터를 담은 배열을 반환합니다.
      */
     async findRoom(roomName: string): Promise<ChatRoom[]> {
-        return await this.find({ where: { room_name: roomName }});
+        return await this.find({ where: { room_name: Like(`%${roomName}%`) }});
     }
 
     /**
