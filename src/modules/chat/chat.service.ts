@@ -45,8 +45,8 @@ export class ChatService {
 
     async deleteRoom(roomId: number): Promise<DeleteResult> {
         try {
-            const result: DeleteResult = await this.chatRoomRepository.deleteRoom(roomId);
             await this.chatMessageRepository.deleteRoomMessage(roomId);
+            const result: DeleteResult = await this.chatRoomRepository.deleteRoom(roomId);
             return result;
         } catch (err) {
             console.error('deleteRoom Error:', err);
