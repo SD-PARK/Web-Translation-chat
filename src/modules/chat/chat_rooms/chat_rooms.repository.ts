@@ -52,7 +52,7 @@ export class ChatRoomRepository extends Repository<ChatRoom> {
      * @param roomId 삭제할 채팅방의 고유 식별자(ID)입니다.
      */
     async deleteRoom(roomId: number): Promise<DeleteResult> {
-        return await this.delete(roomId);
+        return await this.delete({ room_id: roomId });
     }
 
     /**
