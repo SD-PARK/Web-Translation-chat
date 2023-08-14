@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Patch, Delete, Param, Body, Query } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Param, Body, Query, BadRequestException } from '@nestjs/common';
 import { ChatService } from './chat.service';
 import { ChatRoom } from './chat_rooms/chat_rooms.entity';
 import { CreateRoomDto } from './chat_rooms/dto/create_room.dto';
@@ -29,11 +29,13 @@ export class ChatController {
 
     @Patch('/room/:id')
     async updateRoom(@Param('id') id: number, @Body() roomData: UpdateRoomDto): Promise<ChatRoom> {
+        if (isNaN(id)) throw new BadRequestException('Invalid room ID');
         return await this.chatService.updateRoom(id, roomData);
     }
     
     @Delete('/room/:id')
     async deleteRoom(@Param(':id') id: number): Promise<DeleteResult> {
+        if (isNaN(id)) throw new BadRequestException('Invalid room ID');
         return await this.chatService.deleteRoom(id);
     }
 
