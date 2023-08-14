@@ -8,6 +8,8 @@ import { CreateRoomDto } from './chat_rooms/dto/create_room.dto';
 import { RemoveOptions, SaveOptions } from 'typeorm';
 import { CreateMessageDto } from './chat_messages/dto/create_message.dto';
 import { FindMessageDto } from './chat_messages/dto/find_message.dto';
+import { ChatMessage } from './chat_messages/chat_messages.entity';
+import { UpdateRoomDto } from './chat_rooms/dto/update_room.dto';
 
 describe('ChatService', () => {
   let service: ChatService;
@@ -15,7 +17,7 @@ describe('ChatService', () => {
   let mockRoomRepository: Partial<ChatRoomRepository>;
   let mockMessageRepository: Partial<ChatMessageRepository>;
   const baseEntity = {
-    chatMessages: new ChatRoom,
+    chatMessages: [new ChatMessage],
     hasId: function (): boolean {
       throw new Error('Function not implemented.');
     },
@@ -41,7 +43,7 @@ describe('ChatService', () => {
     { room_id: 3, room_name: 'test3', created_at: new Date('2023-03-01'), ...baseEntity},
   ];
   const mockMessageEntities = [
-    { message_id: 1, room_id: 1, user_name: 'tester01', send_at: new Date('2023-01-01'), language: 'en', message_text: 'hello ww' },
+    { message_id: 1, room_id: 1, user_name: 'tester01', send_at: new Date('2023-01-01'), language: 'en', message_text: 'hello ww'},
     { message_id: 2, room_id: 1, user_name: 'tester02', send_at: new Date('2023-02-01'), language: 'ko', message_text: 'ㅎㅇ' }
   ];
 
@@ -67,16 +69,7 @@ describe('ChatService', () => {
       deleteRoom: jest.fn().mockResolvedValue({ affected: 1 }),
     };
     mockMessageRepository = {
-      createMessage: jest.fn().mockImplementation((room_id: number, user_name: string, language: string, message_text: string) => {
-        return {
-          message_id: 1,
-          room_id: room_id,
-          user_name: user_name,
-          send_at: new Date(Date.now()),
-          language: language,
-          message_text: message_text,
-        }
-      }),
+      createMessage: jest.fn().mockResolvedValue(mockMessageEntities[0]),
 
       findRoomMessages: jest.fn().mockResolvedValue(mockMessageEntities),
 
@@ -117,15 +110,12 @@ describe('ChatService', () => {
   });
 
   describe('Create Room', () => {
-    // Room 생성, 생성 결과 확인
     it('채팅방 생성', async () => {
       const createRoomDto: CreateRoomDto = { room_name: 'test' };
       const mockCreatedEntity: ChatRoom = {
-        room_id: 1,
+        ...baseEntity,
+        ...mockRoomEntities[0],
         ...createRoomDto,
-        created_at: new Date(Date.now()),
-        chatMessages: new ChatRoom,
-        ...baseEntity
       };
 
       mockRoomRepository.createRoom = jest.fn().mockResolvedValue(mockCreatedEntity);
@@ -139,16 +129,17 @@ describe('ChatService', () => {
   describe('Find Room', () => {
     // 유효한 Room 조회 (유효하지 않은 경우는 Validate에서 처리함)
     it('모든 채팅방 검색', () => {
-      expect(service.findRoom({ room_name: '' })).resolves.toEqual(mockRoomEntities);
+      expect(service.findRoom('')).resolves.toEqual(mockRoomEntities);
     });
     it('특정 채팅방 검색', () => {
-      expect(service.findRoom({ room_name: 'test2' })).resolves.toEqual([mockRoomEntities[1]]);
+      expect(service.findRoom('test2')).resolves.toEqual([mockRoomEntities[1]]);
     });
   });
 
   describe('Update Room', () => {
-    const updateData = { room_name: 'test11' };
-    const mockUpdatedEntity = {
+    const updateData: UpdateRoomDto = { room_name: 'test11' };
+    const mockUpdatedEntity: ChatRoom = {
+      ...baseEntity,
       ...mockRoomEntities[0],
       ...updateData,
     };
@@ -161,8 +152,6 @@ describe('ChatService', () => {
   });
 
   describe('Delete Room', () => {
-    // Create Room에서 생성한 Room 제거, 확인
-    // Message도 사라졌는지 확인
     const deleteRoomID: number = 1;
 
     it('채팅방 삭제', async () => {
@@ -185,7 +174,7 @@ describe('ChatService', () => {
     it('메시지 생성', async () => {
       const result = await service.createMessage(createMessageEntity);
       expect(mockMessageRepository.createMessage).toBeCalledWith(createMessageEntity.room_id, createMessageEntity.user_name, createMessageEntity.language, createMessageEntity.message_text);
-      expect(result.message_id).toEqual(1);
+      expect(result).toEqual(mockMessageEntities[0]);
     });
   });
 
