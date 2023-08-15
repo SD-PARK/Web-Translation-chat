@@ -8,6 +8,7 @@ export class FindMessageDto {
     room_id: number;
 
     @Transform(({ value }) => toDate(value))
+    @IsOptional()
     @IsDate()
     send_at: Date;
 
