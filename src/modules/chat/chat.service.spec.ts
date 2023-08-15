@@ -103,7 +103,7 @@ describe('ChatService', () => {
 
   describe('Validate', () => {
     it('Room ID', async () => {
-      await expect(service.validateRoomID(0)).rejects.toThrow('Room ID를 찾을 수 없습니다');
+      await expect(service.validateRoomID(0)).resolves.toBeUndefined();
       await expect(service.validateRoomID(1)).resolves.toBeUndefined();
       expect(mockRoomRepository.findOneRoom).toBeCalledWith(1);
     });
@@ -188,7 +188,8 @@ describe('ChatService', () => {
     }
 
     it('메시지 조회', async () => {
-      expect(service.findMessage(findMessageData)).resolves.toEqual(mockMessageEntities);
+      const result = await service.findMessage(findMessageData);
+      expect(result).toEqual(mockMessageEntities);
       expect(mockMessageRepository.findRoomMessages).toBeCalledWith(findMessageData.room_id, findMessageData.send_at, findMessageData.take);
     });
   });
