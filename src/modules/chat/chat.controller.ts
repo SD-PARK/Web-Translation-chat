@@ -34,9 +34,9 @@ export class ChatController {
     }
     
     @Delete('/room/:id')
-    async deleteRoom(@Param('id') id: number): Promise<DeleteResult> {
+    async deleteRoom(@Param('id') id: number): Promise<void> {
         if (isNaN(id)) throw new BadRequestException('Invalid room ID');
-        return await this.chatService.deleteRoom(id);
+        await this.chatService.deleteRoom(id);
     }
 
     @Get('/message')
