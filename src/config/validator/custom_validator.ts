@@ -4,10 +4,10 @@ import { ValidationArguments, ValidatorConstraint, ValidatorConstraintInterface 
 export class CustomRoomNameValidator implements ValidatorConstraintInterface {
     validate(text: string, args: ValidationArguments) {
         // 텍스트에서 공백 제거 및 길이 확인
-        // 공백 제외 4글자 이상, 공백 포함 30글자 이내.
+        // 공백 제외 3글자 이상, 공백 포함 30글자 이내.
         if(!text) return false;
         const trimmedText = text.replace(/\s+/g, '');
-        return trimmedText.length >= 4 && text.length <= 30;
+        return trimmedText.length >= 3 && text.length <= 30;
     }
 
     defaultMessage(validationArguments?: ValidationArguments): string {
