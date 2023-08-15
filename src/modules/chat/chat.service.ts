@@ -54,7 +54,8 @@ export class ChatService {
     }
 
     async createMessage(messageData: CreateMessageDto): Promise<ChatMessage> {
-        this.validateRoomID(messageData.room_id);
+        await this.validateRoomID(messageData.room_id);
+        console.log(1);
         try {
             const result: ChatMessage = await this.chatMessageRepository.createMessage(messageData.room_id, messageData.user_name, messageData.language, messageData.message_text);
             return result;
