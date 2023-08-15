@@ -35,6 +35,7 @@ export class ChatService {
     }
 
     async updateRoom(roomId: number, roomData: UpdateRoomDto): Promise<ChatRoom> {
+        await this.validateRoomID(roomId);
         try {
             const result: ChatRoom = await this.chatRoomRepository.updateRoomName(roomId, roomData.room_name);
             return result;
@@ -43,10 +44,13 @@ export class ChatService {
         }
     }
 
-    async deleteRoom(roomId: number): Promise<DeleteResult> {
+    async deleteRoom(roomId: number): Promise<Object> {
+        await this.validateRoomID(roomId);
         try {
-            await this.chatMessageRepository.deleteRoomMessage(roomId);
-            const result: DeleteResult = await this.chatRoomRepository.deleteRoom(roomId);
+            const result: Object = {
+                affected_message: (await this.chatMessageRepository.deleteRoomMessage(roomId)).affected,
+                affected_room: (await this.chatRoomRepository.deleteRoom(roomId)).affected
+            }
             return result;
         } catch (err) {
             console.error('deleteRoom Error:', err);
@@ -55,7 +59,6 @@ export class ChatService {
 
     async createMessage(messageData: CreateMessageDto): Promise<ChatMessage> {
         await this.validateRoomID(messageData.room_id);
-        console.log(1);
         try {
             const result: ChatMessage = await this.chatMessageRepository.createMessage(messageData.room_id, messageData.user_name, messageData.language, messageData.message_text);
             return result;
