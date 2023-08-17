@@ -158,7 +158,10 @@ describe('ChatService', () => {
       const result = await service.deleteRoom(deleteRoomID);
       expect(mockRoomRepository.deleteRoom).toBeCalledWith(deleteRoomID);
       expect(mockMessageRepository.deleteRoomMessage).toBeCalledWith(deleteRoomID);
-      expect(result.affected).toEqual(1);
+      expect(result).toMatchObject({
+        affected_message: expect.any(Number),
+        affected_room: expect.any(Number)
+      });
     });
   });
 
