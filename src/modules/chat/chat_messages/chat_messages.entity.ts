@@ -23,6 +23,15 @@ export class ChatMessage extends BaseEntity {
     @Column({ type: 'text', nullable: false })
     message_text: string;
 
+    @Column({ type: 'text' })
+    ko_text?: string;
+
+    @Column({ type: 'text' })
+    en_text?: string;
+
+    @Column({ type: 'text' })
+    ja_text?: string;
+
     @ManyToOne(() => ChatRoom, chatRoom => chatRoom.chatMessages)
     @JoinColumn({ name: 'room_id' })
     chatRoom: ChatRoom;

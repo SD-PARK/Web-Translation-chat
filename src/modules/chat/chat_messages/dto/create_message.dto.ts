@@ -1,4 +1,4 @@
-import { IsIn, IsNumber, IsString, MaxLength, Min } from 'class-validator';
+import { IsIn, IsNumber, IsOptional, IsString, MaxLength, Min } from 'class-validator';
 
 export class CreateMessageDto {
     @IsNumber()
@@ -16,4 +16,16 @@ export class CreateMessageDto {
 
     @IsString()
     readonly message_text: string;
+
+    @IsString()
+    @IsOptional()
+    readonly ko_text?: string;
+
+    @IsString()
+    @IsOptional()
+    readonly en_text?: string;
+
+    @IsString()
+    @IsOptional()
+    readonly ja_text?: string;
 }
