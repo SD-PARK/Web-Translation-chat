@@ -23,7 +23,7 @@ describe('AppController (e2e)', () => {
   afterAll((done) => {
     app.close();
     done();
-  })
+  });
 
   it('/ (GET)', () => {
     return request(app.getHttpServer())
@@ -125,6 +125,33 @@ describe('AppController (e2e)', () => {
           })
           .expect(404)
       });
+
+      it('PATCH 200 OK', () => {
+        return request(app.getHttpServer())
+          .patch('/chat/message/1')
+          .send({
+            en_text: 'Message_Data_01',
+          })
+          .expect(200)
+      });
+
+      it('PATCH 400 Bad Request', () => {
+        return request(app.getHttpServer())
+          .patch('/chat/message/1')
+          .send({
+            en_text: 123,
+          })
+          .expect(400)
+      });
+
+      it('PATCH 404 Not Found', () => {
+        return request(app.getHttpServer())
+          .patch('/chat/message/0')
+          .send({
+            en_text: 'Message_Data_00',
+          })
+          .expect(404)
+      });
     });
 
     describe('/room/:id', () => {
@@ -156,7 +183,7 @@ describe('AppController (e2e)', () => {
       });
 
       it('DELETE 200 OK', () => {
-        // 왠지 모르겠는데 204 No Content가 안 됨;;
+        // 왠지 모르겠는데 204 No Content가 안 됨;
         return request(app.getHttpServer())
           .delete('/chat/room/' + postRoomID)
           .expect(200)

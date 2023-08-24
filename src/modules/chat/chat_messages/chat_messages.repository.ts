@@ -1,6 +1,7 @@
 import { CustomRepository } from "src/config/typeorm_ex/typeorm-ex.decorator";
 import { ChatMessage } from "./chat_messages.entity";
-import { DeleteResult, LessThan, Repository } from "typeorm";
+import { DeleteResult, LessThan, Repository, UpdateResult } from "typeorm";
+import { UpdateMessageDto } from "./dto/update_message.dto";
 
 @CustomRepository(ChatMessage)
 export class ChatMessageRepository extends Repository<ChatMessage> {
@@ -23,6 +24,16 @@ export class ChatMessageRepository extends Repository<ChatMessage> {
     }
 
     /**
+     * ID를 통해 메시지를 조회합니다.
+     * @param messageId 조회하고자 하는 메시지의 고유 식별자(ID)입니다.
+     * @returns 메시지 데이터를 반환합니다.
+     */
+    async findOneMessage(messageId: number): Promise<ChatMessage> {
+        const message: ChatMessage = await this.findOne({ where: { message_id: messageId } });
+        return message;
+    }
+
+    /**
      * 새 메시지를 생성합니다.
      * @param roomId 메시지가 전송된 채팅방의 고유 식별자(ID)입니다.
      * @param userName 메시지를 전송한 사람의 이름입니다.
@@ -42,8 +53,20 @@ export class ChatMessageRepository extends Repository<ChatMessage> {
     }
 
     /**
+     * 메시지의 데이터를 변경합니다.
+     * @param messageId 변경할 메시지의 고유 식별자(ID)입니다.
+     * @param updateData 변경할 데이터가 담긴 객체입니다.
+     * @returns 결과를 반환합니다.
+     */
+    async updateMessage(messageId: number, updateData: UpdateMessageDto): Promise<UpdateResult> {
+        const result:UpdateResult = await this.update(messageId, updateData);
+        return result;
+    }
+
+    /**
      * 특정 Room의 메시지를 삭제합니다.
      * @param roomId 메시지를 삭제할 채팅방의 고유 식별자(ID) 입니다.
+     * @returns 결과를 반환합니다.
      */
     async deleteRoomMessage(roomId: number): Promise<DeleteResult> {
         const deletedEntities: DeleteResult = await this.delete({ room_id: roomId });

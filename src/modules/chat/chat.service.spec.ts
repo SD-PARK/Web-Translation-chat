@@ -10,6 +10,7 @@ import { CreateMessageDto } from './chat_messages/dto/create_message.dto';
 import { FindMessageDto } from './chat_messages/dto/find_message.dto';
 import { ChatMessage } from './chat_messages/chat_messages.entity';
 import { UpdateRoomDto } from './chat_rooms/dto/update_room.dto';
+import { UpdateMessageDto } from './chat_messages/dto/update_message.dto';
 
 describe('ChatService', () => {
   let service: ChatService;
@@ -18,31 +19,19 @@ describe('ChatService', () => {
   let mockMessageRepository: Partial<ChatMessageRepository>;
   const baseEntity = {
     chatMessages: [new ChatMessage],
-    hasId: function (): boolean {
-      throw new Error('Function not implemented.');
-    },
-    save: function (options?: SaveOptions): Promise<ChatRoom> {
-      throw new Error('Function not implemented.');
-    },
-    remove: function (options?: RemoveOptions): Promise<ChatRoom> {
-      throw new Error('Function not implemented.');
-    },
-    softRemove: function (options?: SaveOptions): Promise<ChatRoom> {
-      throw new Error('Function not implemented.');
-    },
-    recover: function (options?: SaveOptions): Promise<ChatRoom> {
-      throw new Error('Function not implemented.');
-    },
-    reload: function (): Promise<void> {
-      throw new Error('Function not implemented.');
-    }
+    hasId: function (): boolean { throw new Error('Function not implemented.'); },
+    save: function (options?: SaveOptions): Promise<ChatRoom> { throw new Error('Function not implemented.'); },
+    remove: function (options?: RemoveOptions): Promise<ChatRoom> { throw new Error('Function not implemented.'); },
+    softRemove: function (options?: SaveOptions): Promise<ChatRoom> { throw new Error('Function not implemented.'); },
+    recover: function (options?: SaveOptions): Promise<ChatRoom> { throw new Error('Function not implemented.'); },
+    reload: function (): Promise<void> { throw new Error('Function not implemented.'); }
   }
-  const mockRoomEntities: ChatRoom[] = [
+  let mockRoomEntities: ChatRoom[] = [
     { room_id: 1, room_name: 'test1', created_at: new Date('2023-01-01'), ...baseEntity},
     { room_id: 2, room_name: 'test2', created_at: new Date('2023-02-01'), ...baseEntity},
     { room_id: 3, room_name: 'test3', created_at: new Date('2023-03-01'), ...baseEntity},
   ];
-  const mockMessageEntities = [
+  let mockMessageEntities = [
     { message_id: 1, room_id: 1, user_name: 'tester01', send_at: new Date('2023-01-01'), language: 'en', message_text: 'hello ww'},
     { message_id: 2, room_id: 1, user_name: 'tester02', send_at: new Date('2023-02-01'), language: 'ko', message_text: 'ㅎㅇ' }
   ];
@@ -50,19 +39,17 @@ describe('ChatService', () => {
   beforeAll(async () => {
     mockRoomRepository = {
       findRoom: jest.fn().mockImplementation((roomName) => {
-        return mockRoomEntities.filter((entity) => entity.room_name.includes(roomName));
+        return mockRoomEntities.filter(entity => entity.room_name.includes(roomName));
       }),
 
       findOneRoom: jest.fn().mockImplementation((roomId) => {
-        return mockRoomEntities.find((entity) => entity.room_id === roomId);
+        return mockRoomEntities.find(entity => entity.room_id === roomId);
       }),
 
-      updateRoomName: jest.fn().mockImplementation((roomId, roomName) => {
-        return mockRoomEntities.find((entity) => {
-          if (entity.room_id === roomId) {
-            entity.room_name = roomName;
-            return entity;
-          }
+      updateRoomName: jest.fn().mockImplementation((roomId, roomData) => {
+        mockRoomEntities = mockRoomEntities.map(entity => {
+          if (entity.room_id === roomId)
+            return { ...entity, ...roomData };
         });
       }),
 
@@ -72,6 +59,17 @@ describe('ChatService', () => {
       createMessage: jest.fn().mockResolvedValue(mockMessageEntities[0]),
 
       findRoomMessages: jest.fn().mockResolvedValue(mockMessageEntities),
+
+      findOneMessage: jest.fn().mockImplementation((messageId) => {
+        return mockMessageEntities.find(entity => entity.message_id === messageId);
+      }),
+      
+      updateMessage: jest.fn().mockImplementation((messageId, messageData) => {
+        mockMessageEntities = mockMessageEntities.map(entity => {
+          if (entity.message_id === messageId)
+            return { ...entity, ...messageData, };
+        });
+      }),
 
       deleteRoomMessage: jest.fn().mockResolvedValue({ affected: 1 }),
     }
@@ -101,14 +99,6 @@ describe('ChatService', () => {
     expect(service).toBeDefined();
   });
 
-  describe('Validate', () => {
-    it('Room ID', async () => {
-      await expect(service.validateRoomID(0)).rejects.toThrow('Room ID를 찾을 수 없습니다');
-      await expect(service.validateRoomID(1)).resolves.toBeUndefined();
-      expect(mockRoomRepository.findOneRoom).toBeCalledWith(1);
-    });
-  });
-
   describe('Create Room', () => {
     it('채팅방 생성', async () => {
       const createRoomDto: CreateRoomDto = { room_name: 'test' };
@@ -134,20 +124,26 @@ describe('ChatService', () => {
     it('특정 채팅방 검색', () => {
       expect(service.findRoom('test2')).resolves.toEqual([mockRoomEntities[1]]);
     });
+    
+    it('Room ID로 검색', async () => {
+      await expect(service.findOneRoom(0)).rejects.toThrow('Room ID를 찾을 수 없습니다');
+      await expect(service.findOneRoom(1)).resolves.toEqual(mockRoomEntities[0]);
+      expect(mockRoomRepository.findOneRoom).toBeCalledWith(1);
+    });
   });
 
   describe('Update Room', () => {
     const updateData: UpdateRoomDto = { room_name: 'test11' };
-    const mockUpdatedEntity: ChatRoom = {
-      ...baseEntity,
+    const mockUpdatedEntity = {
       ...mockRoomEntities[0],
       ...updateData,
     };
     
     it('채팅방 업데이트 확인', async () => {
-      const result = await service.updateRoom(1, updateData);
-      expect(mockRoomRepository.updateRoomName).toBeCalledWith(1, updateData.room_name);
-      expect(result).toEqual(mockUpdatedEntity);
+      await service.updateRoom(1, updateData);
+      expect(mockRoomRepository.updateRoomName).toBeCalledWith(1, updateData);
+      const updatedRoom = await service.findOneRoom(1);
+      expect(updatedRoom).toEqual(mockUpdatedEntity);
     });
   });
 
@@ -194,6 +190,21 @@ describe('ChatService', () => {
       const result = await service.findMessage(findMessageData);
       expect(result).toEqual(mockMessageEntities);
       expect(mockMessageRepository.findRoomMessages).toBeCalledWith(findMessageData.room_id, findMessageData.send_at, findMessageData.take);
+    });
+  });
+
+  describe('Update Message', () => {
+    const updateData: UpdateMessageDto = { ko_text: '안녕 ㅋ' };
+    const mockUpdatedEntity = {
+      ...mockMessageEntities[0],
+      ...updateData,
+    };
+    
+    it('채팅방 업데이트 확인', async () => {
+      await service.updateMessage(1, updateData);
+      expect(mockMessageRepository.updateMessage).toBeCalledWith(1, updateData);
+      const updatedMessage = await service.findOneMessage(1);
+      expect(updatedMessage).toEqual(mockUpdatedEntity);
     });
   });
 });
