@@ -13,6 +13,8 @@ export class PapagoService {
 
     async translate(source: string, target: string, text: string): Promise<string> {
         this.validate(source, target, text);
+        
+        if (source === target) return text;
 
         const url = 'https://openapi.naver.com/v1/papago/n2mt';
         try {
