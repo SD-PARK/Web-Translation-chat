@@ -1,6 +1,7 @@
 import { CustomRepository } from "src/config/typeorm_ex/typeorm-ex.decorator";
-import { DeleteResult, Like, Repository } from "typeorm";
+import { DeleteResult, Like, Repository, UpdateResult } from "typeorm";
 import { ChatRoom } from "./chat_rooms.entity";
+import { UpdateRoomDto } from "./dto/update_room.dto";
 
 @CustomRepository(ChatRoom)
 export class ChatRoomRepository extends Repository<ChatRoom> {
@@ -58,13 +59,11 @@ export class ChatRoomRepository extends Repository<ChatRoom> {
     /**
      * 채팅방의 이름을 변경합니다.
      * @param roomId 이름을 변경할 채팅방의 고유 식별자(ID)입니다.
-     * @param roomName 변경할 이름입니다.
+     * @param roomData 변경할 데이터를 포함한 객체입니다.
      * @returns 변경한 채팅방 데이터를 반환합니다.
      */
-    async updateRoomName(roomId: number, roomName: string): Promise<ChatRoom> {
-        const updateEntity: ChatRoom = await this.findOneRoom(roomId);
-        updateEntity.room_name = roomName;
-        await this.save(updateEntity);
-        return updateEntity;
+    async updateRoomName(roomId: number, updateData: UpdateRoomDto): Promise<UpdateResult> {
+        const result: UpdateResult = await this.update(roomId, updateData);
+        return result;
     }
 }
