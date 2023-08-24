@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>PapagoChat</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+  <div id="chat-container" class="container">
+    <h1 id="room-name" class="font-weight-bold"></h1>
+    <h6 class="font-weight-bold">현재 대화상대</h6>
+    <div id="room-persons" class="p-lg-2">
+      <!-- List -->
+    </div>
+    
+    <select id="selected-language">
+      <option value="ko">Korean</option>
+      <option value="en">English</option>
+      <option value="ja">Japanese</option>
+    </select>
+
+    <div id="chat-logs">
+      <!-- Message Logs -->
+    </div>
+    
+    <div id="chat-input" class="fixed-bottom p-3 w-100">
+      <textarea id="input-text" class="form-control pr-5" tabindex="0" placeholder="대화 입력" oninput="autoResize(this)"></textarea>
+      <button id="send-button" disabled>
+        <i class="fa-regular fa-envelope"></i>
+      </button>
+    </div>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="./js/action.js"></script>
+  <script src="./js/logs.js"></script>
+  <script src="./js/socket.js"></script>
+</body>
+</html>
