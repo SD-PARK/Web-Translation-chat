@@ -56,4 +56,9 @@ function emptyTextarea() {
  */
 selectedLanguage.change(() => {
     language = selectedLanguage.val();
+    
+    chatLogs.empty();
+    for (message of messages.values()) {
+        checkTranslatedLog(message);
+    }
 });
