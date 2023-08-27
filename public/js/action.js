@@ -55,10 +55,11 @@ function emptyTextarea() {
  * 언어를 변경합니다.
  */
 selectedLanguage.change(() => {
-    language = selectedLanguage.val();
-    
-    chatLogs.empty();
-    for (message of messages.values()) {
-        checkTranslatedLog(message);
+    if (!isTranslating) {
+        language = selectedLanguage.val();
+        chatLogs.empty();
+        for (message of messages.values()) {
+            checkTranslatedLog(message);
+        }
     }
 });
