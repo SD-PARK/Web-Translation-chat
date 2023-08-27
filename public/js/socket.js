@@ -3,6 +3,7 @@ const socket = io('/chat');
 let user_name;
 let room_id = 1;
 let language = selectedLanguage.val();
+let messages = new Map();
 
 socket.on('connect', () => {
     console.log('서버랑 연결 됨ㅎ');
@@ -10,6 +11,7 @@ socket.on('connect', () => {
 
     // 메시지 수신
     socket.on('message', (response) => {
+        messages.set(response.message_id, response);
         checkTranslatedLog(response);
     });
 
@@ -20,7 +22,11 @@ socket.on('connect', () => {
 
     socket.emit('join', { room_id: room_id }, (roomData) => {
         $('#room-name').html(roomData.room_data.room_name);
-        for (message of roomData.message_data) { checkTranslatedLog(message); }
+        chatLogs.empty();
+        for (message of roomData.message_data) {
+            messages.set(`${message.message_id}`, message);
+            checkTranslatedLog(message);
+        }
     });
     // socket.emit('leave', room_id);
     
@@ -43,16 +49,24 @@ function checkTranslatedLog(message) {
     const translatedMessage = message[`${language}_text`];
     if (translatedMessage) {
         const translatedData = { ...message, message_text: translatedMessage };
-        console.log(translatedData);
         addLog(translatedData);
     } else if (message.language !== language) {
-        const reqData = {
-            message_id: message.message_id,
-            language: language,
-        }
-        socket.emit('reqTranslate', reqData);
-        addLog(message, message.message_id);
+        addLog(message);
+        translate(message.message_id);
     } else {
         addLog(message);
     }
+}
+
+/**
+ * 메시지를 번역합니다.
+ * @param {number} id - 메시지 ID
+ */
+function translate(id) {
+    addLoading(id);
+    socket.emit('reqTranslate', { message_id: id, language: language }, (response) => {
+        messages.set(id, response);
+        replaceLog(id, response[`${language}_text`]);
+        removeLoading(id);
+    });
 }
