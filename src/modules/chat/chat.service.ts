@@ -119,10 +119,3 @@ export class ChatService {
         }
     }
 }
-
-    // Translate Test, translate 모듈로 옮길 예정.
-    // async testTranslate(messageData: CreateMessageDto, target: string): Promise<string> {
-    //     console.log(messageData);
-    //     return await this.papagoService.translate(messageData.language, target, messageData.message_text);
-    // }
-    // =====================
