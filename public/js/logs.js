@@ -6,13 +6,40 @@ const chatPersons = $('#room-persons');
  * @param {boolean} me - 유저가 보냈는 지에 대한 여부
  * @param {object} data - 송신자의 이름과 텍스트가 포함된 객체
  */
-function addLog(data = { user_name: 'unknown', message_text: '' }, loader = 0) {
-    chatLogs.append(`<div class="log"><div class="name">${data.user_name}</div>${data.message_text}</div>`);
+function addLog(data) {
+    chatLogs.append(`<div class="log ${data?.message_id}"><div class="name">${data?.user_name}</div><p>${data?.message_text}</p></div>`);
     
     if (data.user_name === user_name) $('.log:last-child > .name').css('color', 'green');
-    if (loader) $('.log:last-child').append(`<div class="loader ${data.message_id}"></div>`);
 
     chatLogs.scrollTop(chatLogs.prop('scrollHeight'));
+}
+
+/**
+ * 채팅 로그를 변경합니다.
+ * @param {number} id - 메시지 ID
+ * @param {string} text - 변경할 텍스트
+ */
+function replaceLog(id, text) {
+    const messageTextDiv = $(`.${id} > p`);
+    messageTextDiv.text(text);
+}
+
+/**
+ * 메시지에 로딩 애니메이션을 추가합니다.
+ * @param {number} id - 메시지 ID
+ */
+function addLoading(id) {
+    const messageDiv = $(`.${id}`);
+    messageDiv.append('<div class="loading"></div>');
+}
+
+/**
+ * 메시지의 로딩 애니메이션을 제거합니다.
+ * @param {number} id - 메시지 ID
+ */
+function removeLoading(id) {
+    const messageDiv = $(`.${id} > .loading`);
+    messageDiv.remove();
 }
 
 /**
@@ -21,11 +48,11 @@ function addLog(data = { user_name: 'unknown', message_text: '' }, loader = 0) {
  * @param {string} content - 로그 안에 들어갈 내용
  */
 function replaceLoadingLog(status, content = '') {
-    const loadingDiv = $('.loading');
+    const loadingDiv = $('.loader');
     if (status === 200) {
         loadingDiv.html(content);
     }
-    loadingDiv.removeClass('loading');
+    loadingDiv.removeClass('loader');
     chatLogs.scrollTop(chatLogs.prop('scrollHeight'));
 }
 
