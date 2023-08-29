@@ -46,7 +46,7 @@ function emitMessage() {
 
 // 메시지 번역 여부 체크 후 로그 출력
 function checkTranslatedLog(message) {
-    messages.set(id, response);
+    messages.set(message.message_id, message);
     const translatedMessage = message[`${language}_text`];
     if (translatedMessage) {
         const translatedData = { ...message, message_text: translatedMessage };
@@ -67,9 +67,15 @@ function translate(id) {
     addLoading(id);
     isTranslating = true;
     socket.emit('reqTranslate', { message_id: id, language: language }, (response) => {
-        messages.set(id, response);
-        replaceLog(id, response[`${language}_text`]);
-        removeLoading(id);
-        isTranslating = false;
+        if (response.error) {
+            replaceLog(id, '[Translation Failed]');
+            removeLoading(id);
+            isTranslating = false;
+        } else {
+            messages.set(id, response);
+            replaceLog(id, response[`${language}_text`]);
+            removeLoading(id);
+            isTranslating = false;
+        }
     });
 }
