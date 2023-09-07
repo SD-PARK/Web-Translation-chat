@@ -14,8 +14,8 @@ export class ChatController {
     constructor(private readonly chatService: ChatService) {}
 
     @Get()
-    @Render('index')
-    default() {}
+    @Render('chat')
+    getChatPage(): void {}
 
     @Get('/room')
     async getRoomAll(): Promise<ChatRoom[]> {
