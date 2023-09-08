@@ -9,4 +9,17 @@ socket.on('connect', () => {
             addCol(room);
         }
     });
+
+    socket.on('update', (data) => {
+        const col = $(`.${data?.room_id}`);
+        if (col) {
+            if (data?.cnt !== undefined) {
+            }
+            for (const key in data) {
+                const div = col.find(`.${key}`);
+                div.text(`${data[key]}`);
+                if (key === 'cnt') div.append('/∞');
+            }
+        }
+    });
 });

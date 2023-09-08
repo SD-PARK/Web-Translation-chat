@@ -6,7 +6,7 @@ const roomList = $('#room-list');
  */
 function addCol(data) {
     roomList.append(`
-    <div class="col" onclick="joinRoom(${data?.room_id})">
+    <div class="col ${data?.room_id}" onclick="joinRoom(${data?.room_id})">
       <span class="room-id">${data?.room_id ?? ''}</span>
       <span class="cnt">${data?.cnt ?? '?'}/∞</span>
       <p class="title">${data?.room_name ?? ''}</p>

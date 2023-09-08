@@ -50,6 +50,14 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     socket.leave(roomIdString);
   }
 
+  // 해당 room의 인원 갱신 후 방 목록 페이지의 유저들에게 전송
+  updateRoomCnt(roomId: number) {
+    this.nsp.to('list').emit('update', {
+      room_id: roomId,
+      cnt: this.nsp.adapter.rooms.get(roomId.toString()).size,
+    });
+  }
+
   // 메시지 송신 시 DB에 더하고 같은 room의 사람들에게 전송 (미번역 상태)
   @SubscribeMessage('message')
   async handleMessage(
@@ -118,11 +126,13 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
     this.nsp.adapter.on('join-room', (room, id) => {
       this.logger.log(`[Socket: ${id}]가 [Room: ${room}]에 참여하였습니다.`);
+      if (id !== room && room !== 'list') this.updateRoomCnt(room);
     });
 
     this.nsp.adapter.on('leave-room', (room, id) => {
       this.nsp.to(room).emit('person-update', [ ...this.nsp.adapter.rooms.get(room) ]);
       this.logger.log(`[Socket: ${id}]가 [Room: ${room}]에서 나갔습니다.`);
+      if (id !== room && room !== 'list') this.updateRoomCnt(room);
     });
 
     this.nsp.adapter.on('delete-room', (room) => {
