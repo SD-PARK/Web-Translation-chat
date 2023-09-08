@@ -1,7 +1,7 @@
 const socket = io('/chat');
 
 let user_name;
-let room_id = 1;
+let room_id = window.location.href.split('/')[4];
 let language = selectedLanguage.val();
 let messages = new Map();
 let isTranslating = false;
@@ -21,7 +21,7 @@ socket.on('connect', () => {
     });
 
     // 방 입장
-    socket.emit('join', { room_id: room_id }, (roomData) => {
+    socket.emit('joinRoom', { room_id: room_id }, (roomData) => {
         $('#room-name').html(roomData.room_data.room_name);
         chatLogs.empty();
         for (message of roomData.message_data) {
