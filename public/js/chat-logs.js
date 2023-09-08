@@ -7,7 +7,7 @@ const chatPersons = $('#room-persons');
  * @param {object} data - 송신자의 이름과 텍스트가 포함된 객체
  */
 function addLog(data) {
-    chatLogs.append(`<div class="log ${data?.message_id}"><div class="name">${data?.user_name}</div><p>${data?.message_text}</p></div>`);
+    chatLogs.append(`<div class="log ${data?.message_id}"><img class="flag" src="../img/flag/${data?.language}.png" title="${data?.language}"></img><div class="name">${data?.user_name}</div><p>${data?.message_text}</p></div>`);
     
     if (data.user_name === user_name) $('.log:last-child > .name').css('color', 'green');
 

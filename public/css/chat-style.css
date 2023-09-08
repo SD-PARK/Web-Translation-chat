@@ -35,7 +35,7 @@ h6 { margin: 15px 0 0 8px; }
 #chat-logs {
     flex-grow: 1;
     overflow-y: auto;
-    margin-bottom: 72px;
+    margin-bottom: 69px;
 }
 #chat-logs::-webkit-scrollbar { width: 4px; }
 #chat-logs::-webkit-scrollbar-thumb { background: #50505F; border-radius: 15px; }
@@ -53,6 +53,12 @@ h6 { margin: 15px 0 0 8px; }
     margin-bottom: 3px;
 }
 .log > p { margin-bottom: 0; }
+.flag {
+    width: 18px; height: 12px; object-fit: cover;
+    float: left; margin: 4px 5px 0 0;
+}
+
+#selected-language { border: none; border-bottom: 1px solid #50505F; }
 
 /* chat-input */
 #chat-input {
