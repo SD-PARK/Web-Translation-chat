@@ -1,0 +1,57 @@
+/* Font */
+@import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Noto+Sans+JP&display=swap');
+body { font-family: 'Gowun Dodum', 'Noto Sans JP', sans-serif; color: #50505F;}
+.bold { font-weight: bold; }
+.no-drag { -webkit-user-select:none; -moz-user-select:none; -ms-user-select:none; user-select:none }
+
+/* container */
+body { background-color: #fcfdfc; }
+#container {
+    max-width: 850px;
+    height: 100vh;
+    margin: 0 auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    background-color: #fcfdfc;
+}
+
+/* filter */
+#filter {
+    height: 100px; max-height: 250px;
+    padding: 10px 15px;
+}
+#filter > div { margin: 6px 0; }
+#filter > div > .desc { margin-right: 10px; }
+#filter > div > input[type="checkbox"] { display: none; }
+#filter > div > input[type="checkbox"] + label {
+    width: 60px; height: 25px;
+    margin-right: 5px;
+    font-size: 14px; line-height: 25px; text-align: center;
+    border: 1px solid #ccc; border-radius: 8px;
+    cursor: pointer;
+}
+#filter > div > input[type="checkbox"]:checked + label { border-color: #e5f4e5; background-color: #e5f4e5; }
+#filter > div > #filter-title {
+    width: 200px;
+    background-color: #fcfdfc; border: 1px solid #ccc;
+    color: #fff; font-size:14px;
+    outline: none;
+}
+
+/* room-list */
+#room-list {
+    flex-grow: 1;
+    overflow-y: auto;
+}
+#room-list::-webkit-scrollbar { width: 4px; }
+#room-list::-webkit-scrollbar-thumb { background: #50505F40; border-radius: 15px; }
+#room-list > .col {
+    height: 60px;
+    font-size: 14px;
+    margin-bottom: 8px; padding: 5px 10px;
+    cursor: pointer;
+}
+#room-list > .col:nth-child(2n) { background-color:#f0f7f0; }
+.col > .title { font-size: 17px; color: #000; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.col > .cnt { float: right; }
