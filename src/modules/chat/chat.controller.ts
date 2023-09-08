@@ -13,7 +13,7 @@ import { UpdateResult } from 'typeorm';
 export class ChatController {
     constructor(private readonly chatService: ChatService) {}
 
-    @Get()
+    @Get('/:id')
     @Render('chat')
     getChatPage(): void {}
 
