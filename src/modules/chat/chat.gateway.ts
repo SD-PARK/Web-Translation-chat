@@ -6,6 +6,7 @@ import { ChatService } from './chat.service';
 import { FindMessageDto } from './chat_messages/dto/find_message.dto';
 import { ChatMessage } from './chat_messages/chat_messages.entity';
 import { PapagoService } from 'src/api/papago/papago.service';
+import { ChatRoom } from './chat_rooms/chat_rooms.entity';
 
 @WebSocketGateway({
   namespace: 'chat',
@@ -24,11 +25,12 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
   @WebSocketServer() nsp: Namespace;
 
   // 접속 시 room에 join 시키고 해당 room의 메시지 불러와서 돌려줌.
-  @SubscribeMessage('join')
-  async handleJoin(
+  @SubscribeMessage('joinRoom')
+  async handleJoinRoom(
     @ConnectedSocket() socket: Socket,
     @MessageBody() joinData: FindMessageDto,
   ) {
+    socket.leave('list');
     const roomIdString = joinData.room_id.toString();
     socket.join(roomIdString);
     this.nsp.to(roomIdString).emit('person-update', [ ...this.nsp.adapter.rooms.get(roomIdString) ]);
@@ -39,8 +41,8 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
   }
 
   // room 나가면 leave 처리
-  @SubscribeMessage('leave')
-  handleLeave(
+  @SubscribeMessage('leaveRoom')
+  handleLeaveRoom(
     @ConnectedSocket() socket: Socket,
     @MessageBody() roomId: number,
   ) {
@@ -78,6 +80,34 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     message[`${data.language}_text`] = tMessage;
 
     return message;
+  }
+
+  // 방 목록 페이지 접속 시, room 'list' 입장 및 방 목록 반환
+  @SubscribeMessage('joinList')
+  async handleJoinList(
+    @ConnectedSocket() socket: Socket
+  ) {
+    socket.join('list');
+    await this.handleGetRoomList(socket, '');
+  }
+
+  // 접속 인원을 포함한 room 목록 반환
+  @SubscribeMessage('getRoomList')
+  async handleGetRoomList(
+    @ConnectedSocket() socket: Socket,
+    @MessageBody() roomName: string,
+  ) {
+    const rooms: ChatRoom[] = await this.chatService.findRoom(roomName);
+
+    const cntRooms = rooms.map((room) => {
+      const roomIdString: string = room.room_id.toString();
+      let cnt: number = 0;
+      const getRoom = this.nsp.adapter.rooms.get(roomIdString);
+      if(getRoom) cnt = getRoom.size;
+      return { ...room, cnt };
+    });
+
+    this.nsp.to(socket.id).emit('getRoomList', cntRooms);
   }
 
   // 초기화 이후
