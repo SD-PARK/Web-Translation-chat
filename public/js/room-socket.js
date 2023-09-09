@@ -23,3 +23,9 @@ socket.on('connect', () => {
         }
     });
 });
+
+function filterSearch() {
+    const filterTitle = $('#filter-title').val();
+    logClear();
+    socket.emit('getRoomList', filterTitle);
+}

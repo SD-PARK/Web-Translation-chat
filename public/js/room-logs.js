@@ -16,3 +16,14 @@ function addCol(data) {
 function joinRoom(roomId) {
   location.href=`/chat/${roomId}`;
 }
+
+function logClear() {
+  roomList.empty();
+}
+
+// input에서 엔터 키 입력 시 버튼 클릭 이벤트 실행
+$("#filter-title").keyup(function(event) {
+  if (event.which === 13) {
+      $("#filter-search").click();
+  }
+});
