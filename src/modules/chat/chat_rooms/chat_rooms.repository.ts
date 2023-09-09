@@ -20,7 +20,8 @@ export class ChatRoomRepository extends Repository<ChatRoom> {
      * @returns 채팅방 데이터를 담은 배열을 반환합니다.
      */
     async findRoom(roomName: string): Promise<ChatRoom[]> {
-        return await this.find({ where: { room_name: Like(`%${roomName}%`) }});
+        const escapeRoomName = roomName.replace(/[%_]/g, '\\$&');
+        return await this.find({ where: { room_name: Like(`%${escapeRoomName}%`) }});
     }
 
     /**
