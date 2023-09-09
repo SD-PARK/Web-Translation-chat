@@ -35,7 +35,7 @@ body { background-color: #fcfdfc; }
 #filter > div > #filter-title {
     width: 200px;
     background-color: #fcfdfc; border: 1px solid #ccc;
-    color: #fff; font-size:14px;
+    color: #000; font-size:14px;
     outline: none;
 }
 
