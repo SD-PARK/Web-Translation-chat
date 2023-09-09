@@ -11,7 +11,7 @@
     <h4 class="font-weight-bold">채팅방 목록</h4> 
     {{!-- 방 필터 (언어, 카테고리, 제목), --}}
     <div id="filter">
-      <div>
+      {{!-- <div>
         <span class="desc">사용 중인 언어</span>
         <input type="checkbox" name="filter-language-ko" id="filter-language-ko">
           <label for="filter-language-ko" class="filter-language no-drag">Korean</label>
@@ -19,11 +19,12 @@
           <label for="filter-language-en" class="filter-language no-drag">English</label>
         <input type="checkbox" name="filter-language-ja" id="filter-language-ja">
           <label for="filter-language-ja" class="filter-language no-drag">Japanese</label>
-      </div>
+      </div> --}}
       <div>
         <span class="desc">제목</span>
         <input type="text" name="filter-title" id="filter-title"> {{!-- input width 사이즈 자동 조절해야 함 --}}
       </div>
+      <button type="button" id="filter-search" onclick="filterSearch()">검색</button>
     </div>
 
     <div id="room-list" class="p-lg-2">
