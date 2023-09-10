@@ -51,11 +51,15 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
   }
 
   // 해당 room의 인원 갱신 후 방 목록 페이지의 유저들에게 전송
-  updateRoomCnt(roomId: number) {
-    this.nsp.to('list').emit('update', {
-      room_id: roomId,
-      cnt: this.nsp.adapter.rooms.get(roomId.toString()).size,
-    });
+  updateRoomCnt(roomId: string) {
+    const roomIdNumber = Number(roomId);
+    
+    if (!Number.isNaN(roomIdNumber)) {
+      this.nsp.to('list').emit('update', {
+        room_id: roomIdNumber,
+        cnt: this.nsp.adapter.rooms.get(roomId).size,
+      });
+    }
   }
 
   // 메시지 송신 시 DB에 더하고 같은 room의 사람들에게 전송 (미번역 상태)
