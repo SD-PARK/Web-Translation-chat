@@ -1,5 +1,6 @@
 const chatLogs = $('#chat-logs');
 const chatPersons = $('#room-persons');
+let roomList = new Map();
 
 /**
  * 채팅 로그를 추가합니다.
