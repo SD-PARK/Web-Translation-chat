@@ -7,6 +7,7 @@ body { font-family: 'Gowun Dodum', 'Noto Sans JP', sans-serif; color: #50505F;}
 /* container */
 body { background-color: #fcfdfc; }
 #container {
+    position: relative;
     max-width: 850px;
     height: 100vh;
     margin: 0 auto;
@@ -64,3 +65,4 @@ body { background-color: #fcfdfc; }
 #room-list > .col:nth-child(2n) { background-color:#f0f7f0; }
 .col > .title { font-size: 17px; color: #000; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .col > .cnt { float: right; }
+.col:hover { border:1px solid #cdc}
