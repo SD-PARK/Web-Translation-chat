@@ -66,3 +66,16 @@ body { background-color: #fcfdfc; }
 .col > .title { font-size: 17px; color: #000; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .col > .cnt { float: right; }
 .col:hover { border:1px solid #cdc}
+
+button#create {
+    position: absolute;
+    right: 40px; bottom: 35px;
+    width: 50px; height: 50px;
+    border-radius: 50%; border: none; outline: none;
+    background: url('../img/plus.png') no-repeat center top / 100%;
+    background-color: #c5e8c5;
+    opacity: 0.5;
+}
+button#create:hover {
+    opacity: 1;
+}
