@@ -20,13 +20,3 @@ socket.on('connect', () => {
         updateCol(data);
     });
 });
-
-function filterSearch() {
-    const filterTitle = $('#filter-title').val();
-    logClear();
-    roomsMap.forEach((value, key) => {
-        if (value?.room_name.includes(filterTitle)) {
-            addCol(value);
-        };
-    });
-}
