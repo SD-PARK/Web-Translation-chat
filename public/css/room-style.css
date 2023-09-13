@@ -91,9 +91,9 @@ button#create {
 }
 #alert-box {
     position:absolute;
-    width:400px; height:auto;
-    border: 1px solid #cdc;
     top:50%; left:50%; transform:translate(-50%, -50%);
+    width:400px; height:auto;
+    background-color: white; border: 1px solid #cdc;
     border-radius:15px;
     padding: 30px; padding-bottom: 0px;
     box-shadow:1px 2px 7px -5px black;
