@@ -7,6 +7,7 @@ import { FindMessageDto } from './chat_messages/dto/find_message.dto';
 import { ChatMessage } from './chat_messages/chat_messages.entity';
 import { PapagoService } from 'src/api/papago/papago.service';
 import { ChatRoom } from './chat_rooms/chat_rooms.entity';
+import { CreateRoomDto } from './chat_rooms/dto/create_room.dto';
 
 @WebSocketGateway({
   namespace: 'chat',
@@ -120,6 +121,16 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     });
 
     this.nsp.to(socket.id).emit('getRoomList', cntRooms);
+  }
+
+  // 신규 방 생성
+  @SubscribeMessage('postRoom')
+  async handlePostRoom(
+    @ConnectedSocket() socket: Socket,
+    @MessageBody() roomData: CreateRoomDto,
+  ) {
+    const createdRoom: ChatRoom = await this.chatService.createRoom(roomData);
+    this.nsp.to('list').emit('update', createdRoom);
   }
 
   // 초기화 이후

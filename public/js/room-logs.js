@@ -9,7 +9,7 @@ function addCol(data) {
     roomList.append(`
     <div class="col ${data?.room_id}" onclick="joinRoom(${data?.room_id})">
       <span class="room-id">${data?.room_id ?? ''}</span>
-      <span class="cnt">${data?.cnt ?? '?'}/∞</span>
+      <span class="cnt">${data?.cnt ?? '0'}/∞</span>
       <p class="title">${data?.room_name ?? ''}</p>
     </div>`);
 }
@@ -20,12 +20,14 @@ function addCol(data) {
  */
 function updateCol(data) {
   const col = $(`.${data?.room_id}`);
-  if (col) {
+  if (col.length > 0) {
       for (const key in data) {
           const div = col.find(`.${key}`);
           div.text(`${data[key]}`);
           if (key === 'cnt') div.append('/∞');
       }
+  } else {
+    addCol(data);
   }
 }
 

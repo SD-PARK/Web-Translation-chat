@@ -20,3 +20,12 @@ socket.on('connect', () => {
         updateCol(data);
     });
 });
+
+/** 방을 생성합니다. */
+function createRoom() {
+    const enterTitle = $('#enter-title').val();
+    socket.emit('postRoom', {
+        room_name: enterTitle,
+    });
+    closeAlert();
+}
