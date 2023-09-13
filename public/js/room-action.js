@@ -1,6 +1,5 @@
 const alertBackground = $('#alert-background');
 const alertBox = $('#alert-box');
-const enterTitle = $('#enter-title');
 
 function createRoomApp() {
     return `<button id="close-alert" onclick="closeAlert()"></button>
@@ -30,11 +29,6 @@ function closeAlert() {
     setTimeout(() => {
         alertBackground.hide();
     }, 100)
-}
-
-/** 방을 생성합니다. */
-function createRoom() {
-    console.log($('#enter-title').val());
 }
 
 // input에서 엔터 키 입력 시 버튼 클릭 이벤트 실행
