@@ -50,13 +50,15 @@ h6 { margin: 15px 0 0 8px; }
 }
 .log > .name {
     font-size: 14px; font-weight: bold;
-    margin-bottom: 3px;
+    margin: 0 120px 3px 0;
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
 }
 .log > p { margin-bottom: 0; }
 .flag {
     width: 18px; height: 12px; object-fit: cover;
     float: left; margin: 4px 5px 0 0;
 }
+.log > .send-at { position: absolute; top: 10px; right: 10px; font-size: 14px; }
 
 #selected-language { border: none; border-bottom: 1px solid #50505F; }
 
@@ -114,15 +116,3 @@ h6 { margin: 15px 0 0 8px; }
     from { transform: rotate(0deg); }
     to { transform: rotate(359deg); }
 }
-
-/* Modal */
-/* #modal {
-    position: absolute;
-    top:50%; left:50%; transform: translate(-50%, -50%);
-    max-width: 500px;
-    padding: 16px 25px;
-    background-color:#1F1F22;
-    border: 4px double #50505F; border-radius: 15px;
-    text-align: center;
-    opacity: 0;
-} */
