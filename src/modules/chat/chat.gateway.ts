@@ -21,6 +21,9 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
   ) {}
 
   private readonly logger = new Logger(ChatGateway.name);
+  private translateStatus = new Set<string>();
+  private readonly MAX_RETRY_LIMIT = 5; // 번역 요청 재시도 횟수
+  private readonly RETRY_INTERVAL = 500; // 번역 요청 재시도 간격(ms)
 
   // namespace를 설정하지 않으면 @WebSocketServer는 서버 인스턴스를 반환함; @WebSocketServer() server: Socket
   @WebSocketServer() nsp: Namespace;
@@ -81,18 +84,40 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     @MessageBody() data: {
       message_id: number,
       language: string,
+      retryCount?: number,
     }
   ) {
+    // 번역 완료된 텍스트인지 확인
     const message: ChatMessage = await this.chatService.findOneMessage(data.message_id);
     if (message[`${data.language}_text`]) return message;
+    
+    // 번역 중인 텍스트인지 확인
+    const requestKey = `${data.message_id}_${data.language}`;
 
-    const tMessage: string = await this.papagoService.translate(message.language, data.language, message.message_text);
-    await this.chatService.updateMessage(data.message_id, {
-      [`${data.language}_text`]: tMessage,
-    });
-    message[`${data.language}_text`] = tMessage;
-
-    return message;
+    if (this.translateStatus.has(requestKey)) {
+      const retryCount = data.retryCount ?? 0;
+      console.log(retryCount);
+      if (data.retryCount >= this.MAX_RETRY_LIMIT) {
+        throw new Error('Translation retry limit exceeded.');
+      } else {
+        await this.delay(this.RETRY_INTERVAL);
+        return this.handleReqTranslate(socket, { ...data, retryCount: retryCount + 1});
+      }
+    }
+    
+    // 번역 중이 아닌 경우, 번역 시작
+    this.translateStatus.add(requestKey);
+    try {
+      const tMessage: string = await this.papagoService.translate(message.language, data.language, message.message_text);
+      await this.chatService.updateMessage(data.message_id, {
+        [`${data.language}_text`]: tMessage,
+      });
+      message[`${data.language}_text`] = tMessage;
+      console.log(tMessage);
+      return message;
+    } finally {
+      this.translateStatus.delete(requestKey);
+    }
   }
 
   // 방 목록 페이지 접속 시, room 'list' 입장 및 방 목록 반환
@@ -165,5 +190,9 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
   // 소켓 연결 종료 시
   handleDisconnect(@ConnectedSocket() socket: Socket) {
     this.logger.log(`${socket.id} 소켓 연결 ❌`);
+  }
+
+  async delay(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
   }
 }
