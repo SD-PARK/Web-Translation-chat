@@ -24,7 +24,8 @@ socket.on('connect', () => {
     socket.emit('joinRoom', { room_id: room_id }, (roomData) => {
         $('#room-name').html(roomData.room_data.room_name);
         chatLogs.empty();
-        for (message of roomData.message_data) {
+        for (let i = roomData.message_data.length-1; i >= 0; i--) {
+            let message = roomData.message_data[i];
             checkTranslatedLog(message);
         }
     });
