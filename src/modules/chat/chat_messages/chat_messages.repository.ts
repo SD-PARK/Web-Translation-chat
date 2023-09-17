@@ -19,6 +19,9 @@ export class ChatMessageRepository extends Repository<ChatMessage> {
                 send_at: LessThan(sendAt),
             },
             take: take,
+            order: {
+                send_at: 'DESC',
+            },
         });
         return messages;
     }
