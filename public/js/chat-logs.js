@@ -37,6 +37,8 @@ function timeStyle(time) {
 function replaceLog(id, text) {
     const messageTextDiv = $(`.${id} > p`);
     messageTextDiv.text(text);
+    if (text === '[Translation Failed]')
+        messageTextDiv.css('color', '#EE0000');
 }
 
 /**
