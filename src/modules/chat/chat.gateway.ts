@@ -38,10 +38,14 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     const roomIdString = joinData.room_id.toString();
     socket.join(roomIdString);
     this.nsp.to(roomIdString).emit('person-update', [ ...this.nsp.adapter.rooms.get(roomIdString) ]);
-    return {
-      room_data: await this.chatService.findOneRoom(joinData.room_id),
-      message_data: await this.chatService.findMessage(joinData),
-    };
+    try {
+      return {
+        room_data: await this.chatService.findOneRoom(joinData.room_id),
+        message_data: await this.chatService.findMessage(joinData),
+      };
+    } catch (err) {
+      return { error: 'Join Room Failed'};
+    }
   }
 
   // room 나가면 leave 처리
@@ -98,7 +102,7 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
       const retryCount = data.retryCount ?? 0;
       console.log(retryCount);
       if (data.retryCount >= this.MAX_RETRY_LIMIT) {
-        throw new Error('Translation retry limit exceeded.');
+        return { error: 'Translation Failed' };
       } else {
         await this.delay(this.RETRY_INTERVAL);
         return this.handleReqTranslate(socket, { ...data, retryCount: retryCount + 1});
