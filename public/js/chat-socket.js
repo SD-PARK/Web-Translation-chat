@@ -22,15 +22,21 @@ socket.on('connect', () => {
 
     // 방 입장
     socket.emit('joinRoom', { room_id: room_id }, (roomData) => {
-        $('#room-name').html(roomData.room_data.room_name);
-        chatLogs.empty();
-        for (let i = roomData.message_data.length-1; i >= 0; i--) {
-            let message = roomData.message_data[i];
-            checkTranslatedLog(message);
+        if (roomData.error) {
+            // 서버에서 오류 응답이 돌아온 경우
+            console.error('오류 발생', roomData.error);
+        } else {
+            // 정상적인 응답을 받은 경우
+            $('#room-name').html(roomData?.room_data?.room_name ?? '');
+            chatLogs.empty();
+            for (let i = roomData?.message_data?.length-1 ?? 0; i >= 0; i--) {
+                let message = roomData.message_data[i];
+                checkTranslatedLog(message);
+            }
         }
     });
+
     // socket.emit('leave', room_id);
-    
 });
 
 // 메시지 전송 이벤트
@@ -69,10 +75,12 @@ function translate(id) {
     isTranslating = true;
     socket.emit('reqTranslate', { message_id: id, language: language }, (response) => {
         if (response.error) {
+            // 서버에서 오류 응답이 돌아온 경우
             replaceLog(id, '[Translation Failed]');
             removeLoading(id);
             isTranslating = false;
         } else {
+            // 정상적인 응답을 받은 경우
             messages.set(id, response);
             replaceLog(id, response[`${language}_text`]);
             removeLoading(id);
