@@ -77,7 +77,13 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     @MessageBody() data: CreateMessageDto,
   ) {
     const roomIdString = data.room_id.toString();
-    const message: ChatMessage = await this.chatService.createMessage(data);
+    const socket_ip = socket.handshake.address.split(':').pop().split('.').slice(0, 2).join('.');
+    console.log(socket_ip);
+    const includedIpData: CreateMessageDto = {
+      ...data,
+      ip: socket_ip,
+    }
+    const message: ChatMessage = await this.chatService.createMessage(includedIpData);
     this.nsp.to(roomIdString).emit('message', message);
   }
 
