@@ -11,7 +11,7 @@ function addLog(data) {
     chatLogs.append(`
         <div class="log ${data?.message_id}">
             <img class="flag" src="../img/flag/${data?.language}.png" title="${data?.language}"></img>
-            <div class="name">${data?.user_name}</div>
+            <div class="name">${data?.user_name}<span class="ip">(${data?.ip})</span></div>
             <p>${data?.message_text}</p>
             <span class="send-at">${timeStyle(data?.send_at)}</span>
         </div>`);
