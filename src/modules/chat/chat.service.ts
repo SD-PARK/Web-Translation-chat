@@ -76,7 +76,7 @@ export class ChatService {
     async createMessage(messageData: CreateMessageDto): Promise<ChatMessage> {
         await this.findOneRoom(messageData.room_id);
         try {
-            const result: ChatMessage = await this.chatMessageRepository.createMessage(messageData.room_id, messageData.user_name, messageData.language, messageData.message_text);
+            const result: ChatMessage = await this.chatMessageRepository.createMessage(messageData.room_id, messageData.user_name, messageData.language, messageData.message_text, messageData.ip);
             return result;
         } catch (err) {
             console.error('createMessage Error:', err);

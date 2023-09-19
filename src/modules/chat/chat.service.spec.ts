@@ -32,8 +32,8 @@ describe('ChatService', () => {
     { room_id: 3, room_name: 'test3', created_at: new Date('2023-03-01'), ...baseEntity},
   ];
   let mockMessageEntities = [
-    { message_id: 1, room_id: 1, user_name: 'tester01', send_at: new Date('2023-01-01'), language: 'en', message_text: 'hello ww'},
-    { message_id: 2, room_id: 1, user_name: 'tester02', send_at: new Date('2023-02-01'), language: 'ko', message_text: 'ㅎㅇ' }
+    { message_id: 1, room_id: 1, user_name: 'tester01', send_at: new Date('2023-01-01'), language: 'en', ip: '123.456', message_text: 'hello ww'},
+    { message_id: 2, room_id: 1, user_name: 'tester02', send_at: new Date('2023-02-01'), language: 'ko', ip: '123.456', message_text: 'ㅎㅇ' }
   ];
 
   beforeAll(async () => {
@@ -168,11 +168,12 @@ describe('ChatService', () => {
       user_name: 'Tester01',
       language: 'en',
       message_text: 'hello, how are you',
+      ip: '123.456',
     };
 
     it('메시지 생성', async () => {
       const result = await service.createMessage(createMessageEntity);
-      expect(mockMessageRepository.createMessage).toBeCalledWith(createMessageEntity.room_id, createMessageEntity.user_name, createMessageEntity.language, createMessageEntity.message_text);
+      expect(mockMessageRepository.createMessage).toBeCalledWith(createMessageEntity.room_id, createMessageEntity.user_name, createMessageEntity.language, createMessageEntity.message_text, createMessageEntity.ip);
       expect(result).toEqual(mockMessageEntities[0]);
     });
   });
