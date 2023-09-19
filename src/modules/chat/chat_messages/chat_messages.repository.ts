@@ -44,12 +44,13 @@ export class ChatMessageRepository extends Repository<ChatMessage> {
      * @param messageText 전송한 메시지의 문자열 데이터입니다.
      * @returns 생성한 메시지 데이터를 반환합니다.
      */
-    async createMessage(roomId: number, userName: string, language: string, messageText: string): Promise<ChatMessage> {
+    async createMessage(roomId: number, userName: string, language: string, messageText: string, ip: string): Promise<ChatMessage> {
         const newEntity: ChatMessage = this.create({
             room_id: roomId,
             user_name: userName,
             language: language,
             message_text: messageText,
+            ip: ip,
         });
         await this.save(newEntity);
         return newEntity;
