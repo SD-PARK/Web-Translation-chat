@@ -19,6 +19,9 @@ export class ChatMessage extends BaseEntity {
     @Column({ length: 5, nullable: false })
     @IsIn(['ko', 'en', 'ja', 'zh-CN', 'zh-TW', 'vi', 'id', 'th', 'th', 'de', 'ru', 'es', 'it', 'fr'])
     language: string;
+    
+    @Column({ length: 7, nullable: false, default: '000.00'})
+    ip: string;
 
     @Column({ type: 'text', nullable: false })
     message_text: string;

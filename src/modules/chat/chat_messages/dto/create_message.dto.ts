@@ -15,6 +15,10 @@ export class CreateMessageDto {
     readonly language: string;
 
     @IsString()
+    @MaxLength(7)
+    readonly ip?: string;
+
+    @IsString()
     readonly message_text: string;
 
     @IsString()
