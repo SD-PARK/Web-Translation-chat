@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Patch, Delete, Param, Body, Query, BadRequestException, Render } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Param, Body, Query, BadRequestException, Render, Req } from '@nestjs/common';
 import { ChatService } from './chat.service';
 import { ChatRoom } from './chat_rooms/chat_rooms.entity';
 import { CreateRoomDto } from './chat_rooms/dto/create_room.dto';
@@ -8,6 +8,7 @@ import { CreateMessageDto } from './chat_messages/dto/create_message.dto';
 import { ChatMessage } from './chat_messages/chat_messages.entity';
 import { UpdateMessageDto } from './chat_messages/dto/update_message.dto';
 import { UpdateResult } from 'typeorm';
+import { Request } from 'express';
 
 @Controller('chat')
 export class ChatController {
@@ -50,8 +51,10 @@ export class ChatController {
     }
 
     @Post('/message')
-    async createMessage(@Body() messageData: CreateMessageDto): Promise<ChatMessage> {
-        return await this.chatService.createMessage(messageData);
+    async createMessage(@Req() req: Request, @Body() messageData: CreateMessageDto): Promise<ChatMessage> {
+        const req_ip = req.connection.remoteAddress.split(':').pop().split('.').slice(0, 2).join('.');
+        const includedIPData: CreateMessageDto = { ...messageData, ip: req_ip };
+        return await this.chatService.createMessage(includedIPData);
     }
 
     @Patch('/message/:id')
