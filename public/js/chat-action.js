@@ -40,7 +40,7 @@ function buttonDisabled() {
 function autoResize(textarea) {
     textarea.style.height = "auto";
     textarea.style.height = (textarea.scrollHeight) + "px";
-    chatLogs.css('margin-bottom', (textarea.scrollHeight + 12) + "px");
+    chatLogs.css('margin-bottom', (textarea.scrollHeight + 58) + "px");
 }
 
 /**
@@ -48,6 +48,7 @@ function autoResize(textarea) {
  */
 function emptyTextarea() {
     $('#input-text').val('');
+    autoResize(inputText);
     buttonDisabled();
 }
 
