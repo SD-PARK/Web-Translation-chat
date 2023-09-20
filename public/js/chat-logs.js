@@ -2,17 +2,7 @@ const chatLogs = $('#chat-logs');
 const chatPersons = $('#room-persons');
 let roomList = new Map();
 const winLanguage = window.navigator.language;
-
-async function getIpClient() {
-    try {
-      const response = await axios.get('https://api.ipify.org?format=json');
-      console.log(response);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-  
-  getIpClient();
+let winIP;
 
 /**
  * 채팅 로그를 추가합니다.
@@ -28,7 +18,7 @@ function addLog(data) {
             <span class="send-at">${timeStyle(data?.send_at)}</span>
         </div>`);
     
-    if (data.ip === '1') $('.log:last-child > .name').css('color', 'green');
+    if (winIP && data.ip === winIP) $('.log:last-child > .name').css('color', 'green');
 
     chatLogs.scrollTop(chatLogs.prop('scrollHeight'));
 }
