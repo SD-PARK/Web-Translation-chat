@@ -77,8 +77,7 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     @MessageBody() data: CreateMessageDto,
   ) {
     const roomIdString = data.room_id.toString();
-    const socket_ip = socket.handshake.address.split(':').pop().split('.').slice(0, 2).join('.');
-    console.log(socket_ip);
+    const socket_ip = this.getIP(socket);
     const includedIpData: CreateMessageDto = {
       ...data,
       ip: socket_ip,
@@ -194,6 +193,7 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
   // 소켓 연결 시
   handleConnection(@ConnectedSocket() socket: Socket) {
+    socket.emit('sendIP', this.getIP(socket))
     this.logger.log(`${socket.id} 소켓 연결`);
   }
 
@@ -204,5 +204,19 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
   async delay(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  getIP(socket: Socket) {
+    try {
+      const rawAddress = socket.handshake.address;
+      const ipAddress = rawAddress.split(':').pop();
+      if (ipAddress && typeof ipAddress === 'string')
+        return ipAddress.split('.').slice(0, 2).join('.');
+      else
+        throw new Error('Invalid IP address');
+    } catch (err) {
+      console.error('Error getIP:', err.message);
+      return null;
+    }
   }
 }
