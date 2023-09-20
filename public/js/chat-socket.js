@@ -20,6 +20,11 @@ socket.on('connect', () => {
         updatePerson(response);
     });
 
+    // 서버로부터 IP 전달받아 저장
+    socket.on('sendIP', (ip) => {
+        winIP = ip;
+    });
+
     // 방 입장
     socket.emit('joinRoom', { room_id: room_id }, (roomData) => {
         if (roomData.error) {
