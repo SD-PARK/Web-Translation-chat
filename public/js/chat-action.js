@@ -1,4 +1,5 @@
 const inputText = $('#input-text');
+const inputName = $('#input-name');
 const sendButton = document.getElementById('send-button');
 const progress = document.getElementById('progress-step');
 const selectedLanguage = $('#selected-language');
@@ -35,12 +36,10 @@ function buttonDisabled() {
 
 /**
  * Textarea의 text가 변경될 때마다, Textarea와 채팅 로그의 높이를 자동으로 조정합니다.
- * @param {textarea} textarea
  */
-function autoResize(textarea) {
-    textarea.style.height = "auto";
-    textarea.style.height = (textarea.scrollHeight) + "px";
-    chatLogs.css('margin-bottom', (textarea.scrollHeight + 58) + "px");
+function autoResize() {
+    inputText.height = (inputText.scrollHeight) + "px";
+    chatLogs.css('margin-bottom', (inputText.scrollHeight + 57) + "px");
 }
 
 /**
@@ -48,7 +47,7 @@ function autoResize(textarea) {
  */
 function emptyTextarea() {
     $('#input-text').val('');
-    autoResize(inputText);
+    autoResize();
     buttonDisabled();
 }
 
