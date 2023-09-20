@@ -8,7 +8,6 @@ let isTranslating = false;
 
 socket.on('connect', () => {
     console.log('서버랑 연결 됨ㅎ');
-    user_name = socket.io.nsps['/chat'].id;
 
     // 메시지 수신
     socket.on('message', (response) => {
@@ -46,6 +45,7 @@ socket.on('connect', () => {
 
 // 메시지 전송 이벤트
 function emitMessage() {
+    user_name = inputName.val();
     const messageData = {
         room_id: 1,
         user_name: user_name,
