@@ -1,7 +1,6 @@
 const chatLogs = $('#chat-logs');
 const chatPersons = $('#room-persons');
 let roomList = new Map();
-const winLanguage = window.navigator.language;
 let winIP;
 
 /**
@@ -75,10 +74,14 @@ function replaceLoadingLog(status, content = '') {
     chatLogs.scrollTop(chatLogs.prop('scrollHeight'));
 }
 
+/**
+ * 대화 상대를 추가합니다.
+ * @param {*} persons 
+ */
 function updatePerson(persons) {
     chatPersons.empty();
     for (person of persons) {
-        chatPersons.append(`<div class="person">${person}</div>`);
+        chatPersons.append(`<div class="person">${person}</div><span class='ip'>123</span>`);
         if (person === user_name) $('.person:last-child').css({
             'color': 'green',
             'font-weight': 'bold',

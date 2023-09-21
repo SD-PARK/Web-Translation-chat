@@ -2,9 +2,27 @@ const socket = io('/chat');
 
 let user_name;
 let room_id = window.location.href.split('/')[4];
-let language = selectedLanguage.val();
 let messages = new Map();
 let isTranslating = false;
+
+let language;
+function Searchlanguage() {
+    const winLanguage = window.navigator.language;
+    const langSlice = winLanguage.slice(0, 2);
+    const langIndex = langList.findIndex((element) => element === langSlice);
+    if (langIndex !== undefined) {
+        language = langList[langIndex];
+    } else if (winLanguage === 'zh-Hant-TW') {
+        language = 'zh-TW';
+    } else if (langSlice === 'zh') {
+        language = 'zh-CN';
+    } else {
+        langauge = 'en';
+    }
+    console.log(language);
+    inputLanguage.css('background-image', `url('../img/flag/${language}.png')`);
+}
+Searchlanguage();
 
 socket.on('connect', () => {
     console.log('서버랑 연결 됨ㅎ');
