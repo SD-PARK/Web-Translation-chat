@@ -14,24 +14,26 @@
     <div id="room-persons" class="p-lg-2">
       <!-- List -->
     </div>
-    
-    <select id="selected-language">
-      <option value="ko">Korean</option>
-      <option value="en">English</option>
-      <option value="ja">Japanese</option>
-    </select>
 
     <div id="chat-logs">
       <!-- Message Logs -->
     </div>
     
     <div id="chat-input" class="fixed-bottom p-3 w-100">
+      <button id="input-language" onclick="languageBoxOnOff()"></button>
       <input type="text" id="input-name" class="form-control mr-5" placeholder="이름">
       <textarea id="input-text" class="form-control pr-5" tabindex="0" placeholder="대화 입력" oninput="autoResize()"></textarea>
       <button id="send-button" disabled>
         <i class="fa-regular fa-envelope"></i>
       </button>
+
+      <div id="language-box">
+        <button id="input-ko" onclick="switchLanguage('ko')"></button>
+        <button id="input-en" onclick="switchLanguage('en')"></button>
+        <button id="input-ja" onclick="switchLanguage('ja')"></button>
+      </div>
     </div>
+
   </div>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>

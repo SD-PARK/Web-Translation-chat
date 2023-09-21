@@ -1,8 +1,9 @@
 const inputText = $('#input-text');
 const inputName = $('#input-name');
+const inputLanguage = $('#input-language');
 const sendButton = document.getElementById('send-button');
 const progress = document.getElementById('progress-step');
-const selectedLanguage = $('#selected-language');
+const languageBox = $('#language-box');
 
 /** 메시지 전송 시: Enter or Send Button Click */
 $('#send-button').click(() => {
@@ -54,12 +55,26 @@ function emptyTextarea() {
 /**
  * 언어를 변경합니다.
  */
-selectedLanguage.change(() => {
-    if (!isTranslating) {
-        language = selectedLanguage.val();
+function switchLanguage(lang) {
+    const langList = ['ko', 'en', 'ja', 'zh-CN', 'zh-TW', 'vi', 'id', 'th', 'de', 'ru', 'es', 'it', 'fr'];
+    if (langList.includes(lang)) {
+        language = lang;
         chatLogs.empty();
         for (message of messages.values()) {
             checkTranslatedLog(message);
         }
+        languageBoxOnOff();
+        inputLanguage.css('background-image', `url('../img/flag/${lang}.png')`)
     }
-});
+}
+
+/**
+ * Language Box를 열거나, 닫습니다.
+ */
+function languageBoxOnOff() {
+    if (languageBox.is(':visible')) {
+        languageBox.fadeOut(250);
+    } else {
+        languageBox.fadeIn(250);
+    }
+}

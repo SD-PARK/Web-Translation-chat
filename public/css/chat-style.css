@@ -54,7 +54,14 @@ h6 { margin: 15px 0 0 8px; }
 }
 .log > .send-at { position: absolute; top: 10px; right: 10px; font-size: 14px; }
 
-#selected-language { border: none; border-bottom: 1px solid #50505F; }
+#selected-language {
+    border: none;
+    -o-appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+#selected-language::-ms-expand { display: none; }
 
 /* chat-input */
 #chat-input {
@@ -63,9 +70,16 @@ h6 { margin: 15px 0 0 8px; }
     transform: translateX(-50%);
     border-top: 1px solid #50505F;
 }
+#input-language {
+    position: absolute;
+    width: 35px; height: 35px;
+    background: url('../img/flag/en.png') no-repeat center top / 100%;
+    outline: none;
+}
 #input-name {
-    margin-bottom: 10px;
+    margin: 0 0 10px 45px;
     border: none;
+    width: 873px;
 }
 #input-text {
     height: auto;
@@ -96,6 +110,28 @@ h6 { margin: 15px 0 0 8px; }
 #send-button:enabled > i {
     color: #eee;
 }
+
+/* language-box */
+#language-box {
+    position: absolute;
+    left: 0; top: -37px;
+    transform:translate(-30%, 0);
+    width: auto; height: auto;
+    opacity: 0.8;
+    background-color: white;
+    border: 1px solid #50505F; border-radius: 15px;
+    padding: 5px 10px;
+    display: none;
+}
+#language-box > button {
+    width: 35px; height: 30px;
+    outline: none;
+    background: no-repeat center top / 100%;
+    margin: 0 5px;
+}
+#language-box > #input-ko { background-image: url('../img/flag/ko.png'); }
+#language-box > #input-en { background-image: url('../img/flag/en.png'); }
+#language-box > #input-ja { background-image: url('../img/flag/ja.png'); }
 
 /* Loading */
 .loading {
