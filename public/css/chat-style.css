@@ -23,6 +23,7 @@ h6 { margin: 15px 0 0 8px; }
 #room-persons > .person {
     overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
 }
+#room-persons > .person > .ip { font-size: 14px; font-weight: normal; color: #777; margin-left: 5px; }
 
 /* chat-logs */
 #chat-logs {
