@@ -71,7 +71,7 @@ socket.on('connect', () => {
 function emitMessage() {
     user_name = inputName.val();
     const messageData = {
-        room_id: 1,
+        room_id: room_id,
         user_name: user_name,
         language: language,
         message_text: $('#input-text').val(),
