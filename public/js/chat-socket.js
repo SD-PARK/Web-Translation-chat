@@ -2,10 +2,12 @@ const socket = io('/chat');
 
 let user_name;
 let room_id = window.location.href.split('/')[4];
+let peoples = new Map();
 let messages = new Map();
 let isTranslating = false;
 
 let language;
+/** 브라우저 언어 탐색 후 초기 언어 설정 */
 function Searchlanguage() {
     const winLanguage = window.navigator.language;
     const langSlice = winLanguage.slice(0, 2);
@@ -26,6 +28,7 @@ Searchlanguage();
 
 socket.on('connect', () => {
     console.log('서버랑 연결 됨ㅎ');
+    inputName.val(socket.io.nsps['/chat'].id);
 
     // 메시지 수신
     socket.on('message', (response) => {
@@ -34,7 +37,10 @@ socket.on('connect', () => {
 
     // 대화상대 갱신
     socket.on('person-update', (response) => {
-        updatePerson(response);
+        chatPersons.empty();
+        for (const person of response) {
+            updatePerson(person);
+        }
     });
 
     // 서버로부터 IP 전달받아 저장

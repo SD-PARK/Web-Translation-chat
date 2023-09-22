@@ -76,15 +76,12 @@ function replaceLoadingLog(status, content = '') {
 
 /**
  * 대화 상대를 추가합니다.
- * @param {*} persons 
+ * @param {*} person
  */
-function updatePerson(persons) {
-    chatPersons.empty();
-    for (person of persons) {
-        chatPersons.append(`<div class="person">${person}</div><span class='ip'>123</span>`);
-        if (person === user_name) $('.person:last-child').css({
-            'color': 'green',
-            'font-weight': 'bold',
-        });
-    }
+function updatePerson(person) {
+    chatPersons.append(`<div class="person">${person.name}<span class='ip'>(${person.ips})</span></div>`);
+    if (person.ips === winIP) $('.person:last-child').css({
+        'color': 'green',
+        'font-weight': 'bold',
+    });
 }

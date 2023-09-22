@@ -24,6 +24,7 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
   private translateStatus = new Set<string>();
   private readonly MAX_RETRY_LIMIT = 5; // 번역 요청 재시도 횟수
   private readonly RETRY_INTERVAL = 500; // 번역 요청 재시도 간격(ms)
+  private personMap = new Map<string, {name: string, ips: string}>();
 
   // namespace를 설정하지 않으면 @WebSocketServer는 서버 인스턴스를 반환함; @WebSocketServer() server: Socket
   @WebSocketServer() nsp: Namespace;
@@ -37,7 +38,10 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     socket.leave('list');
     const roomIdString = joinData.room_id.toString();
     socket.join(roomIdString);
-    this.nsp.to(roomIdString).emit('person-update', [ ...this.nsp.adapter.rooms.get(roomIdString) ]);
+    this.personMap.set(socket.id, { name: socket.id, ips: this.getIP(socket) });
+
+    this.nsp.to(roomIdString).emit('person-update', this.getPersons(roomIdString));
+    
     try {
       return {
         room_data: await this.chatService.findOneRoom(joinData.room_id),
@@ -105,7 +109,6 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
     if (this.translateStatus.has(requestKey)) {
       const retryCount = data.retryCount ?? 0;
-      console.log(retryCount);
       if (data.retryCount >= this.MAX_RETRY_LIMIT) {
         return { error: 'Translation Failed' };
       } else {
@@ -122,7 +125,6 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
         [`${data.language}_text`]: tMessage,
       });
       message[`${data.language}_text`] = tMessage;
-      console.log(tMessage);
       return message;
     } finally {
       this.translateStatus.delete(requestKey);
@@ -178,8 +180,9 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
       if (id !== room && room !== 'list') this.updateRoomCnt(room);
     });
 
-    this.nsp.adapter.on('leave-room', (room, id) => {
-      this.nsp.to(room).emit('person-update', [ ...this.nsp.adapter.rooms.get(room) ]);
+    this.nsp.adapter.on('leave-room', (room, id,) => {
+      this.personMap.delete(id);
+      this.nsp.to(room).emit('person-update', this.getPersons(room));
       this.logger.log(`[Socket: ${id}]가 [Room: ${room}]에서 나갔습니다.`);
       if (id !== room && room !== 'list') this.updateRoomCnt(room);
     });
@@ -218,5 +221,14 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
       console.error('Error getIP:', err.message);
       return null;
     }
+  }
+
+  // 특정 룸의 접속 인원 정보를 가져옵니다.
+  getPersons(roomId: string) {
+    const roomPerson = this.nsp.adapter.rooms.get(roomId);
+    const persons = Array.from(roomPerson).map((socketId) => {
+      return this.personMap.get(socketId);
+    });
+    return persons;
   }
 }
