@@ -90,6 +90,19 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     this.nsp.to(roomIdString).emit('message', message);
   }
 
+  @SubscribeMessage('switchName')
+  async handleSwitchName(
+    @ConnectedSocket() socket: Socket,
+    @MessageBody() data: { room_id: number, name: string },
+  ) {
+    const originData = this.personMap.get(socket.id);
+    if (originData) {
+      const roomIdString = data.room_id.toString();
+      this.personMap.set(socket.id, { ...originData, name: data.name });
+      this.nsp.to(roomIdString).emit('person-update', this.getPersons(roomIdString));
+    }
+  }
+
   // 번역 요청 시 번역 상태 확인 및(이미 번역되어 있으면 그대로 반환) 번역 후 DB 저장, 반환
   @SubscribeMessage('reqTranslate')
   async handleReqTranslate(

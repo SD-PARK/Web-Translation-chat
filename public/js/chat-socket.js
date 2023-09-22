@@ -80,6 +80,15 @@ function emitMessage() {
     socket.emit('message', messageData);
 }
 
+// 닉네임 변경 이벤트
+function switchName() {
+    const data = {
+        room_id: room_id,
+        name: inputName.val(),
+    }
+    socket.emit('switchName', data);
+}
+
 // 메시지 번역 여부 체크 후 로그 출력
 function checkTranslatedLog(message) {
     messages.set(message.message_id, message);

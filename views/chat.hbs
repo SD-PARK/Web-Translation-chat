@@ -21,7 +21,7 @@
     
     <div id="chat-input" class="fixed-bottom p-3 w-100">
       <button id="input-language" onclick="languageBoxOnOff()"></button>
-      <input type="text" id="input-name" class="form-control mr-5" placeholder="이름">
+      <input type="text" id="input-name" class="form-control mr-5" placeholder="이름" onchange="switchName()">
       <textarea id="input-text" class="form-control pr-5" tabindex="0" placeholder="대화 입력" oninput="autoResize()"></textarea>
       <button id="send-button" disabled>
         <i class="fa-regular fa-envelope"></i>
