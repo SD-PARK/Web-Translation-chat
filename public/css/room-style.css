@@ -51,7 +51,7 @@ body { background-color: #fcfdfc; }
     margin-bottom: 8px; padding: 5px 10px;
     cursor: pointer;
 }
-.col:hover { border:1px solid #cdc; }
+.col:hover { outline: 1px solid #cdc; }
 #room-list > .col:nth-child(2n) { background-color:#f0f7f0; }
 .col > .title { font-size: 17px; color: #000; margin: 4px 0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .col > .cnt { float: right; }
