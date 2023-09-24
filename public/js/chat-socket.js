@@ -41,6 +41,7 @@ socket.on('connect', () => {
         for (const person of response) {
             updatePerson(person);
         }
+        chatPersonCnt.text(response.length);
     });
 
     // 서버로부터 IP 전달받아 저장

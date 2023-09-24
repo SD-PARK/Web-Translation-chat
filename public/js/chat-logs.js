@@ -1,5 +1,6 @@
 const chatLogs = $('#chat-logs');
 const chatPersons = $('#room-persons');
+const chatPersonCnt = $('#person-cnt');
 let roomList = new Map();
 let winIP;
 
