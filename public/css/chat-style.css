@@ -1,4 +1,5 @@
 #container {
+    position: relative;
     max-width: 1000px;
     height: 100vh;
     margin: 0 auto;
@@ -7,6 +8,15 @@
     flex-direction: column;
     background-color: #fcfdfc;
 }
+
+#goto-room {
+    position: absolute;
+    top: 38px; right: 30px;
+    width: 40px; height: 28px;
+    background: url('../img/back.png') no-repeat center top / 100%;
+    opacity: 0.3;
+}
+#goto-room:hover { opacity: 0.8; }
 
 /* room-persons */
 #room-persons {
