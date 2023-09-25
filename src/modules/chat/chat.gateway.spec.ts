@@ -10,6 +10,8 @@ import { ChatMessage } from './chat_messages/chat_messages.entity';
 import { RemoveOptions, SaveOptions } from 'typeorm';
 import { AxiosModule } from 'src/config/axios/axios.module';
 import { ConfigService } from '@nestjs/config';
+import { FindMessageDto } from './chat_messages/dto/find_message.dto';
+import { Socket } from 'socket.io';
 
 describe('ChatGateway', () => {
   let gateway: ChatGateway;
@@ -92,4 +94,18 @@ describe('ChatGateway', () => {
   it('should be defined', () => {
     expect(gateway).toBeDefined();
   });
+
+  // SocketMock 생성이라는 벽에 막혀서 우선 인섬니아로 테스트하기로 함,,
+  // describe('joinRoom', () => {
+  //   it('채팅방 생성', async () => {
+  //     const findMessageDto: FindMessageDto = { room_id: 1 };
+
+  //     const result = await gateway.handleJoinRoom(socketMock, findMessageDto);
+  //     expect(mockRoomRepository.findOneRoom).toBeCalledWith(findMessageDto.room_id);
+  //     expect(result).toEqual({
+  //       room_data: mockRoomEntities[0],
+  //       message_data: mockMessageEntities,
+  //     });
+  //   })
+  // });
 });
