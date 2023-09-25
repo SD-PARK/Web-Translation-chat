@@ -10,10 +10,10 @@ export class FindMessageDto {
     @Transform(({ value }) => toDate(value))
     @IsOptional()
     @IsDate()
-    send_at: Date;
+    send_at?: Date;
 
     @Transform(({ value }) => toNumber(value, { default: 20, min: 0}))
     @IsOptional()
     @IsNumber()
-    take: number;
+    take?: number;
 }
