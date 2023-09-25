@@ -54,6 +54,10 @@ socket.on('connect', () => {
         if (roomData.error) {
             // 서버에서 오류 응답이 돌아온 경우
             console.error('오류 발생', roomData.error);
+
+            //
+            // 방 입장 불가 알림 표시 후 방 목록 페이지로 돌아가도록 하기
+            //
         } else {
             // 정상적인 응답을 받은 경우
             $('#room-name').html(roomData?.room_data?.room_name ?? '');
@@ -72,11 +76,12 @@ socket.on('connect', () => {
 function emitMessage() {
     user_name = inputName.val();
     const messageData = {
-        room_id: room_id,
+        room_id: parseInt(room_id),
         user_name: user_name,
         language: language,
         message_text: $('#input-text').val(),
     };
+    console.log(messageData);
     emptyTextarea();
     socket.emit('message', messageData);
 }
