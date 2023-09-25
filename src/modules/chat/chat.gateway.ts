@@ -1,4 +1,4 @@
-import { Logger } from '@nestjs/common';
+import { Logger, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ConnectedSocket, MessageBody, OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Namespace, Socket } from 'socket.io';
 import { CreateMessageDto } from './chat_messages/dto/create_message.dto';
@@ -31,6 +31,7 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
   // 접속 시 room에 join 시키고 해당 room의 메시지 불러와서 돌려줌.
   @SubscribeMessage('joinRoom')
+  @UsePipes(ValidationPipe)
   async handleJoinRoom(
     @ConnectedSocket() socket: Socket,
     @MessageBody() joinData: FindMessageDto,
@@ -49,28 +50,6 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
       };
     } catch (err) {
       return { error: 'Join Room Failed'};
-    }
-  }
-
-  // room 나가면 leave 처리
-  @SubscribeMessage('leaveRoom')
-  handleLeaveRoom(
-    @ConnectedSocket() socket: Socket,
-    @MessageBody() roomId: number,
-  ) {
-    const roomIdString = roomId.toString();
-    socket.leave(roomIdString);
-  }
-
-  // 해당 room의 인원 갱신 후 방 목록 페이지의 유저들에게 전송
-  updateRoomCnt(roomId: string) {
-    const roomIdNumber = Number(roomId);
-    
-    if (!Number.isNaN(roomIdNumber)) {
-      this.nsp.to('list').emit('update', {
-        room_id: roomIdNumber,
-        cnt: this.nsp.adapter.rooms.get(roomId).size,
-      });
     }
   }
 
@@ -218,10 +197,23 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     this.logger.log(`${socket.id} 소켓 연결 ❌`);
   }
 
+  // 해당 room의 인원 갱신 후 방 목록 페이지의 유저들에게 전송
+  updateRoomCnt(roomId: string) {
+    const roomIdNumber = Number(roomId);
+    
+    if (!Number.isNaN(roomIdNumber)) {
+      this.nsp.to('list').emit('update', {
+        room_id: roomIdNumber,
+        cnt: this.nsp.adapter.rooms.get(roomId).size,
+      });
+    }
+  }
+
   async delay(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
+  // socket의 IP 앞 2자리를 가져옵니다.
   getIP(socket: Socket) {
     try {
       const rawAddress = socket.handshake.address;
