@@ -55,18 +55,25 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
   // 메시지 송신 시 DB에 더하고 같은 room의 사람들에게 전송 (미번역 상태)
   @SubscribeMessage('message')
+  @UsePipes(ValidationPipe)
   async handleMessage(
     @ConnectedSocket() socket: Socket,
     @MessageBody() data: CreateMessageDto,
   ) {
     const roomIdString = data.room_id.toString();
-    const socket_ip = this.getIP(socket);
-    const includedIpData: CreateMessageDto = {
-      ...data,
-      ip: socket_ip,
+    try {
+      const socket_ip = this.getIP(socket);
+      const includedIpData: CreateMessageDto = {
+        ...data,
+        ip: socket_ip,
+      }
+      const message: ChatMessage = await this.chatService.createMessage(includedIpData);
+      this.nsp.to(roomIdString).emit('message', message);
+    } catch (err) {
+      this.logger.error(err);
+      // 메시지 전송 실패 알림
+      // socket.emit('failSendMessage');
     }
-    const message: ChatMessage = await this.chatService.createMessage(includedIpData);
-    this.nsp.to(roomIdString).emit('message', message);
   }
 
   @SubscribeMessage('switchName')
