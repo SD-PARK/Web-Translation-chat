@@ -15,6 +15,7 @@ export class CreateMessageDto {
     readonly language: string;
 
     @IsString()
+    @IsOptional()
     @MaxLength(7)
     readonly ip?: string;
 
