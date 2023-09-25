@@ -11,8 +11,8 @@
 
 #goto-room {
     position: absolute;
-    top: 38px; right: 30px;
-    width: 40px; height: 28px;
+    top: 40px; right: 30px;
+    width: 36px; height: 25px;
     background: url('../img/back.png') no-repeat center top / 100%;
     opacity: 0.3;
 }
