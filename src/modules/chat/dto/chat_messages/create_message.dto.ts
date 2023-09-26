@@ -1,4 +1,5 @@
 import { IsIn, IsNumber, IsOptional, IsString, MaxLength, Min } from 'class-validator';
+import appConfig from 'src/config/appConfig';
 
 export class CreateMessageDto {
     @IsNumber()
@@ -10,8 +11,7 @@ export class CreateMessageDto {
     readonly user_name: string;
 
     @IsString()
-    @MaxLength(5)
-    @IsIn(['ko', 'en', 'ja', 'zh-CN', 'zh-TW', 'vi', 'id', 'th', 'th', 'de', 'ru', 'es', 'it', 'fr'])
+    @IsIn(appConfig.supportedLanguage)
     readonly language: string;
 
     @IsString()
