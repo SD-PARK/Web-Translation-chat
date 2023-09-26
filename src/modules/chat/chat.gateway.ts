@@ -8,6 +8,7 @@ import { ChatMessage } from './entities/chat_messages.entity';
 import { PapagoService } from 'src/api/papago/papago.service';
 import { ChatRoom } from './entities/chat_rooms.entity';
 import { CreateRoomDto } from './dto/chat_rooms/create_room.dto';
+import { SwitchNameDto } from './dto/chat_gateway/switch_name.dto';
 
 @WebSocketGateway({
   namespace: 'chat',
@@ -77,10 +78,12 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
   }
 
   @SubscribeMessage('switchName')
+  @UsePipes(ValidationPipe)
   async handleSwitchName(
     @ConnectedSocket() socket: Socket,
-    @MessageBody() data: { room_id: number, name: string },
+    @MessageBody() data: SwitchNameDto,
   ) {
+    console.log(data);
     const originData = this.personMap.get(socket.id);
     if (originData) {
       const roomIdString = data.room_id.toString();
