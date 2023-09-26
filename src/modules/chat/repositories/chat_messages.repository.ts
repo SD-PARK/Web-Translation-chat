@@ -1,7 +1,7 @@
 import { CustomRepository } from "src/config/typeorm_ex/typeorm-ex.decorator";
-import { ChatMessage } from "./chat_messages.entity";
+import { ChatMessage } from "../entities/chat_messages.entity";
 import { DeleteResult, LessThan, Repository, UpdateResult } from "typeorm";
-import { UpdateMessageDto } from "./dto/update_message.dto";
+import { UpdateMessageDto } from "../dto/chat_messages/update_message.dto";
 
 @CustomRepository(ChatMessage)
 export class ChatMessageRepository extends Repository<ChatMessage> {

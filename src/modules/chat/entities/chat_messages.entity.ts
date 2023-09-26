@@ -1,5 +1,5 @@
 import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { ChatRoom } from '../chat_rooms/chat_rooms.entity';
+import { ChatRoom } from './chat_rooms.entity';
 import { IsIn } from 'class-validator';
 
 @Entity('chat_messages')

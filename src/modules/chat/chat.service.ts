@@ -1,13 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { ChatMessageRepository } from './chat_messages/chat_messages.repository';
-import { ChatRoomRepository } from './chat_rooms/chat_rooms.repository';
-import { CreateMessageDto } from './chat_messages/dto/create_message.dto';
-import { FindMessageDto } from './chat_messages/dto/find_message.dto';
-import { CreateRoomDto } from './chat_rooms/dto/create_room.dto';
-import { UpdateRoomDto } from './chat_rooms/dto/update_room.dto';
-import { ChatRoom } from './chat_rooms/chat_rooms.entity';
-import { ChatMessage } from './chat_messages/chat_messages.entity';
-import { UpdateMessageDto } from './chat_messages/dto/update_message.dto';
+import { ChatMessageRepository } from './repositories/chat_messages.repository';
+import { ChatRoomRepository } from './repositories/chat_rooms.repository';
+import { CreateMessageDto } from './dto/chat_messages/create_message.dto';
+import { FindMessageDto } from './dto/chat_messages/find_message.dto';
+import { CreateRoomDto } from './dto/chat_rooms/create_room.dto';
+import { UpdateRoomDto } from './dto/chat_rooms/update_room.dto';
+import { ChatRoom } from './entities/chat_rooms.entity';
+import { ChatMessage } from './entities/chat_messages.entity';
+import { UpdateMessageDto } from './dto/chat_messages/update_message.dto';
 import { UpdateResult } from 'typeorm';
 
 @Injectable()

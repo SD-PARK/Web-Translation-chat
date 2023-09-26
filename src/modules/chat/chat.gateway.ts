@@ -1,13 +1,13 @@
 import { Logger, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ConnectedSocket, MessageBody, OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Namespace, Socket } from 'socket.io';
-import { CreateMessageDto } from './chat_messages/dto/create_message.dto';
+import { CreateMessageDto } from './dto/chat_messages/create_message.dto';
 import { ChatService } from './chat.service';
-import { FindMessageDto } from './chat_messages/dto/find_message.dto';
-import { ChatMessage } from './chat_messages/chat_messages.entity';
+import { FindMessageDto } from './dto/chat_messages/find_message.dto';
+import { ChatMessage } from './entities/chat_messages.entity';
 import { PapagoService } from 'src/api/papago/papago.service';
-import { ChatRoom } from './chat_rooms/chat_rooms.entity';
-import { CreateRoomDto } from './chat_rooms/dto/create_room.dto';
+import { ChatRoom } from './entities/chat_rooms.entity';
+import { CreateRoomDto } from './dto/chat_rooms/create_room.dto';
 
 @WebSocketGateway({
   namespace: 'chat',
