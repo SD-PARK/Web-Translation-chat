@@ -3,14 +3,14 @@ import { ChatGateway } from './chat.gateway';
 import { ChatService } from './chat.service';
 import { PapagoService } from 'src/api/papago/papago.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { ChatRoomRepository } from './chat_rooms/chat_rooms.repository';
-import { ChatMessageRepository } from './chat_messages/chat_messages.repository';
-import { ChatRoom } from './chat_rooms/chat_rooms.entity';
-import { ChatMessage } from './chat_messages/chat_messages.entity';
+import { ChatRoomRepository } from './repositories/chat_rooms.repository';
+import { ChatMessageRepository } from './repositories/chat_messages.repository';
+import { ChatRoom } from './entities/chat_rooms.entity';
+import { ChatMessage } from './entities/chat_messages.entity';
 import { RemoveOptions, SaveOptions } from 'typeorm';
 import { AxiosModule } from 'src/config/axios/axios.module';
 import { ConfigService } from '@nestjs/config';
-import { FindMessageDto } from './chat_messages/dto/find_message.dto';
+import { FindMessageDto } from './dto/chat_messages/find_message.dto';
 import { Socket } from 'socket.io';
 
 describe('ChatGateway', () => {

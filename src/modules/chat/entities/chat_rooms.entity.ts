@@ -1,5 +1,5 @@
 import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, OneToMany, JoinColumn } from "typeorm";
-import { ChatMessage } from "../chat_messages/chat_messages.entity";
+import { ChatMessage } from "./chat_messages.entity";
 
 @Entity('chat_rooms')
 export class ChatRoom extends BaseEntity {

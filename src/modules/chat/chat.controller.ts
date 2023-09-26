@@ -1,12 +1,12 @@
 import { Controller, Get, Post, Patch, Delete, Param, Body, Query, BadRequestException, Render, Req } from '@nestjs/common';
 import { ChatService } from './chat.service';
-import { ChatRoom } from './chat_rooms/chat_rooms.entity';
-import { CreateRoomDto } from './chat_rooms/dto/create_room.dto';
-import { UpdateRoomDto } from './chat_rooms/dto/update_room.dto';
-import { FindMessageDto } from './chat_messages/dto/find_message.dto';
-import { CreateMessageDto } from './chat_messages/dto/create_message.dto';
-import { ChatMessage } from './chat_messages/chat_messages.entity';
-import { UpdateMessageDto } from './chat_messages/dto/update_message.dto';
+import { ChatRoom } from './entities/chat_rooms.entity';
+import { CreateRoomDto } from './dto/chat_rooms/create_room.dto';
+import { UpdateRoomDto } from './dto/chat_rooms/update_room.dto';
+import { FindMessageDto } from './dto/chat_messages/find_message.dto';
+import { CreateMessageDto } from './dto/chat_messages/create_message.dto';
+import { ChatMessage } from './entities/chat_messages.entity';
+import { UpdateMessageDto } from './dto/chat_messages/update_message.dto';
 import { UpdateResult } from 'typeorm';
 import { Request } from 'express';
 
