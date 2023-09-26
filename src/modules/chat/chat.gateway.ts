@@ -9,6 +9,7 @@ import { PapagoService } from 'src/api/papago/papago.service';
 import { ChatRoom } from './entities/chat_rooms.entity';
 import { CreateRoomDto } from './dto/chat_rooms/create_room.dto';
 import { SwitchNameDto } from './dto/chat_gateway/switch_name.dto';
+import { ReqTranslateDto } from './dto/chat_gateway/req_translate.dto';
 
 @WebSocketGateway({
   namespace: 'chat',
@@ -83,7 +84,6 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     @ConnectedSocket() socket: Socket,
     @MessageBody() data: SwitchNameDto,
   ) {
-    console.log(data);
     const originData = this.personMap.get(socket.id);
     if (originData) {
       const roomIdString = data.room_id.toString();
@@ -94,13 +94,10 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
   // 번역 요청 시 번역 상태 확인 및(이미 번역되어 있으면 그대로 반환) 번역 후 DB 저장, 반환
   @SubscribeMessage('reqTranslate')
+  @UsePipes(ValidationPipe)
   async handleReqTranslate(
     @ConnectedSocket() socket: Socket,
-    @MessageBody() data: {
-      message_id: number,
-      language: string,
-      retryCount?: number,
-    }
+    @MessageBody() data: ReqTranslateDto
   ) {
     // 번역 완료된 텍스트인지 확인
     const message: ChatMessage = await this.chatService.findOneMessage(data.message_id);
@@ -128,6 +125,8 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
       });
       message[`${data.language}_text`] = tMessage;
       return message;
+    } catch(err) {
+      return { error: 'Translation Failed' };
     } finally {
       this.translateStatus.delete(requestKey);
     }
@@ -148,17 +147,20 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     @ConnectedSocket() socket: Socket,
     @MessageBody() roomName: string,
   ) {
-    const rooms: ChatRoom[] = await this.chatService.findRoom(roomName);
-
-    const cntRooms = rooms.map((room) => {
-      const roomIdString: string = room.room_id.toString();
-      let cnt: number = 0;
-      const getRoom = this.nsp.adapter.rooms.get(roomIdString);
-      if(getRoom) cnt = getRoom.size;
-      return { ...room, cnt };
-    });
-
-    this.nsp.to(socket.id).emit('getRoomList', cntRooms);
+    try {
+      const rooms: ChatRoom[] = await this.chatService.findRoom(roomName);
+  
+      const cntRooms = rooms.map((room) => {
+        const roomIdString: string = room.room_id.toString();
+        let cnt: number = 0;
+        const getRoom = this.nsp.adapter.rooms.get(roomIdString);
+        if(getRoom) cnt = getRoom.size;
+        return { ...room, cnt };
+      });
+      socket.emit('getRoomList', cntRooms);
+    } catch (err) {
+      socket.emit('getRoomList', { error: 'Failed to get Room List' });
+    }
   }
 
   // 신규 방 생성
@@ -167,8 +169,12 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     @ConnectedSocket() socket: Socket,
     @MessageBody() roomData: CreateRoomDto,
   ) {
-    const createdRoom: ChatRoom = await this.chatService.createRoom(roomData);
-    this.nsp.to('list').emit('update', createdRoom);
+    try {
+      const createdRoom: ChatRoom = await this.chatService.createRoom(roomData);
+      this.nsp.to('list').emit('update', createdRoom);
+    } catch (err) {
+      return { error: 'Failed to Create a New Room' };
+    }
   }
 
   // 초기화 이후
@@ -233,7 +239,7 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
       else
         throw new Error('Invalid IP address');
     } catch (err) {
-      console.error('Error getIP:', err.message);
+      this.logger.error('Error getIP:', err.message);
       return null;
     }
   }
