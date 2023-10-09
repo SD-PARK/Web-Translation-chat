@@ -68,8 +68,6 @@ socket.on('connect', () => {
             }
         }
     });
-
-    // socket.emit('leave', room_id);
 });
 
 // 메시지 전송 이벤트
@@ -81,7 +79,6 @@ function emitMessage() {
         language: language,
         message_text: $('#input-text').val(),
     };
-    console.log(messageData);
     emptyTextarea();
     socket.emit('message', messageData);
 }
@@ -89,7 +86,7 @@ function emitMessage() {
 // 닉네임 변경 이벤트
 function switchName() {
     const data = {
-        room_id: room_id,
+        room_id: parseInt(room_id),
         name: inputName.val(),
     }
     socket.emit('switchName', data);
