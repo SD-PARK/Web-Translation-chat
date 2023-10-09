@@ -1,4 +1,4 @@
-import { Logger, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Logger, UseFilters, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ConnectedSocket, MessageBody, OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Namespace, Socket } from 'socket.io';
 import { CreateMessageDto } from './dto/chat_messages/create_message.dto';
@@ -10,6 +10,7 @@ import { ChatRoom } from './entities/chat_rooms.entity';
 import { CreateRoomDto } from './dto/chat_rooms/create_room.dto';
 import { SwitchNameDto } from './dto/chat_gateway/switch_name.dto';
 import { ReqTranslateDto } from './dto/chat_gateway/req_translate.dto';
+import { BadRequestExceptionFilter } from 'src/config/validator/bad-request-filter';
 
 @WebSocketGateway({
   namespace: 'chat',
@@ -34,6 +35,7 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
   // 접속 시 room에 join 시키고 해당 room의 메시지 불러와서 돌려줌.
   @SubscribeMessage('joinRoom')
   @UsePipes(ValidationPipe)
+  @UseFilters(BadRequestExceptionFilter)
   async handleJoinRoom(
     @ConnectedSocket() socket: Socket,
     @MessageBody() joinData: FindMessageDto,
@@ -58,6 +60,7 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
   // 메시지 송신 시 DB에 더하고 같은 room의 사람들에게 전송 (미번역 상태)
   @SubscribeMessage('message')
   @UsePipes(ValidationPipe)
+  @UseFilters(BadRequestExceptionFilter)
   async handleMessage(
     @ConnectedSocket() socket: Socket,
     @MessageBody() data: CreateMessageDto,
@@ -80,6 +83,7 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
   @SubscribeMessage('switchName')
   @UsePipes(ValidationPipe)
+  @UseFilters(BadRequestExceptionFilter)
   async handleSwitchName(
     @ConnectedSocket() socket: Socket,
     @MessageBody() data: SwitchNameDto,
@@ -95,6 +99,7 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
   // 번역 요청 시 번역 상태 확인 및(이미 번역되어 있으면 그대로 반환) 번역 후 DB 저장, 반환
   @SubscribeMessage('reqTranslate')
   @UsePipes(ValidationPipe)
+  @UseFilters(BadRequestExceptionFilter)
   async handleReqTranslate(
     @ConnectedSocket() socket: Socket,
     @MessageBody() data: ReqTranslateDto
