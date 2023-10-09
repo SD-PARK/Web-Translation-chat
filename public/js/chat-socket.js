@@ -49,6 +49,11 @@ socket.on('connect', () => {
         winIP = ip;
     });
 
+    // ValidationPipe Error
+    socket.on('error', (err) => {
+        console.log(err);
+    });
+
     // 방 입장
     socket.emit('joinRoom', { room_id: room_id }, (roomData) => {
         if (roomData.error) {
