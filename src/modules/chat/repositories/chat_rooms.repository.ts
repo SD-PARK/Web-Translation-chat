@@ -1,7 +1,7 @@
 import { CustomRepository } from "src/config/typeorm_ex/typeorm-ex.decorator";
 import { DeleteResult, Like, Repository, UpdateResult } from "typeorm";
 import { ChatRoom } from "../entities/chat_rooms.entity";
-import { UpdateRoomDto } from "../chat_rooms/update_room.dto";
+import { UpdateRoomDto } from "../dto/chat_rooms/update_room.dto";
 
 @CustomRepository(ChatRoom)
 export class ChatRoomRepository extends Repository<ChatRoom> {
