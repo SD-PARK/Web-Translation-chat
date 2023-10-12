@@ -35,10 +35,10 @@ function timerCloseAlert(closeTime) {
     return new Promise((resolve) => {
         isTimerClose = true;
         const modalTimer = $('#modal-timer');
-        let elapsedTime = 0;
+        let elapsedTime = closeTime;
         setInterval(() => {
-            elapsedTime += 1;
-            if (modalTimer) { modalTimer.text(closeTime - elapsedTime); }
+            elapsedTime -= 1;
+            if (modalTimer) { modalTimer.text(elapsedTime); }
         }, 1000);
         setTimeout(() => {
             isTimerClose = false;
@@ -57,6 +57,6 @@ function errorApp(err) {
     return `<div class="center">
                 <i class="fa-solid fa-triangle-exclamation fa-2xl" style="color: #ffde38;"></i><br><br>
                 <h5>${err}</h5>
-                <h6><span id="modal-timer">5</span>초 뒤 창이 닫힙니다.</h6>
+                <h6><span id="modal-timer">N</span>초 뒤 창이 닫힙니다.</h6>
             </div><br>`;
 }
