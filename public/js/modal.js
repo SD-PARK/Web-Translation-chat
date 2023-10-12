@@ -45,7 +45,7 @@ function timerCloseAlert(closeTime) {
             closeAlert();
             isTimerClose = false;
             resolve();
-        }, 5000);
+        }, closeTime * 1000);
     })
 }
 
