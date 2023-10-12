@@ -52,6 +52,10 @@ socket.on('connect', () => {
     // ValidationPipe Error
     socket.on('error', (err) => {
         console.log(err);
+        if (err.message == 'name must be longer than or equal to 1 characters') {
+            loadModal(errorApp('이름을 1글자 이상 입력하세요.'));
+            timerCloseAlert(3);
+        }
     });
 
     // 방 입장
