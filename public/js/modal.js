@@ -36,6 +36,7 @@ function timerCloseAlert(closeTime) {
         isTimerClose = true;
         const modalTimer = $('#modal-timer');
         let elapsedTime = closeTime;
+        if (modalTimer) { modalTimer.text(elapsedTime); }
         setInterval(() => {
             elapsedTime -= 1;
             if (modalTimer) { modalTimer.text(elapsedTime); }
