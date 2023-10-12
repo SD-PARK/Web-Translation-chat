@@ -61,15 +61,9 @@ socket.on('connect', () => {
             // 입장 불가 알림 표시 후 방 목록 페이지로 돌아가기
             console.error('오류 발생', roomData.error);
             loadModal(errorApp('방 정보 불러오기 실패'));
-            const modalTimer = $('#modal-timer');
-            let closeTime = 5;
-            setInterval(() => {
-                closeTime -= 1;
-                modalTimer.text(closeTime);
-            }, 1000);
-            setTimeout(() => {
+            timerCloseAlert(5).then(() => {
                 location.href = '/';
-            }, 5000)
+            });
         } else {
             // 정상적인 응답을 받은 경우
             $('#room-name').html(roomData?.room_data?.room_name ?? '');
