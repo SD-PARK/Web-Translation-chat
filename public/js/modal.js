@@ -41,6 +41,7 @@ function timerCloseAlert(closeTime) {
             if (modalTimer) { modalTimer.text(elapsedTime); }
         }, 1000);
         setTimeout(() => {
+            closeAlert();
             isTimerClose = false;
             resolve();
         }, 5000);
