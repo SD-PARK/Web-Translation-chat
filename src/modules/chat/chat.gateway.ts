@@ -105,36 +105,40 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     @ConnectedSocket() socket: Socket,
     @MessageBody() data: ReqTranslateDto
   ) {
-    // 번역 완료된 텍스트인지 확인
-    const message: ChatMessage = await this.chatService.findOneMessage(data.message_id);
-    if (message[`${data.language}_text`]) return message;
-    
-    // 번역 중인 텍스트인지 확인
-    const requestKey = `${data.message_id}_${data.language}`;
-
-    if (this.translateStatus.has(requestKey)) {
-      const retryCount = data.retryCount ?? 0;
-      if (data.retryCount >= this.MAX_RETRY_LIMIT) {
-        return { error: 'Translation Failed' };
-      } else {
-        await this.delay(this.RETRY_INTERVAL);
-        return this.handleReqTranslate(socket, { ...data, retryCount: retryCount + 1});
-      }
-    }
-    
-    // 번역 중이 아닌 경우, 번역 시작
-    this.translateStatus.add(requestKey);
     try {
-      const tMessage: string = await this.papagoService.translate(message.language, data.language, message.message_text);
-      await this.chatService.updateMessage(data.message_id, {
-        [`${data.language}_text`]: tMessage,
-      });
-      message[`${data.language}_text`] = tMessage;
-      return message;
-    } catch(err) {
+      // 번역 완료된 텍스트인지 확인
+      const message: ChatMessage = await this.chatService.findOneMessage(data.message_id);
+      if (message[`${data.language}_text`]) return message;
+      
+      // 번역 중인 텍스트인지 확인
+      const requestKey = `${data.message_id}_${data.language}`;
+  
+      if (this.translateStatus.has(requestKey)) {
+        const retryCount = data.retryCount ?? 0;
+        if (data.retryCount >= this.MAX_RETRY_LIMIT) {
+          return { error: 'Translation Failed' };
+        } else {
+          await this.delay(this.RETRY_INTERVAL);
+          return this.handleReqTranslate(socket, { ...data, retryCount: retryCount + 1});
+        }
+      }
+      
+      // 번역 중이 아닌 경우, 번역 시작
+      this.translateStatus.add(requestKey);
+      try {
+        const tMessage: string = await this.papagoService.translate(message.language, data.language, message.message_text);
+        await this.chatService.updateMessage(data.message_id, {
+          [`${data.language}_text`]: tMessage,
+        });
+        message[`${data.language}_text`] = tMessage;
+        return message;
+      } catch(err) {
+        return { error: 'Translation Failed' };
+      } finally {
+        this.translateStatus.delete(requestKey);
+      }
+    } catch (err) {
       return { error: 'Translation Failed' };
-    } finally {
-      this.translateStatus.delete(requestKey);
     }
   }
 
