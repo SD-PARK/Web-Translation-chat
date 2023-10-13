@@ -64,7 +64,7 @@ socket.on('connect', () => {
             // 서버에서 오류 응답이 돌아온 경우
             // 입장 불가 알림 표시 후 방 목록 페이지로 돌아가기
             console.error('오류 발생', roomData.error);
-            loadModal(errorApp('방 정보 불러오기 실패'));
+            loadModal(errorApp('방 정보 불러오기 실패', '초 뒤 목록 페이지로 돌아갑니다.'));
             timerCloseAlert(5).then(() => {
                 location.href = '/';
             });
