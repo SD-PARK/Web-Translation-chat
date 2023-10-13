@@ -85,7 +85,6 @@ h6 { margin: 15px 0 0 8px; }
     position: absolute;
     width: 35px; height: 35px;
     background: url('../img/flag/en.png') no-repeat center top / 100%;
-    outline: none;
 }
 #input-name {
     margin: 0 0 10px 45px;
@@ -105,7 +104,7 @@ h6 { margin: 15px 0 0 8px; }
     width: 45px; height: 45px;
     position: absolute; right: 24px; bottom: 23px;
     padding: 6px;
-    border: none; border-radius: 5px; outline: none;
+    border: none; border-radius: 5px;
     background: none;
     transition: background-color 0.2s;
     line-height:17px;
@@ -136,7 +135,6 @@ h6 { margin: 15px 0 0 8px; }
 }
 #language-box > button {
     width: 35px; height: 30px;
-    outline: none;
     background: no-repeat center top / 100%;
     margin: 0 5px;
 }
