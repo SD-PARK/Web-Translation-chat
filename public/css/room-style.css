@@ -69,3 +69,9 @@ button#create {
     background: url('../img/plus.png') no-repeat center top / 100%;
     background-color: #c5e8c5;
 }
+
+/* Modal */
+#enter-title {
+    border-radius: 5px;
+    padding: 3px 0 3px 10px;
+}
