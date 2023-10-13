@@ -10,21 +10,36 @@ let winIP;
  * @param {object} data - 송신자의 이름과 텍스트가 포함된 객체
  */
 function addLog(data) {
-    chatLogs.append(`
-        <div class="log ${data?.message_id}">
-            <img class="flag" src="../img/flag/${data?.language}.png" title="${data?.language}"></img>
-            <div class="name">${data?.user_name}<span class="ip">(${data?.ip})</span></div>
-            <p>${data?.message_text}</p>
-            <span class="send-at">${timeStyle(data?.send_at)}</span>
-        </div>`);
+    if (data?.message_id) {
+        chatLogs.append(`
+            <div class="log ${data?.message_id}">
+                <img class="flag" src="../img/flag/${data?.language}.png" title="${data?.language}"></img>
+                <div class="name">${data?.user_name}<span class="ip">(${data?.ip})</span></div>
+                <p>${data?.message_text}</p>
+                <span class="send-at">${timeStyle(data?.send_at)}</span>
+            </div>`);
+    } else {
+        const $errLog = $(`
+            <div class="log err-msg">
+                <img class="flag" src="../img/flag/${data?.language}.png" title="${data?.language}"></img>
+                <div class="name">${data?.user_name}<span class="ip">(${data?.ip})</span></div>
+                <p>${data?.message_text ?? ''}</p>
+                <button class="resend" onclick="resend(this)">
+                    <i class="fa-solid fa-circle-exclamation fa-xl" style="color: #f32020;"></i>
+                </button>
+            </div>`);
+        $errLog.data('data', data);
+        chatLogs.append($errLog);
+    }
     
     if (winIP && data.ip === winIP) $('.log:last-child > .name').css('color', 'green');
-
     chatLogs.scrollTop(chatLogs.prop('scrollHeight'));
 }
 
 function timeStyle(time) {
-    if (new Date(time).toLocaleDateString() === new Date().toLocaleDateString()) {
+    if (!time) {
+        return '';
+    } else if (new Date(time).toLocaleDateString() === new Date().toLocaleDateString()) {
         return new Intl.DateTimeFormat(language, {timeStyle:'short'}).format(new Date(time));
     } else {
         return new Intl.DateTimeFormat(language, {dateStyle:'short', timeStyle:'short'}).format(new Date(time));

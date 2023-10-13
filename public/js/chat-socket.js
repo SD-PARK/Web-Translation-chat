@@ -61,6 +61,9 @@ socket.on('connect', () => {
                 loadModal(errorApp('이름을 변경하지 못했습니다.'));
                 timerCloseAlert(3);
                 break;
+            case 'Failed to send message':
+                addLog(err.data);
+                break;
         }
     });
 

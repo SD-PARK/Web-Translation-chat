@@ -78,3 +78,15 @@ function languageBoxOnOff() {
         languageBox.fadeIn(250);
     }
 }
+
+/**
+ * 전송에 실패한 메시지를 재전송하고, 로그를 제거합니다.
+ */
+function resend(object) {
+    const thisLog = $(object).closest('.err-msg');
+    const data = thisLog.data('data');
+    thisLog.remove();
+    setTimeout(() => { // 로그 삭제 후 1초 뒤 전송합니다.
+        socket.emit('message', data);
+    }, 1000);
+}
