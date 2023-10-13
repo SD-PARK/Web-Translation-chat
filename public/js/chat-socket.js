@@ -52,9 +52,15 @@ socket.on('connect', () => {
     // ValidationPipe Error
     socket.on('error', (err) => {
         console.log(err);
-        if (err.message == 'name must be longer than or equal to 1 characters') {
-            loadModal(errorApp('이름을 1글자 이상 입력하세요.'));
-            timerCloseAlert(3);
+        switch (err.message) {
+            case 'name must be longer than or equal to 1 characters':
+                loadModal(errorApp('이름을 1글자 이상 입력하세요.'));
+                timerCloseAlert(3);
+                break;
+            case 'Name conversion failed':
+                loadModal(errorApp('이름을 변경하지 못했습니다.'));
+                timerCloseAlert(3);
+                break;
         }
     });
 

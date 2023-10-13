@@ -88,11 +88,15 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     @ConnectedSocket() socket: Socket,
     @MessageBody() data: SwitchNameDto,
   ) {
-    const originData = this.personMap.get(socket.id);
-    if (originData) {
-      const roomIdString = data.room_id.toString();
-      this.personMap.set(socket.id, { ...originData, name: data.name });
-      this.nsp.to(roomIdString).emit('person-update', this.getPersons(roomIdString));
+    try {
+      const originData = this.personMap.get(socket.id);
+      if (originData) {
+        const roomIdString = data.room_id.toString();
+        this.personMap.set(socket.id, { ...originData, name: data.name });
+        this.nsp.to(roomIdString).emit('person-update', this.getPersons(roomIdString));
+      }
+    } catch (err) {
+      socket.emit('error', { message: 'Name conversion failed' });
     }
   }
 
