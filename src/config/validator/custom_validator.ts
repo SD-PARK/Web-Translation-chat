@@ -11,6 +11,17 @@ export class CustomRoomNameValidator implements ValidatorConstraintInterface {
     }
 
     defaultMessage(validationArguments?: ValidationArguments): string {
+        const text = validationArguments.value;
+        const trimmedText = text.replace(/\s+/g, '');
+
+        if (trimmedText.length <= 3) {
+            return validationArguments.property + ' Properties must be at least 3 characters excluding spaces.';
+        }
+
+        if (text.length > 30) {
+            return validationArguments.property + ' Properties must not be more than 30 characters including spaces.';
+        }
+
         return validationArguments.property + ' Properties must be at least 4 characters excluding spaces and not more than 30 characters including spaces.';
     }
 }
