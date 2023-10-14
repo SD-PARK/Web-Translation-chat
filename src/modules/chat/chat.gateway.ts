@@ -40,14 +40,14 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     @ConnectedSocket() socket: Socket,
     @MessageBody() joinData: FindMessageDto,
   ) {
-    socket.leave('list');
-    const roomIdString = joinData.room_id.toString();
-    socket.join(roomIdString);
-    this.personMap.set(socket.id, { name: socket.id, ips: this.getIP(socket) });
-
-    this.nsp.to(roomIdString).emit('person-update', this.getPersons(roomIdString));
-    
     try {
+      socket.leave('list');
+      const roomIdString = joinData.room_id.toString();
+      socket.join(roomIdString);
+      this.personMap.set(socket.id, { name: socket.id, ips: this.getIP(socket) });
+
+      this.nsp.to(roomIdString).emit('person-update', this.getPersons(roomIdString));
+    
       return {
         room_data: await this.chatService.findOneRoom(joinData.room_id),
         message_data: await this.chatService.findMessage(joinData),
@@ -147,8 +147,12 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
   async handleJoinList(
     @ConnectedSocket() socket: Socket
   ) {
-    socket.join('list');
-    await this.handleGetRoomList(socket, '');
+    try {
+      socket.join('list');
+      await this.handleGetRoomList(socket, '');
+    } catch (err) {
+      socket.emit('getRoomList', { error: 'Failed to get Room List' });
+    }
   }
 
   // 접속 인원을 포함한 room 목록 반환
