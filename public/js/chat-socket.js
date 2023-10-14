@@ -6,29 +6,10 @@ let peoples = new Map();
 let messages = new Map();
 let isTranslating = false;
 
-let language;
-/** 브라우저 언어 탐색 후 초기 언어 설정 */
-function Searchlanguage() {
-    const winLanguage = window.navigator.language;
-    const langSlice = winLanguage.slice(0, 2);
-    const langIndex = langList.findIndex((element) => element === langSlice);
-    if (langIndex !== undefined) {
-        language = langList[langIndex];
-    } else if (winLanguage === 'zh-Hant-TW') {
-        language = 'zh-TW';
-    } else if (langSlice === 'zh') {
-        language = 'zh-CN';
-    } else {
-        langauge = 'en';
-    }
-    console.log(language);
-    inputLanguage.css('background-image', `url('../img/flag/${language}.png')`);
-}
-Searchlanguage();
-
 socket.on('connect', () => {
-    console.log('서버랑 연결 됨ㅎ');
+    console.log('Server Connnected');
     inputName.val(socket.io.nsps['/chat'].id);
+    inputLanguage.css('background-image', `url('../img/flag/${language}.png')`);
 
     // 메시지 수신
     socket.on('message', (response) => {

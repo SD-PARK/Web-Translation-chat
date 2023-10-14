@@ -4,7 +4,6 @@ const inputLanguage = $('#input-language');
 const sendButton = document.getElementById('send-button');
 const progress = document.getElementById('progress-step');
 const languageBox = $('#language-box');
-const langList = ['ko', 'en', 'ja', 'zh-CN', 'zh-TW', 'vi', 'id', 'th', 'de', 'ru', 'es', 'it', 'fr'];
 
 /** 메시지 전송 시: Enter or Send Button Click */
 $('#send-button').click(() => {
@@ -65,6 +64,7 @@ function switchLanguage(lang) {
         }
         languageBoxOnOff();
         inputLanguage.css('background-image', `url('../img/flag/${lang}.png')`)
+        setCookie('language', language, 1);
     }
 }
 
