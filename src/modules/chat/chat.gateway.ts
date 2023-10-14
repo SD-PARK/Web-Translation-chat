@@ -179,6 +179,8 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
   // 신규 방 생성
   @SubscribeMessage('postRoom')
+  @UsePipes(ValidationPipe)
+  @UseFilters(BadRequestExceptionFilter)
   async handlePostRoom(
     @ConnectedSocket() socket: Socket,
     @MessageBody() roomData: CreateRoomDto,
