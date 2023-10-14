@@ -20,6 +20,7 @@ export class CreateMessageDto {
     readonly ip?: string;
 
     @IsString()
+    @MaxLength(1000)
     readonly message_text: string;
 
     @IsString()
