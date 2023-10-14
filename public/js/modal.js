@@ -52,7 +52,7 @@ function timerCloseAlert(closeTime) {
 function createRoomApp() {
     return `<button id="close-alert" onclick="closeAlert()"></button>
             <h3>방 만들기</h3><br>
-            <input type="text" id="enter-title" placeholder="제목 입력" onkeydown="enterTitleEnter(event)"><br>
+            <input type="text" id="enter-title" placeholder="제목 입력" onkeydown="enterTitleEnter(event)" maxlength="30"><br>
             <button id="enter-alert" onclick="createRoom()">생성</button>`;
 }
 function errorApp(err, text = '초 뒤 창이 닫힙니다.') {
