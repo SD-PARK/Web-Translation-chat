@@ -51,14 +51,15 @@ function timerCloseAlert(closeTime) {
 
 function createRoomApp() {
     return `<button id="close-alert" onclick="closeAlert()"></button>
-            <h3>방 만들기</h3><br>
-            <input type="text" id="enter-title" placeholder="제목 입력" onkeydown="enterTitleEnter(event)" maxlength="30"><br>
-            <button id="enter-alert" onclick="createRoom()">생성</button>`;
+            <h3>${text[language]['방 만들기']}</h3><br>
+            <input type="text" id="enter-title" placeholder="${text[language]['제목 입력']}" onkeydown="enterTitleEnter(event)" maxlength="30"><br>
+            <button id="enter-alert" onclick="createRoom()">${text[language]['생성']}</button>`;
 }
-function errorApp(err, text = '초 뒤 창이 닫힙니다.') {
+function errorApp(err, msg = '') {
+    if (msg === '') msg = text[language]['초 뒤 창이 닫힙니다.'];
     return `<div class="center">
                 <i class="fa-solid fa-triangle-exclamation fa-2xl" style="color: #ffde38;"></i><br><br>
                 <h5>${err}</h5>
-                <h6><span id="modal-timer">N</span>${text}</h6>
+                <h6><span id="modal-timer">N</span>${msg}</h6>
             </div><br>`;
 }

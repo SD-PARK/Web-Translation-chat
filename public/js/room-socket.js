@@ -33,15 +33,15 @@ socket.on('connect', () => {
         console.log(err);
         switch (err.message) {
             case 'room_name Properties must be at least 3 characters excluding spaces.':
-                loadModal(errorApp('채팅방 제목은 공백 제외 3글자 이상이어야 합니다.'));
+                loadModal(errorApp(text[language]['채팅방 제목은 공백 제외 3글자 이상이어야 합니다.']));
                 timerCloseAlert(3);
                 break;
             case 'room_name Properties must not be more than 30 characters including spaces.':
-                loadModal(errorApp('채팅방 제목은 공백 포함 30글자 이하이어야 합니다.'));
+                loadModal(errorApp(text[language]['채팅방 제목은 공백 포함 30글자 이하이어야 합니다.']));
                 timerCloseAlert(3);
                 break;
             case 'Failed to Create a New Room':
-                loadModal(errorApp('채팅방을 생성할 수 없습니다.'));
+                loadModal(errorApp(text[language]['채팅방을 생성할 수 없습니다.']));
                 timerCloseAlert(3);
                 break;
         }

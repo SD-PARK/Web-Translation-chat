@@ -8,7 +8,7 @@
 </head>
 <body class="no-drag">
   <div id="container">
-    <h2>채팅방 목록</h2> 
+    <h2 data-detect="채팅방 목록"></h2> 
     {{!-- 방 필터 (언어, 카테고리, 제목), --}}
     <div id="filter">
       {{!-- <div>
@@ -21,10 +21,10 @@
           <label for="filter-language-ja" class="filter-language no-drag">Japanese</label>
       </div> --}}
       <div>
-        <span class="desc">제목</span>
+        <span class="desc" data-detect="필터-제목"></span>
         <input type="text" name="filter-title" id="filter-title"> {{!-- input width 사이즈 자동 조절해야 함 --}}
       </div>
-      <button type="button" id="filter-search" onclick="filterSearch()">검색</button>
+      <button type="button" id="filter-search" onclick="filterSearch()" data-detect="필터-검색"></button>
     </div>
 
     <div id="room-list">
@@ -40,6 +40,7 @@
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script src="/socket.io/socket.io.js"></script>
+  <script src="./js/text.js"></script>
   <script src="./js/search-language.js"></script>
   <script src="./js/room-logs.js"></script>
   <script src="./js/room-action.js"></script>

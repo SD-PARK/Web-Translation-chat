@@ -65,6 +65,7 @@ function switchLanguage(lang) {
         languageBoxOnOff();
         inputLanguage.css('background-image', `url('../img/flag/${lang}.png')`)
         setCookie('language', language, 1);
+        setLanguage();
     }
 }
 

@@ -35,19 +35,19 @@ socket.on('connect', () => {
         console.log(err);
         switch (err.message) {
             case 'name must be longer than or equal to 1 characters': // 이름 1글자 미만
-                loadModal(errorApp('이름을 1글자 이상 입력하세요.'));
+                loadModal(errorApp(text[language]['이름을 1글자 이상 입력하세요.']));
                 timerCloseAlert(3);
                 break;
             case 'name must be shorter than or equal to 45 characters': case 'user_name must be shorter than or equal to 45 characters': // 이름 45자 초과
-                loadModal(errorApp('이름은 45자 이내로 작성해주세요.'));
+                loadModal(errorApp(text[language]['이름은 45자 이내로 작성해주세요.']));
                 timerCloseAlert(3);
                 break;
             case 'Name conversion failed': // 이름 변경 실패
-                loadModal(errorApp('이름을 변경하지 못했습니다.'));
+                loadModal(errorApp(text[language]['이름을 변경하지 못했습니다.']));
                 timerCloseAlert(3);
                 break;
             case 'message_text must be shorter than or equal to 1000 characters': // 메시지 1000자 초과
-                loadModal(errorApp('메시지는 1000자 이내로 작성해주세요.'));
+                loadModal(errorApp(text[language]['메시지는 1000자 이내로 작성해주세요.']));
                 timerCloseAlert(3);
                 break;
             case 'Failed to send message': // 메시지 송신 실패
@@ -62,7 +62,7 @@ socket.on('connect', () => {
             // 서버에서 오류 응답이 돌아온 경우
             // 입장 불가 알림 표시 후 방 목록 페이지로 돌아가기
             console.error('오류 발생', roomData.error);
-            loadModal(errorApp('방 정보 불러오기 실패', '초 뒤 목록 페이지로 돌아갑니다.'));
+            loadModal(errorApp(text[language]['방 정보 불러오기 실패'], text[language]['초 뒤 목록 페이지로 돌아갑니다.']));
             timerCloseAlert(5).then(() => {
                 location.href = '/';
             });

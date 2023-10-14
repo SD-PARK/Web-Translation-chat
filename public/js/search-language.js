@@ -26,6 +26,18 @@ function Searchlanguage() {
 }
 Searchlanguage();
 
+function setLanguage() {
+    let changeNodeList = Array.prototype.slice.call(document.querySelectorAll('[data-detect]'));
+    let changeNodeList2 = Array.prototype.slice.call(document.querySelectorAll('[data-detect-placeholder]'));
+    changeNodeList.map(v => {
+        v.innerHTML = text[language][v.dataset.detect];
+    });
+    changeNodeList2.map(v => {
+        v.placeholder = text[language][v.dataset.detectPlaceholder];
+    });
+}
+setLanguage();
+
 function setCookie(name, value, exp) {
     var date = new Date();
     date.setTime(date.getTime() + exp*24*60*60*1000);
