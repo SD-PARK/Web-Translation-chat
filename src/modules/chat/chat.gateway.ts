@@ -23,11 +23,11 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     private readonly papagoService: PapagoService,
   ) {}
 
-  private readonly logger = new Logger(ChatGateway.name);
-  private translateStatus = new Set<string>();
-  private readonly MAX_RETRY_LIMIT = 5; // 번역 요청 재시도 횟수
-  private readonly RETRY_INTERVAL = 500; // 번역 요청 재시도 간격(ms)
-  private personMap = new Map<string, {name: string, ips: string}>();
+  private readonly logger: Logger = new Logger(ChatGateway.name);
+  private readonly MAX_RETRY_LIMIT: number = 5; // 번역 요청 재시도 횟수
+  private readonly RETRY_INTERVAL: number = 500; // 번역 요청 재시도 간격(ms)
+  private translateStatus: Set<string> = new Set<string>();
+  private personMap: Map<string, object> = new Map<string, {name: string, ips: string}>();
 
   // namespace를 설정하지 않으면 @WebSocketServer는 서버 인스턴스를 반환함; @WebSocketServer() server: Socket
   @WebSocketServer() nsp: Namespace;
