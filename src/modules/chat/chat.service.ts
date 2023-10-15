@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { ChatMessageRepository } from './repositories/chat_messages.repository';
 import { ChatRoomRepository } from './repositories/chat_rooms.repository';
 import { CreateMessageDto } from './dto/chat_messages/create_message.dto';
@@ -9,6 +9,7 @@ import { ChatRoom } from './entities/chat_rooms.entity';
 import { ChatMessage } from './entities/chat_messages.entity';
 import { UpdateMessageDto } from './dto/chat_messages/update_message.dto';
 import { UpdateResult } from 'typeorm';
+import { Cron } from '@nestjs/schedule';
 
 @Injectable()
 export class ChatService {
@@ -16,6 +17,27 @@ export class ChatService {
         private readonly chatMessageRepository: ChatMessageRepository,
         private readonly chatRoomRepository: ChatRoomRepository,
     ) {}
+
+    private readonly logger = new Logger(ChatService.name);
+
+    // ================================================
+    // =================== Schedule ===================
+    // ================================================
+
+    @Cron('* 0 * * * *') // 매 시 정각에 실행
+    async handleCron() {
+        try {
+            const obsoleteRooms:ChatRoom[] = await this.chatRoomRepository.findObsoleteRoom();
+            this.logger.log('이용되지 않는 방을 제거합니다.');
+            this.logger.log('제거한 방 목록: ');
+            for (let room of obsoleteRooms) {
+                await this.deleteRoom(room.room_id);
+                this.logger.log(`ID: ${room.room_id} | TITLE: ${room.room_name}`);
+            }
+        } catch (err) {
+            this.logger.error(err);
+        }
+    }
 
     // ================================================
     // ===================== Room =====================
@@ -73,6 +95,10 @@ export class ChatService {
         }
     }
 
+    // =================================================
+    // ==================== Message ====================
+    // =================================================
+
     async createMessage(messageData: CreateMessageDto): Promise<ChatMessage> {
         await this.findOneRoom(messageData.room_id);
         try {
@@ -82,10 +108,6 @@ export class ChatService {
             console.error('createMessage Error:', err);
         }
     }
-
-    // =================================================
-    // ==================== Message ====================
-    // =================================================
 
     async findMessage(messageData: FindMessageDto): Promise<ChatMessage[]> {
         await this.findOneRoom(messageData.room_id);
