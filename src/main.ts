@@ -17,7 +17,11 @@ async function bootstrap() {
     transform: true,
   }));
   // CORS 활성화
-  app.enableCors();
+  app.enableCors({
+    origin: 'http://papago-chat.site/',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  });
   await app.listen(3000);
 }
 bootstrap();
