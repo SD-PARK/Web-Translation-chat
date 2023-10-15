@@ -7,7 +7,6 @@ function Searchlanguage() {
     if (cookieLanguage && langList.includes(cookieLanguage)) {
         language = cookieLanguage;
     } else {
-        console.log(2);
         const winLanguage = window.navigator.language;
         const langSlice = winLanguage.slice(0, 2);
         const langIndex = langList.findIndex((element) => element === langSlice);
@@ -22,7 +21,6 @@ function Searchlanguage() {
         }
         setCookie('language', language, 1);
     }
-    console.log(language);
 }
 Searchlanguage();
 
@@ -42,10 +40,10 @@ function setCookie(name, value, exp) {
     var date = new Date();
     date.setTime(date.getTime() + exp*24*60*60*1000);
     document.cookie = name + '=' + value + ';expires=' + date.toUTCString() + ';path=/';
+    console.log(`setCookie: ${name}, ${value}`);
 };
 
 function getCookie(name) {
-    console.log(name);
     var value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
     return value? value[2] : null;
 }
