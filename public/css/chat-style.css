@@ -1,0 +1,168 @@
+#container {
+    position: relative;
+    max-width: 1000px;
+    height: 100vh;
+    margin: 0 auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    background-color: #fcfdfc;
+}
+
+#goto-room {
+    position: absolute;
+    top: 40px; right: 30px;
+    width: 36px; height: 25px;
+    background: url('../img/back.png') no-repeat center top / 100%;
+    opacity: 0.3;
+}
+#goto-room:hover { opacity: 0.8; }
+
+/* room-persons */
+#room-persons {
+    min-height: 100px;
+    max-height: 120px;
+    overflow-y: auto;
+    border-bottom: 4px double #50505F;
+    white-space: pre-line;
+    line-height:25px;
+}
+#room-persons::-webkit-scrollbar { width: 4px; }
+#room-persons::-webkit-scrollbar-thumb { background: #50505F; border-radius: 15px; }
+h6 { margin: 15px 0 0 8px; }
+#room-persons > .person {
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+#room-persons > .person > .ip { font-size: 14px; font-weight: normal; color: #777; margin-left: 5px; }
+
+/* chat-logs */
+#chat-logs {
+    flex-grow: 1;
+    overflow-y: auto;
+    margin-bottom: 114px;
+}
+#chat-logs::-webkit-scrollbar { width: 4px; }
+#chat-logs::-webkit-scrollbar-thumb { background: #50505F; border-radius: 15px; }
+.log {
+    position: relative;
+    font-size: 15px;
+    padding: 10px;
+    border-bottom: 1px solid #50505F;
+}
+.log:nth-child(2n) {
+    background-color:#f0f7f0;
+}
+.log > .name {
+    font-size: 14px; font-weight: bold;
+    margin: 0 120px 3px 0;
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+.log > .name > .ip { font-size: 13px; font-weight: normal; color: #777; margin-left: 5px; }
+.log > p { margin-bottom: 0; }
+.flag {
+    width: 18px; height: 12px; object-fit: cover;
+    float: left; margin: 4px 5px 0 0;
+}
+.log > .send-at { position: absolute; top: 10px; right: 10px; font-size: 14px; }
+.log > .resend {
+    position: absolute;
+    top: 20px; right: 20px;
+    width: 30px; height: 30px;
+    background: none;
+    padding: 0;
+}
+
+#selected-language {
+    border: none;
+    -o-appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+#selected-language::-ms-expand { display: none; }
+
+/* chat-input */
+#chat-input {
+    max-width: 950px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-top: 1px solid #50505F;
+}
+#input-language {
+    position: absolute;
+    width: 35px; height: 35px;
+    background: url('../img/flag/en.png') no-repeat center top / 100%;
+}
+#input-name {
+    margin: 0 0 10px 45px;
+    border: none;
+    width: 873px;
+}
+#input-text {
+    height: auto;
+    overflow-y: hidden;
+    resize: none;
+    background-color: #fcfdfc;
+    color: #000;
+    border: none;
+    font-size:15px;
+}
+#send-button {
+    width: 45px; height: 45px;
+    position: absolute; right: 24px; bottom: 23px;
+    padding: 6px;
+    border: none; border-radius: 5px;
+    background: none;
+    transition: background-color 0.2s;
+    line-height:17px;
+}
+#send-button.active {
+    background-color: #1EDA69;
+}
+#send-button > i {
+    font-size:17px;
+    color: #50505F;
+    transition: color 0.2s;
+}
+#send-button:enabled > i {
+    color: #eee;
+}
+
+/* language-box */
+#language-box {
+    position: absolute;
+    left: 0; top: -37px;
+    transform:translate(-30%, 0);
+    width: auto; height: auto;
+    opacity: 0.8;
+    background-color: white;
+    border: 1px solid #50505F; border-radius: 15px;
+    padding: 5px 10px;
+    display: none;
+}
+#language-box > button {
+    width: 35px; height: 30px;
+    background: no-repeat center top / 100%;
+    margin: 0 5px;
+}
+#language-box > #input-ko { background-image: url('../img/flag/ko.png'); }
+#language-box > #input-en { background-image: url('../img/flag/en.png'); }
+#language-box > #input-ja { background-image: url('../img/flag/ja.png'); }
+
+/* Loading */
+.loading {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    height: 20px;
+    width: 20px;
+    border: 2px solid #eee;
+    border-top-color: #1EDA69;
+    border-right-color: #1EDA69;
+    border-radius: 100%;
+    animation: spin 1400ms infinite linear;
+}
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(359deg); }
+}

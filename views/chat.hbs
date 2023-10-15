@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>PapagoChat</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="../css/default.css">
+  <link rel="stylesheet" href="../css/chat-style.css">
+</head>
+<body>
+  <div id="container">
+    <h1 id="room-name" class="font-weight-bold"></h1>
+    <button id="goto-room" onclick="window.location.href='/'"></button>
+    <h6 class="font-weight-bold" data-detect="현재 대화상대"></h6>
+    <div id="room-persons" class="p-lg-2">
+      <!-- List -->
+    </div>
+
+    <div id="chat-logs">
+      <!-- Message Logs -->
+    </div>
+    
+    <div id="chat-input" class="fixed-bottom p-3 w-100">
+      <button id="input-language" onclick="languageBoxOnOff()"></button>
+      <input type="text" id="input-name" class="form-control mr-5" onchange="switchName()" maxlength="45" data-detect-placeholder="이름">
+      <textarea id="input-text" class="form-control pr-5" tabindex="0" oninput="autoResize()" maxlength="1000" data-detect-placeholder="대화 입력"></textarea>
+      <button id="send-button" disabled>
+        <i class="fa-regular fa-envelope"></i>
+      </button>
+
+      <div id="language-box">
+        <button id="input-ko" onclick="switchLanguage('ko')"></button>
+        <button id="input-en" onclick="switchLanguage('en')"></button>
+        <button id="input-ja" onclick="switchLanguage('ja')"></button>
+      </div>
+    </div>
+  </div>
+
+  <div id="alert-background">
+    <div id="alert-box"></div>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="../js/text.js"></script>
+  <script src="../js/search-language.js"></script>
+  <script src="../js/chat-action.js"></script>
+  <script src="../js/chat-logs.js"></script>
+  <script src="../js/chat-socket.js"></script>
+  <script src="../js/modal.js"></script>
+</body>
+</html>
