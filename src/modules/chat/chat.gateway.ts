@@ -57,6 +57,21 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     }
   }
 
+  @SubscribeMessage('getMessage')
+  @UsePipes(ValidationPipe)
+  @UseFilters(BadRequestExceptionFilter)
+  async handleGetMessage(
+    @ConnectedSocket() socket: Socket,
+    @MessageBody() data: FindMessageDto,
+  ) {
+    try {
+      const messages: ChatMessage[] = await this.chatService.findMessage(data);
+      return messages;
+    } catch (err) {
+      socket.emit('error', { message: 'Failed to load messages' });
+    }
+  }
+
   // 메시지 송신 시 DB에 더하고 같은 room의 사람들에게 전송 (미번역 상태)
   @SubscribeMessage('message')
   @UsePipes(ValidationPipe)

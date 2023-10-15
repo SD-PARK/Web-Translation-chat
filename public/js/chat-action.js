@@ -58,10 +58,7 @@ function emptyTextarea() {
 function switchLanguage(lang) {
     if (langList.includes(lang)) {
         language = lang;
-        chatLogs.empty();
-        for (message of messages.values()) {
-            checkTranslatedLog(message);
-        }
+        printMessage();
         languageBoxOnOff();
         inputLanguage.css('background-image', `url('../img/flag/${lang}.png')`)
         setCookie('language', language, 1);

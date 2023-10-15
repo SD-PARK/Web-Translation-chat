@@ -3,7 +3,7 @@ const socket = io('/chat');
 let user_name;
 let room_id = window.location.href.split('/')[4];
 let peoples = new Map();
-let messages = new Map();
+let messages = [];
 let isTranslating = false;
 
 socket.on('connect', () => {
@@ -13,6 +13,7 @@ socket.on('connect', () => {
 
     // 메시지 수신
     socket.on('message', (response) => {
+        messages.unshift(response);
         checkTranslatedLog(response);
     });
 
@@ -53,6 +54,10 @@ socket.on('connect', () => {
             case 'Failed to send message': // 메시지 송신 실패
                 addLog(err.data);
                 break;
+            case 'Failed to load messages': // 이전 메시지 수신 실패
+                loadModal(errorApp(text[language]['메시지를 불러올 수 없습니다.']));
+                timerCloseAlert(3);
+                break;
         }
     });
 
@@ -70,13 +75,19 @@ socket.on('connect', () => {
             // 정상적인 응답을 받은 경우
             $('#room-name').html(roomData?.room_data?.room_name ?? '');
             chatLogs.empty();
-            for (let i = roomData?.message_data?.length-1 ?? 0; i >= 0; i--) {
-                let message = roomData.message_data[i];
-                checkTranslatedLog(message);
-            }
+            messageOrganize(roomData?.message_data);
+            printMessage();
+            chatLogs.scrollTop(chatLogs.prop('scrollHeight'));
         }
     });
 });
+
+// 수신받은 메시지를 messages 변수에 저장합니다.
+function messageOrganize(getMessages) {
+    for(let message of getMessages) {
+        messages.push(message);
+    }
+}
 
 // 메시지 전송 이벤트
 function emitMessage() {
@@ -102,7 +113,6 @@ function switchName() {
 
 // 메시지 번역 여부 체크 후 로그 출력
 function checkTranslatedLog(message) {
-    messages.set(message.message_id, message);
     const translatedMessage = message[`${language}_text`];
     if (translatedMessage) {
         const translatedData = { ...message, message_text: translatedMessage };
@@ -130,10 +140,26 @@ function translate(id) {
             isTranslating = false;
         } else {
             // 정상적인 응답을 받은 경우
-            messages.set(id, response);
+            const foundIndex = messages.findIndex(msg => msg.message_id === id);
+            if (foundIndex !== -1)
+                messages[foundIndex] = response;
             replaceLog(id, response[`${language}_text`]);
             removeLoading(id);
             isTranslating = false;
         }
+    });
+}
+
+/** 
+ * 이전 메시지를 불러옵니다.
+ */
+async function getMessage() {
+    const data = {
+        room_id: room_id,
+        send_at: messages[messages.length-1].send_at,
+    }
+    await socket.emit('getMessage', data, async (response) => {
+        messageOrganize(response);
+        printMessage();
     });
 }

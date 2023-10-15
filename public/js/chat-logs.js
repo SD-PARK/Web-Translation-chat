@@ -10,6 +10,7 @@ let winIP;
  * @param {object} data - 송신자의 이름과 텍스트가 포함된 객체
  */
 function addLog(data) {
+    const scrollHeight = chatLogs.prop('scrollHeight') - chatLogs.innerHeight();
     if (data?.message_id) {
         chatLogs.append(`
             <div class="log ${data?.message_id}">
@@ -31,9 +32,8 @@ function addLog(data) {
         $errLog.data('data', data);
         chatLogs.append($errLog);
     }
-    
+    if (chatLogs.scrollTop() + 1 >= scrollHeight) chatLogs.scrollTop(chatLogs.prop('scrollHeight'));
     if (winIP && data.ip === winIP) $('.log:last-child > .name').css('color', 'green');
-    chatLogs.scrollTop(chatLogs.prop('scrollHeight'));
 }
 
 function timeStyle(time) {
@@ -100,4 +100,23 @@ function updatePerson(person) {
         'color': 'green',
         'font-weight': 'bold',
     });
+}
+
+/**
+ * 스크롤을 맨 위로 올렸을 때 실행되는 이벤트
+ */
+chatLogs.scroll(async () => {
+    if (chatLogs.scrollTop() === 0 && messages.length > 0)
+        await getMessage();
+});
+
+// messages에 저장된 메시지를 로그에 표시합니다.
+function printMessage() {
+    const befScroll = chatLogs.prop('scrollHeight');
+    chatLogs.empty();
+    for (let id=messages.length-1; id >= 0; id--) {
+        checkTranslatedLog(messages[id]);
+    }
+    const aftScroll = chatLogs.prop('scrollHeight');
+    chatLogs.scrollTop(aftScroll - befScroll);
 }
