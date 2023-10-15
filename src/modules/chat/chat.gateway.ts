@@ -186,10 +186,9 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     @MessageBody() roomData: CreateRoomDto,
   ) {
     try {
-      throw new Error();
       const createdRoom: ChatRoom = await this.chatService.createRoom(roomData);
       this.nsp.to('list').emit('update', createdRoom);
-      return { status: 'success' };
+      return { status: 'success', room_id: createdRoom.room_id };
     } catch (err) {
       socket.emit('error', { message: 'Failed to Create a New Room' });
     }

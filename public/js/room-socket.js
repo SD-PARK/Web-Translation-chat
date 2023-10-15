@@ -51,8 +51,9 @@ socket.on('connect', () => {
 /** 방을 생성합니다. */
 function createRoom() {
     const enterTitle = $('#enter-title').val();
-    socket.emit('postRoom', { room_name: enterTitle }, (status) => {
-        if (status.status === 'success')
-            closeAlert();
+    socket.emit('postRoom', { room_name: enterTitle }, (data) => {
+        if (data.status === 'success') {
+            joinRoom(data.room_id);
+        }
     });
 }
