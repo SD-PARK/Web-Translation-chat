@@ -19,7 +19,7 @@ async function bootstrap() {
   // CORS 활성화
   app.enableCors({
     origin: true,
-    credentials: true,
+    credentials: true
   });
   await app.listen(3000);
 }
