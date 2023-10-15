@@ -16,11 +16,6 @@ async function bootstrap() {
     forbidNonWhitelisted: true,
     transform: true,
   }));
-  // CORS 활성화
-  app.enableCors({
-    origin: true,
-    credentials: true
-  });
   await app.listen(3000);
 }
 bootstrap();
