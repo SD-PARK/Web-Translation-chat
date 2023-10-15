@@ -24,7 +24,7 @@ export class ChatService {
     // =================== Schedule ===================
     // ================================================
 
-    @Cron('* 0 * * * *') // 매 시 정각에 실행
+    @Cron('0 0 * * * *') // 매 시 정각에 실행
     async handleCron() {
         try {
             const obsoleteRooms:ChatRoom[] = await this.chatRoomRepository.findObsoleteRoom();
