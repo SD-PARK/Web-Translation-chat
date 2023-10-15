@@ -18,8 +18,7 @@ async function bootstrap() {
   }));
   // CORS 활성화
   app.enableCors({
-    origin: 'http://papago-chat.site/',
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    origin: 'http://localhost:3000',
     credentials: true,
   });
   await app.listen(3000);
