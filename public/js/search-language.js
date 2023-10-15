@@ -45,6 +45,7 @@ function setCookie(name, value, exp) {
 };
 
 function getCookie(name) {
+    console.log(name);
     var value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
     return value? value[2] : null;
 }
