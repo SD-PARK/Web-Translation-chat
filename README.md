@@ -1,7 +1,7 @@
 # Papago-Chat V2
 
-![chat-nomem-ko](https://github.com/SD-PARK/papago-chat/assets/97375357/ddf78f0e-4861-490f-8fca-b69892ef7e5e)
-![chat-nomem-en](https://github.com/SD-PARK/papago-chat/assets/97375357/c80c1098-6871-4dbe-8fc5-37b83d3201db)
+<img src="https://github.com/SD-PARK/papago-chat/assets/97375357/ddf78f0e-4861-490f-8fca-b69892ef7e5e" width="400"/>
+<img src="https://github.com/SD-PARK/papago-chat/assets/97375357/c80c1098-6871-4dbe-8fc5-37b83d3201db" width="400"/>
 
 ## 개요
 
