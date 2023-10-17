@@ -1,51 +1,78 @@
-## ERD
+# Papago-Chat V2
 
-![chat-nomem](https://github.com/SD-PARK/papago-chat/assets/97375357/5e56a34e-dbcd-4bd9-b28a-dccb09836dd9)
+<img src="https://github.com/SD-PARK/papago-chat/assets/97375357/ddf78f0e-4861-490f-8fca-b69892ef7e5e" width="400"/>
+<img src="https://github.com/SD-PARK/papago-chat/assets/97375357/c80c1098-6871-4dbe-8fc5-37b83d3201db" width="400"/>
+
+## 개요
+
+- **프로젝트 명**: Papago Chat V2
+- **개발 인원**: 1명
+- **개발 기간**: 2023.09 ~ 10
+- **주요 기능**:
+    - 채팅방
+        - 채팅방 목록 및 접속 인원 조회
+        - 채팅방 개설
+        - 일정 기간(7일) 채팅이 갱신되지 않은 방 주기적 제거
+    - 채팅
+        - 채팅 로그 조회
+        - 실시간 텍스트 송수신 및 번역
+        - 사용 언어 변경
+- **개발 언어**: Nest.js
+- **개발 환경**: VS Code
+- **데이터베이스**: MySQL
+- **간단 소개**:
+
+  팀 프로젝트로 제작했던 '실시간 번역 메신저 앱'을 개선하기 위해 노력했습니다.
+
+  파파고의 번역 API와 Socket을 활용하여 실시간 번역 채팅 기능을 성공적으로 구현했습니다.
+
+  유저들은 언어 장벽을 극복해 다국어로 대화를 나눌 수 있습니다.
+  
+- **테스트 링크**: http://papago-chat.site
+<!--
+## 기능 상세 설명
 
 <details>
-<summary>Entity</summary>
+<summary>Controller, Gateway - Service</summary>
 <div markdown="1">
-
-    @PrimaryGeneratedColumn()
-    room_id: number;
-
-    @Column({ length: 30, nullable: false })
-    room_name: string;
-
-    @Column({ default: () => 'CURRENT_TIMESTAMP' })
-    created_at: Date;
-
-    @OneToMany(() => ChatMessage, chatMessage => chatMessage.chatRoom)
-    @JoinColumn({ name: 'room_id' })
-    chatMessages: ChatRoom;
-    
-</div>
-<div markdown="2">
-  
-    @PrimaryGeneratedColumn()
-    message_id: number;
-
-    @Column({ nullable: false })
-    room_id: number;
-
-    @Column({ length: 45, nullable: false })
-    user_name: string;
-    
-    @Column({ default: () => 'CURRENT_TIMESTAMP'})
-    send_at: Date;
-
-    @Column({ length: 5, nullable: false })
-    language: string;
-
-    @Column({ type: 'text', nullable: false })
-    message_text: string;
-
-    @ManyToOne(() => ChatRoom, chatRoom => chatRoom.chatMessages)
-    @JoinColumn({ name: 'room_id' })
-    chatRoom: ChatRoom;
+    - 하나둘셋넷
     
 </div>
 </details>
+
+<details>
+<summary>Validation Pipe - DTO</summary>
+<div markdown="1">
+</div>
+</details>
+
+<details>
+<summary>Jest</summary>
+<div markdown="1">
+</div>
+</details>
+
+<details>
+<summary>Axios - Papago API</summary>
+<div markdown="1">
+</div>
+</details>
+
+<details>
+<summary>Mysql - TypeORM -Entity, Repository</summary>
+<div markdown="1">
+</div>
+</details>
+
+<details>
+<summary>Schedule</summary>
+<div markdown="1">
+</div>
+</details>
+!-->
+## ERD
+
+![chat-nomem](https://github.com/SD-PARK/papago-chat/assets/97375357/6a27704e-1fde-48e8-ab1c-9883ec537258)
 
 ## CODE
 ```ts
