@@ -34,6 +34,7 @@ h6 { margin: 15px 0 0 8px; }
     overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
 }
 #room-persons > .person > .ip { font-size: 14px; font-weight: normal; color: #777; margin-left: 5px; }
+#room-persons > .person > .flag { width: 21px; height: 14px; object-fit: cover; margin-bottom: 5px; }
 
 /* chat-logs */
 #chat-logs {
@@ -60,7 +61,7 @@ h6 { margin: 15px 0 0 8px; }
 }
 .log > .name > .ip { font-size: 13px; font-weight: normal; color: #777; margin-left: 5px; }
 .log > p { margin-bottom: 0; word-wrap: break-word; }
-.flag {
+.log > .flag {
     width: 18px; height: 12px; object-fit: cover;
     float: left; margin: 4px 5px 0 0;
 }
@@ -92,7 +93,7 @@ h6 { margin: 15px 0 0 8px; }
 #input-language {
     position: absolute;
     width: 35px; height: 35px;
-    background: url('../img/flag/en.png') no-repeat center top / 100%;
+    background: url('../img/flag/undefined.png') no-repeat center top / 100%;
 }
 #input-name {
     margin: 0 0 10px 45px;

@@ -53,20 +53,6 @@ function emptyTextarea() {
 }
 
 /**
- * 언어를 변경합니다.
- */
-function switchLanguage(lang) {
-    if (langList.includes(lang)) {
-        language = lang;
-        printMessage();
-        languageBoxOnOff();
-        inputLanguage.css('background-image', `url('../img/flag/${lang}.png')`)
-        setCookie('language', language, 1);
-        setLanguage();
-    }
-}
-
-/**
  * Language Box를 열거나, 닫습니다.
  */
 function languageBoxOnOff() {

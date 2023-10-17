@@ -2,7 +2,7 @@ const socket = io('/chat');
 
 let user_name;
 let room_id = window.location.href.split('/')[4];
-let peoples = new Map();
+let people = [];
 let messages = [];
 let isTranslating = false;
 
@@ -17,13 +17,10 @@ socket.on('connect', () => {
         checkTranslatedLog(response);
     });
 
-    // 대화상대 갱신
-    socket.on('person-update', (response) => {
-        chatPersons.empty();
-        for (const person of response) {
-            updatePerson(person);
-        }
-        chatPersonCnt.text(response.length);
+    // 대화상대 수신
+    socket.on('get-person-data', (data) => {
+        people = data;
+        updatePerson();
     });
 
     // 서버로부터 IP 전달받아 저장
@@ -78,6 +75,7 @@ socket.on('connect', () => {
             messageOrganize(roomData?.message_data);
             printMessage();
             chatLogs.scrollTop(chatLogs.prop('scrollHeight'));
+            switchLanguage(language);
         }
     });
 });
@@ -104,11 +102,27 @@ function emitMessage() {
 
 // 닉네임 변경 이벤트
 function switchName() {
-    const data = {
-        room_id: parseInt(room_id),
-        name: inputName.val(),
-    }
+    const data = { room_id: parseInt(room_id), name: inputName.val() };
     socket.emit('switchName', data);
+}
+
+/**
+ * 언어를 변경합니다.
+ */
+function switchLanguage(lang) {
+    if (langList.includes(lang)) {
+        const data = { room_id: parseInt(room_id), language: lang };
+        socket.emit('switchLanguage', data);
+
+        language = lang;
+        printMessage();
+        if (languageBox.is(':visible')) {
+            languageBoxOnOff();
+        }
+        inputLanguage.css('background-image', `url('../img/flag/${lang}.png')`);
+        setCookie('language', language, 1);
+        setLanguage();
+    }
 }
 
 // 메시지 번역 여부 체크 후 로그 출력

@@ -91,15 +91,22 @@ function replaceLoadingLog(status, content = '') {
 }
 
 /**
- * 대화 상대를 추가합니다.
- * @param {*} person
+ * 대화 상대 목록을 갱신합니다.
  */
-function updatePerson(person) {
-    chatPersons.append(`<div class="person">${person.name}<span class='ip'>(${person.ips})</span></div>`);
-    if (person.ips === winIP) $('.person:last-child').css({
-        'color': 'green',
-        'font-weight': 'bold',
-    });
+function updatePerson() {
+    chatPersons.empty();
+    for (person of people) {
+        chatPersons.append(`<div class="person">
+                                <img class="flag" src="../img/flag/${person?.language}.png"></img>
+                                ${person.name}
+                                <span class='ip'>(${person.ips})</span>
+                            </div>`);
+        if (person.ips === winIP) $('.person:last-child').css({
+            'color': 'green',
+            'font-weight': 'bold',
+        });
+    }
+    chatPersonCnt.text(people.length);
 }
 
 /**

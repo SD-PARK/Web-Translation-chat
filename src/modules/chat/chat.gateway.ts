@@ -11,6 +11,7 @@ import { CreateRoomDto } from './dto/chat_rooms/create_room.dto';
 import { SwitchNameDto } from './dto/chat_gateway/switch_name.dto';
 import { ReqTranslateDto } from './dto/chat_gateway/req_translate.dto';
 import { BadRequestExceptionFilter } from 'src/config/validator/bad-request-filter';
+import { SwitchLanguageDto } from './dto/chat_gateway/switch_language.dto';
 
 @WebSocketGateway({
   namespace: 'chat',
@@ -27,7 +28,7 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
   private readonly MAX_RETRY_LIMIT: number = 5; // 번역 요청 재시도 횟수
   private readonly RETRY_INTERVAL: number = 500; // 번역 요청 재시도 간격(ms)
   private translateStatus: Set<string> = new Set<string>();
-  private personMap: Map<string, object> = new Map<string, {name: string, ips: string}>();
+  private personMap: Map<string, object> = new Map<string, {name: string, ips: string, language?: string}>();
 
   // namespace를 설정하지 않으면 @WebSocketServer는 서버 인스턴스를 반환함; @WebSocketServer() server: Socket
   @WebSocketServer() nsp: Namespace;
@@ -46,7 +47,7 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
       socket.join(roomIdString);
       this.personMap.set(socket.id, { name: socket.id, ips: this.getIP(socket) });
 
-      this.nsp.to(roomIdString).emit('person-update', this.getPersons(roomIdString));
+      this.nsp.to(roomIdString).emit('get-person-data', this.getPersons(roomIdString));
     
       return {
         room_data: await this.chatService.findOneRoom(joinData.room_id),
@@ -105,10 +106,29 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
       if (originData) {
         const roomIdString = data.room_id.toString();
         this.personMap.set(socket.id, { ...originData, name: data.name });
-        this.nsp.to(roomIdString).emit('person-update', this.getPersons(roomIdString));
+        this.nsp.to(roomIdString).emit('get-person-data', this.getPersons(roomIdString));
       }
     } catch (err) {
       socket.emit('error', { message: 'Name conversion failed' });
+    }
+  }
+
+  @SubscribeMessage('switchLanguage')
+  @UsePipes(ValidationPipe)
+  @UseFilters(BadRequestExceptionFilter)
+  async handleSwitchLanguage(
+    @ConnectedSocket() socket: Socket,
+    @MessageBody() data: SwitchLanguageDto,
+  ) {
+    try {
+      const originData = this.personMap.get(socket.id);
+      if (originData) {
+        const roomIdString = data.room_id.toString();
+        this.personMap.set(socket.id, { ...originData, language: data.language });
+        this.nsp.to(roomIdString).emit('get-person-data', this.getPersons(roomIdString));
+      }
+    } catch (err) {
+      socket.emit('error', { message: 'Language conversion failed' });
     }
   }
 
