@@ -58,6 +58,7 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     }
   }
 
+  // DTO 값 기준으로 메시지 불러옴
   @SubscribeMessage('getMessage')
   @UsePipes(ValidationPipe)
   @UseFilters(BadRequestExceptionFilter)
@@ -94,6 +95,7 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     }
   }
 
+  // 닉네임 변경
   @SubscribeMessage('switchName')
   @UsePipes(ValidationPipe)
   @UseFilters(BadRequestExceptionFilter)
@@ -113,6 +115,7 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     }
   }
 
+  // 사용 언어 변경
   @SubscribeMessage('switchLanguage')
   @UsePipes(ValidationPipe)
   @UseFilters(BadRequestExceptionFilter)
@@ -265,7 +268,7 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     this.logger.log(`${socket.id} 소켓 연결 ❌`);
   }
 
-  // 해당 room의 인원 갱신 후 방 목록 페이지의 유저들에게 전송
+  // 해당 방의 접속 인원 갱신 후 목록 페이지의 유저들에게 전송
   updateRoomCnt(roomId: string) {
     const roomIdNumber = Number(roomId);
     
@@ -277,12 +280,13 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     }
   }
 
-  async delay(ms: number) {
+  // ms 만큼 대기합니다.
+  async delay(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
   // socket의 IP 앞 2자리를 가져옵니다.
-  getIP(socket: Socket) {
+  getIP(socket: Socket): string {
     try {
       const rawAddress = socket.handshake.address;
       const ipAddress = rawAddress.split(':').pop();
@@ -297,7 +301,7 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
   }
 
   // 특정 룸의 접속 인원 정보를 가져옵니다.
-  getPersons(roomId: string) {
+  getPersons(roomId: string): object[] {
     const roomPerson = this.nsp.adapter.rooms.get(roomId);
     const persons = Array.from(roomPerson).map((socketId) => {
       return this.personMap.get(socketId);
