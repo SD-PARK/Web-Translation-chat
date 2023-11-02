@@ -29,111 +29,67 @@
   유저들은 언어 장벽을 극복해 다국어로 대화를 나눌 수 있습니다.
   
 - **테스트 링크**: http://papago-chat.site
-<!--
-## 기능 상세 설명
 
-<details>
-<summary>Controller, Gateway - Service</summary>
-<div markdown="1">
-    - 하나둘셋넷
-    
-</div>
-</details>
-
-<details>
-<summary>Validation Pipe - DTO</summary>
-<div markdown="1">
-</div>
-</details>
-
-<details>
-<summary>Jest</summary>
-<div markdown="1">
-</div>
-</details>
-
-<details>
-<summary>Axios - Papago API</summary>
-<div markdown="1">
-</div>
-</details>
-
-<details>
-<summary>Mysql - TypeORM -Entity, Repository</summary>
-<div markdown="1">
-</div>
-</details>
-
-<details>
-<summary>Schedule</summary>
-<div markdown="1">
-</div>
-</details>
-!-->
 ## ERD
 
 ![chat-nomem](https://github.com/SD-PARK/papago-chat/assets/97375357/6a27704e-1fde-48e8-ab1c-9883ec537258)
 
-## CODE
+## 기능 및 코드
+
+<details>
+<summary><h3>방을 생성할 수 있습니다</h3></summary>
+<div markdown="1">
+<img src="https://github.com/SD-PARK/papago-chat/assets/97375357/9dc98e60-d1e9-481a-bbfd-ed38dc4b4c39" height="400"/>
+    
+우측 하단의 버튼을 통해 새로운 채팅방을 생성할 수 있습니다.
+
+생성된 채팅방은 7일 간 새로운 채팅이 입력되지 않을 시 자동으로 삭제됩니다.
+
+관련 코드는 다음과 같습니다.
+
+<h4>방 생성 관련</h4>
+
 ```ts
-const languageCode: string[] = ['ko', 'en', 'ja', 'zh-CN', 'zh-TW'];
-
-async translate(source: string, target: string, text: string): Promise<string> {
-    this.validate(source, target, text);
-
-    const url = 'https://openapi.naver.com/v1/papago/n2mt';
-    try {
-        const result = await this.axiosService.post(url, {
-            source: source,
-            target: target,
-            text: text,
-        },
-        { headers:
-            {
-                'X-Naver-Client-Id': this.configService.get<string>('NAVER_CLIENT_ID'),
-                'X-Naver-Client-Secret': this.configService.get<string>('NAVER_CLIENT_SECRET'),
-            }
-        });
-        return result.data.message.result.translatedText;
-    } catch (err) {
-        throw new Error('번역 요청 중 오류가 발생했습니다.');
+    /** === ChatService === **/
+    @SubscribeMessage('postRoom')
+    @UsePipes(ValidationPipe)
+    @UseFilters(BadRequestExceptionFilter)
+    async handlePostRoom(
+        @ConnectedSocket() socket: Socket,
+        @MessageBody() roomData: CreateRoomDto,
+    ) {
+        try {
+            const createdRoom: ChatRoom = await this.chatService.createRoom(roomData);
+            this.nsp.to('list').emit('update', createdRoom);
+            return { status: 'success', room_id: createdRoom.room_id };
+        } catch (err) {
+            socket.emit('error', { message: 'Failed to Create a New Room' });
+        }
     }
-}
-
-validate(source: string, target: string, text: string) {
-    if (!languageCode.includes(source))
-        throw 'source 속성의 언어 코드가 유효하지 않습니다.';
-    if(!languageCode.includes(target))
-        throw 'target 속성의 언어 코드가 유효하지 않습니다.';
-    if(text.trim() === "")
-        throw 'text 속성에 유효한 문자열이 입력되어야 합니다.';
-}
 ```
 
+ValidationPipe와 DTO를 통해 전달받은 값에 대한 유효성 검사를 진행 후, 방을 생성합니다.
+
+<h4>방 삭제 관련</h4>
+
 ```ts
-@CustomRepository(ChatRoom)
-export class ChatRoomRepository extends Repository<ChatRoom> {
-    /**
-     * ID를 통해 채팅방을 조회합니다.
-     * @param roomId 조회할 채팅방의 고유 식별자(ID)입니다.
-     * @returns 채팅방 데이터를 반환합니다.
-     */
-    async findOneRoom(roomId: number): Promise<ChatRoom> {
-        return await this.findOne({ where: { room_id: roomId } });
+    /** === ChatService === **/
+    @Cron('0 0 * * * *') // 매 시 정각에 실행
+    async handleCron() {
+        try {
+            const obsoleteRooms:ChatRoom[] = await this.chatRoomRepository.findObsoleteRoom();
+            this.logger.log('이용되지 않는 방을 제거합니다.');
+            this.logger.log('제거한 방 목록: ');
+            for (let room of obsoleteRooms) {
+                await this.deleteRoom(room.room_id);
+                this.logger.log(`ID: ${room.room_id} | TITLE: ${room.room_name}`);
+            }
+        } catch (err) {
+            this.logger.error(err);
+        }
     }
 
-    /**
-     * 모든 채팅방을 조회합니다.
-     * @returns 채팅방 데이터를 담은 배열을 반환합니다.
-     */
-    async findAllRoom(): Promise<ChatRoom[]> {
-        return await this.find();
-    }
-
-    /**
-     * 7일 이상 채팅 입력이 없는 채팅방을 조회합니다.
-     * @returns 7일 이상 채팅 입력이 없는 채팅방 데이터를 담은 배열입니다.
-     */
+    /** === ChatRoomRepository === **/
     async findObsoleteRoom(): Promise<ChatRoom[]> {
         const sevenDaysAgo:Date = new Date(Date.now() - (7 * 24 * 60 * 60 * 1000));
         const obsoleteRoom: ChatRoom[] = await this
@@ -143,37 +99,21 @@ export class ChatRoomRepository extends Repository<ChatRoom> {
             .getMany();
         return obsoleteRoom;
     }
-
-    /**
-     * 채팅방을 생성합니다.
-     * @param roomName 생성할 채팅방의 이름입니다.
-     * @returns 생성한 채팅방 데이터를 반환합니다.
-     */
-    async createRoom(roomName: string): Promise<ChatRoom> {
-        const newEntity: ChatRoom = this.create({ room_name: roomName });
-        await this.save(newEntity);
-        return newEntity;
-    }
-
-    /**
-     * 채팅방을 삭제합니다.
-     * @param roomId 삭제할 채팅방의 고유 식별자(ID)입니다.
-     */
-    async deleteRoom(roomId: number) {
-        await this.delete(roomId);
-    }
-
-    /**
-     * 채팅방의 이름을 변경합니다.
-     * @param roomId 이름을 변경할 채팅방의 고유 식별자(ID)입니다.
-     * @param roomName 변경할 이름입니다.
-     * @returns 변경한 채팅방 데이터를 반환합니다.
-     */
-    async updateRoomName(roomId: number, roomName: string): Promise<ChatRoom> {
-        const updateEntity: ChatRoom = await this.findOneRoom(roomId);
-        updateEntity.room_name = roomName;
-        await this.save(updateEntity);
-        return updateEntity;
-    }
-}
 ```
+
+Schedule 패키지를 통해 매 시 정각에 7일 간 채팅 입력이 없었던 방을 탐색, 제거합니다.
+
+</div>
+</details>
+
+<details>
+<summary><h3>다음</h3></summary>
+<div markdown="1">
+<img src="" height="400"/>
+
+```ts
+
+```
+
+</div>
+</details>
