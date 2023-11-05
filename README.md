@@ -37,6 +37,91 @@
 ## 기능 및 코드
 
 <details>
+<summary><h3>채팅방 목록을 조회할 수 있습니다.</h3></summary>
+<div markdown="1">
+<img src="https://github.com/SD-PARK/papago-chat/assets/97375357/6f454e89-5cbe-44fb-b03b-0cd3237b1e75" width="700"/>
+
+채팅방 목록과 접속 인원을 조회하고, 제목을 통해 특정 채팅방을 검색할 수 있습니다.
+
+관련 코드는 다음과 같습니다.
+
+```ts
+/** === ChatGateway === **/
+// 방 목록 페이지 접속 시, room 'list' 입장 및 방 목록 반환
+@SubscribeMessage('joinList')
+async handleJoinList(
+    @ConnectedSocket() socket: Socket
+) {
+    try {
+        socket.join('list');
+        await this.handleGetRoomList(socket, '');
+    } catch (err) {
+        socket.emit('getRoomList', { error: 'Failed to get Room List' });
+    }
+}
+
+/**
+* 제목에 검색 인자가 포함된 채팅방 목록과 접속 인원을 반환합니다.
+* @param socket - 연결 된 소켓
+* @param roomName - 검색 인자
+*/
+@SubscribeMessage('getRoomList')
+async handleGetRoomList(
+    @ConnectedSocket() socket: Socket,
+    @MessageBody() roomName: string,
+) {
+    try {
+        const rooms: ChatRoom[] = await this.chatService.findRoom(roomName);
+        
+        const cntRooms = rooms.map((room) => {
+            const roomIdString: string = room.room_id.toString();
+            let cnt: number = 0;
+            const getRoom = this.nsp.adapter.rooms.get(roomIdString);
+            if(getRoom) cnt = getRoom.size;
+            return { ...room, cnt };
+        });
+        socket.emit('getRoomList', cntRooms);
+    } catch (err) {
+        socket.emit('getRoomList', { error: 'Failed to get Room List' });
+    }
+}
+
+/** === ChatService === **/
+async findRoom(roomName: string): Promise<ChatRoom[]> {
+    try {
+        const result: ChatRoom[] = await this.chatRoomRepository.findRoom(roomName);
+        return result;
+    } catch (err) {
+        console.error('findRoom Error:', err);
+    }
+}
+
+/** === ChatRoomRepository === **/
+/**
+* 제목을 통해 채팅방을 조회합니다.
+* @param roomName 조회할 채팅방의 제목에 포함된 문자열입니다.
+* @returns 채팅방 데이터를 담은 배열을 반환합니다.
+*/
+async findRoom(roomName: string): Promise<ChatRoom[]> {
+    const escapeRoomName = roomName.replace(/[%_]/g, '\\$&');
+    return await this.find({ where: { room_name: Like(`%${escapeRoomName}%`) }});
+}
+```
+
+채팅방 목록 페이지에 접속 시, 'list' Room에 입장됩니다.
+
+'list'의 접속자들은 이후 목록 내 채팅방의 접속 인원이 변경되었을 경우 변경사항을 전달받습니다.
+
+`getRoomList` 함수는 검색 인자를 통해 채팅방 목록과 접속 인원을 socket에게 전달하는 함수입니다.
+
+TypeORM을 통해 DB에 저장된 채팅방 목록을 검색합니다.
+
+Room 접속 후 `getRoomList` 함수를 실행해 목록을 불러옵니다.
+
+</div>
+</details>
+
+<details>
 <summary><h3>방을 생성할 수 있습니다</h3></summary>
 <div markdown="1">
 <img src="https://github.com/SD-PARK/papago-chat/assets/97375357/9dc98e60-d1e9-481a-bbfd-ed38dc4b4c39" width="700"/>
@@ -176,3 +261,21 @@ Socket ID를 Key로 접속 중인 유저의 정보를 저장하는 personMap 변
 
 </div>
 </details>
+
+<!--
+<details>
+<summary><h3>메시지를 주고 받을 수 있습니다.</h3></summary>
+<div markdown="1">
+<img src="" width="700"/>
+
+</div>
+</details>
+
+<details>
+<summary><h3>메시지를 실시간으로 번역할 수 있습니다.</h3></summary>
+<div markdown="1">
+<img src="" width="700"/>
+
+</div>
+</details>
+-->
