@@ -193,7 +193,11 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     }
   }
 
-  // 접속 인원을 포함한 room 목록 반환
+  /**
+   * 제목에 검색 인자가 포함된 채팅방 목록과 접속 인원을 반환합니다.
+   * @param socket - 연결 된 소켓
+   * @param roomName - 검색 인자
+   */
   @SubscribeMessage('getRoomList')
   async handleGetRoomList(
     @ConnectedSocket() socket: Socket,
