@@ -85,7 +85,9 @@ async handleGetRoomList(
         socket.emit('getRoomList', { error: 'Failed to get Room List' });
     }
 }
+```
 
+```ts
 /** === ChatService === **/
 async findRoom(roomName: string): Promise<ChatRoom[]> {
     try {
@@ -95,7 +97,9 @@ async findRoom(roomName: string): Promise<ChatRoom[]> {
         console.error('findRoom Error:', err);
     }
 }
+```
 
+```ts
 /** === ChatRoomRepository === **/
 /**
 * 제목을 통해 채팅방을 조회합니다.
