@@ -21,12 +21,14 @@ socket.on('connect', () => {
     });
 
     socket.on('update', (data) => {
-        const updatedRoom = {
-            ...roomsMap.get(data.room_id),
-            ...data,
-        };
-        roomsMap.set(data.room_id, updatedRoom);
-        updateCol(data);
+        if(roomsMap.has(data.room_id)) {
+            const updatedRoom = {
+                ...roomsMap.get(data.room_id),
+                ...data,
+            };
+            roomsMap.set(data.room_id, updatedRoom);
+            updateCol(data);
+        }
     });
 
     socket.on('error', (err) => {
