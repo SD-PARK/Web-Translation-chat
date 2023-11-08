@@ -1,6 +1,5 @@
 const chatLogs = $('#chat-logs');
 const chatPersons = $('#room-persons');
-const chatPersonCnt = $('#person-cnt');
 let roomList = new Map();
 let winIP;
 
@@ -94,6 +93,8 @@ function replaceLoadingLog(status, content = '') {
  * 대화 상대 목록을 갱신합니다.
  */
 function updatePerson() {
+    const chatPersonCnt = $('#person-cnt');
+    chatPersonCnt.text(people.length);
     chatPersons.empty();
     for (person of people) {
         chatPersons.append(`<div class="person">
@@ -106,7 +107,6 @@ function updatePerson() {
             'font-weight': 'bold',
         });
     }
-    chatPersonCnt.text(people.length);
 }
 
 /**
