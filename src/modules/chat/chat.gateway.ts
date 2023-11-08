@@ -247,9 +247,9 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
       if (id !== room && room !== 'list') this.updateRoomCnt(room);
     });
 
-    this.nsp.adapter.on('leave-room', (room, id,) => {
+    this.nsp.adapter.on('leave-room', (room, id) => {
       this.personMap.delete(id);
-      this.nsp.to(room).emit('person-update', this.getPersons(room));
+      this.nsp.to(room).emit('get-person-data', this.getPersons(room));
       this.logger.log(`[Socket: ${id}]가 [Room: ${room}]에서 나갔습니다.`);
       if (id !== room && room !== 'list') this.updateRoomCnt(room);
     });
