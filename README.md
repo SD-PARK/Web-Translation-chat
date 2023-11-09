@@ -279,8 +279,8 @@ Socket ID를 Key로 접속 중인 유저의 정보를 저장하는 personMap 변
 <details>
 <summary><h3>메시지를 실시간으로 번역할 수 있습니다.</h3></summary>
 <div markdown="1">
-<img src="https://github.com/SD-PARK/papago-chat/assets/97375357/4283e88c-a3f9-4602-9d4b-0babcb10e838" width="420"/>
-<img src="https://github.com/SD-PARK/papago-chat/assets/97375357/796f0d3d-d8af-4b9f-9554-24d0f97fe363" width="420"/>
+<img src="https://github.com/SD-PARK/papago-chat/assets/97375357/4283e88c-a3f9-4602-9d4b-0babcb10e838" width="410"/>
+<img src="https://github.com/SD-PARK/papago-chat/assets/97375357/796f0d3d-d8af-4b9f-9554-24d0f97fe363" width="410"/>
 
 </div>
 </details>
