@@ -266,15 +266,17 @@ Socket ID를 Key로 접속 중인 유저의 정보를 저장하는 personMap 변
 </div>
 </details>
 
-<!--
 <details>
 <summary><h3>메시지를 주고 받을 수 있습니다.</h3></summary>
 <div markdown="1">
-<img src="" width="700"/>
+<img src="https://github.com/SD-PARK/papago-chat/assets/97375357/bcaeff4c-1786-4d04-9827-f3d17ca42389" width="700"/>
 
+...
+    
 </div>
 </details>
 
+<!--
 <details>
 <summary><h3>메시지를 실시간으로 번역할 수 있습니다.</h3></summary>
 <div markdown="1">
