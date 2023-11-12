@@ -271,8 +271,97 @@ Socket ID를 Key로 접속 중인 유저의 정보를 저장하는 personMap 변
 <div markdown="1">
 <img src="https://github.com/SD-PARK/papago-chat/assets/97375357/bcaeff4c-1786-4d04-9827-f3d17ca42389" width="700"/>
 
-...
+채팅을 입력해 같은 채팅방의 사람들과 대화할 수 있습니다.
+
+관련 코드는 다음과 같습니다.
+
+```ts
+/** === ChatGateway === **/
+// 메시지 수신 시 DB에 추가 후 동일한 채팅방의 유저들에게 전송 (미번역문 전송)
+@SubscribeMessage('message')
+@UsePipes(ValidationPipe)
+@UseFilters(BadRequestExceptionFilter)
+async handleMessage(
+    @ConnectedSocket() socket: Socket,
+    @MessageBody() data: CreateMessageDto,
+) {
+    const roomIdString = data.room_id.toString();
+    const socket_ip = this.getIP(socket);
+    const includedIpData: CreateMessageDto = { ...data, ip: socket_ip, }
+    try {
+        const message: ChatMessage = await this.chatService.createMessage(includedIpData);
+        this.nsp.to(roomIdString).emit('message', message);
+    } catch (err) {
+        this.logger.error(err);
+        // 메시지 전송 실패 알림
+        socket.emit('error', { message: 'Failed to send message', data: includedIpData });
+    }
+}
+
+// socket의 IP 앞 2자리를 가져옵니다.
+getIP(socket: Socket): string {
+    try {
+        const rawAddress = socket.handshake.address;
+        const ipAddress = rawAddress.split(':').pop();
+        if (ipAddress && typeof ipAddress === 'string')
+            return ipAddress.split('.').slice(0, 2).join('.');
+        else
+            throw new Error('Invalid IP address');
+    } catch (err) {
+        this.logger.error('Error getIP:', err.message);
+        return null;
+    }
+}
+```
+
+```ts
+/** === CreateMessageDto === **/
+export class CreateMessageDto {
+    @IsNumber()
+    @Min(0)
+    readonly room_id: number;
     
+    @IsString()
+    @MaxLength(45)
+    readonly user_name: string;
+    
+    @IsString()
+    @IsIn(appConfig.supportedLanguage)
+    readonly language: string;
+    
+    @IsString()
+    @IsOptional()
+    @MaxLength(7)
+    readonly ip?: string;
+    
+    @IsString()
+    @MaxLength(1000)
+    readonly message_text: string;
+    
+    @IsString()
+    @IsOptional()
+    readonly ko_text?: string;
+    
+    @IsString()
+    @IsOptional()
+    readonly en_text?: string;
+    
+    @IsString()
+    @IsOptional()
+    readonly ja_text?: string;
+}
+```
+
+채팅을 송신한 클라이언트로부터 채팅방 ID, 유저 이름, 이용 언어, 텍스트가 포함된 객체를 입력받습니다.
+
+필요한 데이터가 누락된 경우, ValidationPipe를 통해 `BadRequestException`을 반환합니다.
+
+socket에서 송신자 IP를 가져와 DB에 입력한 뒤, DB에 입력된 데이터(수신받은 데이터)를 같은 채팅방의 유저들에게 전송합니다.
+
+이 과정에서 메시지 번역은 진행하지 않습니다. 이는 불필요한 번역 요청을 방지하기 위함입니다.
+
+만약 채팅방 내의 인원이 모두 같은 국적의 사람들이라면, 다른 언어로의 번역 요청이 자원의 낭비로 이어질 수 있기 때문에 미번역 텍스트에 대한 번역은 메시지를 수신한 클라이언트로부터 요청받은 뒤 진행합니다.
+
 </div>
 </details>
 
