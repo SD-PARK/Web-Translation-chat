@@ -443,7 +443,7 @@ async handleReqTranslate(
 
 만약 번역이 완료되지 않았고, 번역 중인 메시지도 아니라면 번역을 시작합니다.
 
-번역이 시작되면 `translateStatus' 변수에 번역 내용을 저장하고, 번역이 완료된 뒤 `translateStatus` 변수에서 해당 값을 제거합니다.
+번역이 시작되면 `translateStatus` 변수에 번역 내용을 저장하고, 번역이 완료된 뒤 `translateStatus` 변수에서 해당 값을 제거합니다.
 
 번역 기능은 Papago의 번역 API를 `Axios` 패키지를 통해 호출하여 이용합니다. 자세한 코드는 아래를 참고하세요.
 
