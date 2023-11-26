@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import appConfig from 'src/config/appConfig';
 import { AxiosService } from 'src/config/axios/axios.service';
-
-const languageCode: string[] = ['ko', 'en', 'ja', 'zh-CN', 'zh-TW'];
 
 @Injectable()
 export class PapagoService {
     constructor(
         private readonly axiosService: AxiosService,
         private readonly configService: ConfigService,
+        private languageCode: string[] = appConfig.supportedLanguage,
     ) {}
 
     async translate(source: string, target: string, text: string): Promise<string> {
@@ -36,9 +36,9 @@ export class PapagoService {
     }
 
     validate(source: string, target: string, text: string) {
-        if (!languageCode.includes(source))
+        if (!this.languageCode.includes(source))
             throw new Error('source 속성의 언어 코드가 유효하지 않습니다.');
-        if(!languageCode.includes(target))
+        if(!this.languageCode.includes(target))
             throw new Error('target 속성의 언어 코드가 유효하지 않습니다.');
         if(text.trim() === "")
             throw new Error('text 속성에 유효한 문자열이 입력되어야 합니다.');
