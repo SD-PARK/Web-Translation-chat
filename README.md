@@ -271,17 +271,223 @@ Socket ID를 Key로 접속 중인 유저의 정보를 저장하는 personMap 변
 <div markdown="1">
 <img src="https://github.com/SD-PARK/papago-chat/assets/97375357/bcaeff4c-1786-4d04-9827-f3d17ca42389" width="700"/>
 
-...
+채팅을 입력해 같은 채팅방의 사람들과 실시간으로 메시지를 주고 받을 수 있습니다.
+
+관련 코드는 다음과 같습니다.
+
+```ts
+/** === ChatGateway === **/
+// 메시지 수신 시 DB에 추가 후 동일한 채팅방의 유저들에게 전송 (미번역문 전송)
+@SubscribeMessage('message')
+@UsePipes(ValidationPipe)
+@UseFilters(BadRequestExceptionFilter)
+async handleMessage(
+    @ConnectedSocket() socket: Socket,
+    @MessageBody() data: CreateMessageDto,
+) {
+    const roomIdString = data.room_id.toString();
+    const socket_ip = this.getIP(socket);
+    const includedIpData: CreateMessageDto = { ...data, ip: socket_ip, }
+    try {
+        const message: ChatMessage = await this.chatService.createMessage(includedIpData);
+        this.nsp.to(roomIdString).emit('message', message);
+    } catch (err) {
+        this.logger.error(err);
+        // 메시지 전송 실패 알림
+        socket.emit('error', { message: 'Failed to send message', data: includedIpData });
+    }
+}
+
+// socket의 IP 앞 2자리를 가져옵니다.
+getIP(socket: Socket): string {
+    try {
+        const rawAddress = socket.handshake.address;
+        const ipAddress = rawAddress.split(':').pop();
+        if (ipAddress && typeof ipAddress === 'string')
+            return ipAddress.split('.').slice(0, 2).join('.');
+        else
+            throw new Error('Invalid IP address');
+    } catch (err) {
+        this.logger.error('Error getIP:', err.message);
+        return null;
+    }
+}
+```
+
+```ts
+/** === CreateMessageDto === **/
+export class CreateMessageDto {
+    @IsNumber()
+    @Min(0)
+    readonly room_id: number;
     
+    @IsString()
+    @MaxLength(45)
+    readonly user_name: string;
+    
+    @IsString()
+    @IsIn(appConfig.supportedLanguage)
+    readonly language: string;
+    
+    @IsString()
+    @IsOptional()
+    @MaxLength(7)
+    readonly ip?: string;
+    
+    @IsString()
+    @MaxLength(1000)
+    readonly message_text: string;
+    
+    @IsString()
+    @IsOptional()
+    readonly ko_text?: string;
+    
+    @IsString()
+    @IsOptional()
+    readonly en_text?: string;
+    
+    @IsString()
+    @IsOptional()
+    readonly ja_text?: string;
+}
+```
+
+데이터의 실시간 송수신을 위해 Socket.io 패키지를 이용했습니다.
+
+채팅을 송신한 클라이언트로부터 채팅방 ID, 유저 이름, 이용 언어, 텍스트가 포함된 객체를 입력받습니다.
+
+필요한 데이터가 누락된 경우, ValidationPipe를 통해 `BadRequestException`을 반환합니다.
+
+socket에서 송신자 IP를 가져와 DB에 입력한 뒤, DB에 입력된 데이터(수신받은 데이터)를 같은 채팅방의 유저들에게 전송합니다.
+
+**이 과정에서 메시지 번역은 진행하지 않습니다.** 이는 불필요한 번역 요청을 방지하기 위함입니다.
+
+만약 채팅방 내의 인원이 모두 같은 언어를 이용하는 사람들이라면,
+
+다른 언어로의 번역 요청이 불필요한 자원의 낭비로 이어질 수 있기 때문에 미번역 텍스트에 대한 번역은 메시지를 수신한 클라이언트로부터 요청받은 뒤 진행합니다.
+
 </div>
 </details>
 
-<!--
 <details>
 <summary><h3>메시지를 실시간으로 번역할 수 있습니다.</h3></summary>
 <div markdown="1">
-<img src="" width="700"/>
+<img src="https://github.com/SD-PARK/papago-chat/assets/97375357/4283e88c-a3f9-4602-9d4b-0babcb10e838" width="410"/>
+<img src="https://github.com/SD-PARK/papago-chat/assets/97375357/796f0d3d-d8af-4b9f-9554-24d0f97fe363" width="410"/>
+
+수신한 메시지를 본인이 설정한 언어로 실시간으로 번역할 수 있습니다.
+
+관련 코드는 다음과 같습니다.
+
+```ts
+/** === ChatGateway === **/
+private readonly MAX_RETRY_LIMIT: number = 5; // 번역 재요청 최대 횟수
+private readonly RETRY_INTERVAL: number = 500; // 번역 재요청 간격(ms)
+private translateStatus: Set<string> = new Set<string>(); // 번역이 진행 중인 메시지+언어
+
+// 번역 요청 시 번역 상태 확인 및(이미 번역되어 있으면 그대로 반환) 번역 후 DB 저장, 반환
+@SubscribeMessage('reqTranslate')
+@UsePipes(ValidationPipe)
+@UseFilters(BadRequestExceptionFilter)
+async handleReqTranslate(
+    @ConnectedSocket() socket: Socket,
+    @MessageBody() data: ReqTranslateDto
+) {
+    try {
+        // 번역 완료된 텍스트인지 확인
+        const message: ChatMessage = await this.chatService.findOneMessage(data.message_id);
+        if (message[`${data.language}_text`]) return message;
+        
+        // 번역 중인 텍스트인지 확인
+        const requestKey = `${data.message_id}_${data.language}`;
+        
+        if (this.translateStatus.has(requestKey)) {
+            const retryCount = data.retryCount ?? 0;
+            if (data.retryCount >= this.MAX_RETRY_LIMIT) {
+                return { error: 'Translation Failed' };
+            } else {
+                await this.delay(this.RETRY_INTERVAL);
+                return this.handleReqTranslate(socket, { ...data, retryCount: retryCount + 1});
+            }
+        }
+        
+        // 번역 중이 아닌 경우, 번역 시작
+        this.translateStatus.add(requestKey);
+        try {
+            const tMessage: string = await this.papagoService.translate(message.language, data.language, message.message_text);
+            await this.chatService.updateMessage(data.message_id, {
+                [`${data.language}_text`]: tMessage,
+            });
+            message[`${data.language}_text`] = tMessage;
+            return message;
+        } catch(err) {
+            return { error: 'Translation Failed' };
+        } finally {
+            this.translateStatus.delete(requestKey);
+        }
+    } catch (err) {
+        return { error: 'Translation Failed' };
+    }
+}
+```
+
+클라이언트로부터 메시지 번역 요청을 받았을 때, 서버는 다음과 같은 절차로 해당 요청을 처리합니다.
+
+**번역 완료된 메시지와 언어인지 확인 >> 번역 중인 메시지와 언어인지 확인 >> 번역 시작**
+
+번역이 이미 완료되었다면 완료된 번역을 반환합니다.
+
+번역 중인 메시지라면 해당 번역이 완료될 때까지 요청을 대기합니다. 번역 중인 메시지는 `메시지 ID_언어 코드`의 형태로 `translateStatus` 변수에 저장됩니다.
+
+메시지가 번역 중일 때 대기시키는 이유는 API에 같은 내용의 번역을 요청하는 경우를 방지하기 위함입니다. 요청 대기시간은 `MAX_RETRY_LIMIT`(번역 재요청 최대 횟수) 변수와 `RETRY_INTERVAL`(번역 재요청 간격) 변수의 값에 따라 달라집니다.
+
+만약 번역이 완료되지 않았고, 번역 중인 메시지도 아니라면 번역을 시작합니다.
+
+번역이 시작되면 `translateStatus` 변수에 번역 내용을 저장하고, 번역이 완료된 뒤 `translateStatus` 변수에서 해당 값을 제거합니다.
+
+번역 기능은 Papago의 번역 API를 `Axios` 패키지를 통해 호출하여 이용합니다. 자세한 코드는 아래를 참고하세요.
+
+```ts
+/** === PapagoService === **/
+constructor(
+        private readonly axiosService: AxiosService,
+        private readonly configService: ConfigService,
+        private languageCode: string[] = appConfig.supportedLanguage,
+) {}
+
+async translate(source: string, target: string, text: string): Promise<string> {
+    this.validate(source, target, text);
+    
+    if (source === target) return text;
+    
+    const url = 'https://openapi.naver.com/v1/papago/n2mt';
+    try {
+        const result = await this.axiosService.post(url, {
+            source: source,
+            target: target,
+            text: text,
+        },
+        { headers:
+            {
+            'X-Naver-Client-Id': this.configService.get<string>('NAVER_CLIENT_ID'),
+            'X-Naver-Client-Secret': this.configService.get<string>('NAVER_CLIENT_SECRET'),
+            }
+        });
+        return result.data.message.result.translatedText;
+    } catch (err) {
+        throw new Error('번역 요청 중 오류가 발생했습니다.');
+    }
+}
+
+validate(source: string, target: string, text: string) {
+    if (!this.languageCode.includes(source))
+        throw new Error('source 속성의 언어 코드가 유효하지 않습니다.');
+    if(!this.languageCode.includes(target))
+        throw new Error('target 속성의 언어 코드가 유효하지 않습니다.');
+    if(text.trim() === "")
+        throw new Error('text 속성에 유효한 문자열이 입력되어야 합니다.');
+}
+```
 
 </div>
 </details>
--->
