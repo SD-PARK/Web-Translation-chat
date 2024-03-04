@@ -27,9 +27,9 @@
   파파고의 번역 API와 Socket을 활용하여 실시간 번역 채팅 기능을 성공적으로 구현했습니다.
 
   유저들은 언어 장벽을 극복해 다국어로 대화를 나눌 수 있습니다.
-  
+<!--
 - **테스트 링크**: http://papago-chat.site
-
+-->
 ## ERD
 
 ![chat-nomem](https://github.com/SD-PARK/papago-chat/assets/97375357/6a27704e-1fde-48e8-ab1c-9883ec537258)
